@@ -1,7 +1,9 @@
-#include "codexion.h"
+#include "dependencies.h"
 
 int main(char **argv, int argc)
 {
-	t_prgrm_args  prgrm_args = get_prgrm_args();
+	t_coder coder = {0}
+
+	t_params  params = get_params();
 		
 }
