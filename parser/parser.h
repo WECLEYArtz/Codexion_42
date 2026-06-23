@@ -3,6 +3,7 @@
 
 // The one time used structure for a shared prointer to all depending on it.
 // preventing data duplication in runtime
+
 typedef struct s_params {
 	const int number_of_coders;
 	const int time_to_burnout;
