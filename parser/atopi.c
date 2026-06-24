@@ -10,7 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_isdigit(int c)
+#include <limits.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+static int	ft_isdigit(int c)
 {
 	return ('0' <= c && c <= '9');
 }
@@ -22,41 +26,38 @@ static int	ft_isspace(int c)
 	return (0);
 }
 
-static long	ft_atoi_convert(const char *str, int sign)
+static int	ft_atoi_convert(const char *str)
 {
-	long	result;
+	int	result;
 
 	result = 0;
 	while (*str && ft_isdigit(*str))
 	{
-		if ((long)((result * 10) + (long)(*str - '0')) < result)
-		{
-			if (sign == -1)
-				return (0);
-			else
-				return (-1);
-		}
+		if ((((long)result * 10) + (*str - '0')) > INT_MAX)
+			exit(puts("DEBUG: big value given"));
 		else
 			result = (result * 10) + (*str++ - '0');
 	}
 	return (result);
 }
 
-int	ft_atoi(const char *str)
+int	ft_atopi(const char *str)
 {
-	long	result;
-	int		sign;
+	int		result;
 
 	result = 0;
-	sign = 1;
 	while (ft_isspace(*str))
 		str++;
-	if (*str == '+' || (*str == '-'))
+
+	if (*str == '-')
 	{
-		if (*str == '-')
-			(sign = -1);
-		str++;
+		if (str[1] == '0' && !ft_isdigit(str[2]))
+			return 0;
+		else
+			exit(puts("DEBUG: negative value given"));
 	}
-	result = ft_atoi_convert(str, sign);
-	return (result * sign);
+	if (*str == '+')
+		str++;
+	result = ft_atoi_convert(str);
+	return (result);
 }

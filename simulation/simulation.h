@@ -5,7 +5,7 @@ typedef struct s_sim {
 	t_dongle* dongles;
 	t_coder* coders;
 
-	t_params* params;
+	t_params params;
 	t_timeval startup;
 
 	pthread_mutex_t print_mutex;

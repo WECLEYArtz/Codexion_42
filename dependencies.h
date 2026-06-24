@@ -4,6 +4,7 @@
 #include <sys/time.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 #include <pthread.h>
 #include <stdbool.h>
@@ -17,6 +18,5 @@ typedef struct timeval t_timeval;
 
 // Util functions
 void announce(t_coder* coder, char *action);
-t_params* getparams(char **args);
 
 #endif

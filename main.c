@@ -15,14 +15,14 @@ static void insert_new_dongle(int index, t_sim *sim)
 {
 	t_dongle dongle;
 
-	dongle.cooldown = sim->params->dongle_cooldown;
+	dongle.cooldown = sim->params.dongle_cooldown;
 	sim->dongles[index] = dongle;
 }
 
 
 static void insert_new_coder(int index, t_sim *sim)
 {
-	int coders_count_to_mod = sim->params->number_of_coders;
+	int coders_count_to_mod = sim->params.number_of_coders;
 	t_coder coder;
 
 	if(pthread_create(
@@ -31,7 +31,7 @@ static void insert_new_coder(int index, t_sim *sim)
 
 	coder.id = index + 1;
 	coder.sim = sim;
-	coder.time_to_burnout = sim->params->time_to_burnout;
+	coder.time_to_burnout = sim->params.time_to_burnout;
 
 	coder.dongle_l = &(sim->dongles[index]);
 	coder.dongle_r = &(sim->dongles[(index+1) % coders_count_to_mod]);
@@ -42,13 +42,13 @@ static void insert_new_coder(int index, t_sim *sim)
 
 void init_dongles(t_sim *sim)
 {
-	sim->dongles = malloc(sizeof(t_dongle) * sim->params->number_of_coders);
+	sim->dongles = malloc(sizeof(t_dongle) * sim->params.number_of_coders);
 	if (!sim->dongles)
 		exit(puts("DEBUG: Failed allocation, must free"));
 	
 	int dongle_order;
 	dongle_order = 0;
-	while(dongle_order < sim->params->number_of_coders)
+	while(dongle_order < sim->params.number_of_coders)
 		// create and append all dongles
 		insert_new_dongle(dongle_order++, sim);
 }
@@ -56,33 +56,31 @@ void init_dongles(t_sim *sim)
 
 void init_coders(t_sim *sim)
 {
-	sim->coders = malloc(sizeof(t_coder) * sim->params->number_of_coders);
+	sim->coders = malloc(sizeof(t_coder) * sim->params.number_of_coders);
 	if (!sim->coders)
 		exit(puts("DEBUG: Failed allocation, must free"));
 
 	int coder_order;
 	coder_order = 0;
-	while(coder_order < sim->params->number_of_coders)
+	while(coder_order < sim->params.number_of_coders)
 		// create and append all coders
 		insert_new_coder(coder_order++, sim);
 }
 
 
-t_sim *init_simulation(t_params *params) {
-	t_sim* sim = malloc(sizeof(t_sim));
-	if(!sim)
-		exit(puts("DEBUG: Failed allocation, must free"));
+t_sim init_simulation(t_params params) {
+	t_sim sim;
 
-	init_dongles(sim);
-	init_coders(sim);
-	sim->params = params;
+	init_dongles(&sim);
+	init_coders(&sim);
+	sim.params = params;
 
-	pthread_mutex_init(&sim->running_mutex, NULL);
-	pthread_mutex_init(&sim->birth_mutex, NULL);
-	pthread_mutex_init(&sim->print_mutex, NULL);
+	pthread_mutex_init(&sim.running_mutex, NULL);
+	pthread_mutex_init(&sim.birth_mutex, NULL);
+	pthread_mutex_init(&sim.print_mutex, NULL);
 
-	sim->running = false;
-	sim->birth_wake = false;
+	sim.running = false;
+	sim.birth_wake = false;
 
 	return sim;
 }
@@ -91,5 +89,7 @@ t_sim *init_simulation(t_params *params) {
 // here is the main brocha
 int main(int argc, char **argv)
 {
-	t_sim* sim = init_simulation(getparams(argv));
+	getparams(argv);
+	return 0;
+	t_sim sim = init_simulation(getparams(argv));
 }

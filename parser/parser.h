@@ -5,14 +5,17 @@
 // preventing data duplication in runtime
 
 typedef struct s_params {
-	const int number_of_coders;
-	const int time_to_burnout;
-	const int time_to_compile;
-	const int time_to_debug;
-	const int time_to_refactor;
-	const int number_of_compiles_required;
-	const int dongle_cooldown;
-	const int scheduler;
+	int number_of_coders;
+	int time_to_burnout;
+	int time_to_compile;
+	int time_to_debug;
+	int time_to_refactor;
+	int number_of_compiles_required;
+	int dongle_cooldown;
+	int scheduler;
 } t_params;
+
+t_params getparams(char **args);
+int	ft_atopi(const char *str);
 
 #endif
