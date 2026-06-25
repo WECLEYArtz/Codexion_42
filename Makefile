@@ -1,28 +1,32 @@
-CFLAGS= -pthread -Wall -Werror -Wextra
+CFLAGS=		-pthread -Wall -Werror -Wextra
 
-NAME=codexion
+NAME=		codexion
 
-DEBUG= -g -fsanitize=address -fsanitize=leak -fsanitize=thread 
+DEBUG=\
+	  # -g\
+	  # -fsanitize=address\
+	  # -fsanitize=leak
 
-SRC= main.c\
-coder/coders.c coder/routines.c\
-donle/dongle.c monitor/monitor.c\
-parser/atopi.c parser/params_parser.c\
-schedualer/schedualer.c\
-simulation/simulation.h
+SRC=		main.c\
+			coder/coders.c coder/routines.c\
+			dongle/dongle.c monitor/monitor.c\
+			parser/atopi.c parser/params_parser.c\
+			schedualer/schedualer.c\
 
-OBJ=(SRC:%.o:%.c)
+OBJ=		$(SRC:.c=.o)
 
-HEADER=codexion.h
+HEADER=		codexion.h
 
-all: $(NAME)
-	$(CC) 
+all:		$(NAME)
 
-%.o:%.c dependencies.h
+$(NAME): 	$(OBJ) 
+	$(CC) $(CFLAGS) $(DEBUG) -o $(NAME) $(OBJ)
+
+%.o:%.c		dependencies.h
+	$(CC) -c $(CFLAGS) $(DEBUG) $< -o $@
 
 clean:
 	rm -f $(OBJ)
-	make fclean
 
 fclean: clean
 	rm -f $(NAME)

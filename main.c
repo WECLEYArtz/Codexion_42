@@ -10,7 +10,6 @@
 // - get the parsed parameters.
 // - initialise the mutexes to be used later.
 
-
 static void insert_new_dongle(int index, t_sim *sim)
 {
 	t_dongle dongle;
@@ -86,10 +85,32 @@ t_sim init_simulation(t_params params) {
 }
 
 
-// here is the main brocha
+// here is the main brosha-shisha
 int main(int argc, char **argv)
 {
+	if (argc != 9)
+		return -1;
 	getparams(argv);
-	return 0;
 	t_sim sim = init_simulation(getparams(argv));
+
+
+
+	printf("\
+	time_to_debug : %d \n\
+	time_to_burnout : %d \n\
+	time_to_compile : %d \n\
+	time_to_debug : %d \n\
+	time_to_refactor : %d \n\
+	number_of_coders : %d \n\
+	dongle_cooldown : %d \n\
+	scheduler : %d where (1)edf - (2)fifo \n",\
+
+	sim.params.time_to_debug,
+	sim.params.time_to_burnout,
+	sim.params.time_to_compile,
+	sim.params.time_to_debug,
+	sim.params.time_to_refactor,
+	sim.params.number_of_coders,
+	sim.params.dongle_cooldown,
+	sim.params.scheduler);
 }

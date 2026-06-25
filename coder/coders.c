@@ -4,8 +4,8 @@
 static void coder_post_creation_action(t_coder *self)
 {
 	int sleep_time =
-		self->sim->params->time_to_compile +
-		self->sim->params->dongle_cooldown;
+		self->sim->params.time_to_compile +
+		self->sim->params.dongle_cooldown;
 		
 	bool nigger = self->id % 2;
 	if (nigger)

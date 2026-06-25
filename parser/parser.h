@@ -12,7 +12,7 @@ typedef struct s_params {
 	int time_to_refactor;
 	int number_of_compiles_required;
 	int dongle_cooldown;
-	int scheduler;
+	short scheduler;
 } t_params;
 
 t_params getparams(char **args);

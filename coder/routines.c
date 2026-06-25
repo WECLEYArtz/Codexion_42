@@ -8,21 +8,21 @@ void compile(t_coder *coder)
 {
 	coder->dongle_l->request(coder->id);
 	announce(coder, "compiling\n");
-	sleep(coder->sim->params->time_to_compile);
+	sleep(coder->sim->params.time_to_compile);
 }
 
 
 void debug(t_coder *coder)
 {
 	announce(coder, "refactoring\n");
-	sleep(coder->sim->params->time_to_debug);
+	sleep(coder->sim->params.time_to_debug);
 }
 
 
 void refactor(t_coder *coder)
 {
 	announce(coder, "refactoring\n");
-	sleep(coder->sim->params->time_to_refactor);
+	sleep(coder->sim->params.time_to_refactor);
 }
 
 
