@@ -6,12 +6,13 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/06/26 10:45:35 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/06/26 16:45:39 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../coder/coder.h"
 #include "../simulation/simulation.h"
+#include <pthread.h>
 
 static void	coder_post_creation_action(t_coder *self)
 {
@@ -21,18 +22,13 @@ static void	coder_post_creation_action(t_coder *self)
 	sleep_time = self->sim->params.time_to_compile
 		+ self->sim->params.dongle_cooldown;
 	nigger = self->id % 2;
-	if (nigger)
-	{
-		while (!self->sim->running)
-			sleep(sleep_time);
-	}
-	else
-	{
-		while (!self->sim->running)
-			pthread_cond_wait(&self->birth_control, &self->sim->running_mutex);
-	}
-	// wether to pick the coder
-	// or sleep until then others are done compiling +
+
+	while (!self->sim->running)
+		pthread_cond_wait(&self->birth_control, &self->sim->running_mutex);
+	if (!nigger)
+		return;
+	while (!self->sim->running)
+		sleep(sleep_time);
 }
 
 static void	init_routine_arr(void (**routines)(t_coder *))

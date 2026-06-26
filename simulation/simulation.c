@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:15:04 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/06/26 15:57:23 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/06/26 16:16:28 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ static void	_fill_coder_vals(t_coder *coder, int order, t_sim *sim)
 	coder->dongle_l = sim->dongles + (order);
 	coder->dongle_r = sim->dongles + (order + 1 % mod);
 	coder->sim = sim;
+	coder->birth_control = sim->birth_control;
 	if (pthread_create(&(coder->thread), NULL, coder_routine, coder))
 	{
 		sim_cleaner(sim);
