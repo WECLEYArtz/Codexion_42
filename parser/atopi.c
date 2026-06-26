@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*   atopi.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ahmounsi <<marvin@42.fr>>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/20 17:30:19 by ahmounsi          #+#    #+#             */
-/*   Updated: 2025/10/29 00:59:47 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/06/26 10:40:28 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,16 +43,15 @@ static int	ft_atoi_convert(const char *str)
 
 int	ft_atopi(const char *str)
 {
-	int		result;
+	int	result;
 
 	result = 0;
 	while (ft_isspace(*str))
 		str++;
-
 	if (*str == '-')
 	{
 		if (str[1] == '0' && !ft_isdigit(str[2]))
-			return 0;
+			return (0);
 		else
 			exit(puts("DEBUG: negative value given"));
 	}

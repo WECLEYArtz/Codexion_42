@@ -1,13 +1,26 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   params_parser.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
+/*   Updated: 2026/06/26 15:16:47 by ahmounsi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../dependencies.h"
 #include "../parser/parser.h"
 
-t_params getparams(char **argv){
-	t_params params;
+t_params	getparams(char **argv)
+{
+	t_params	params;
 
 	if (!strcmp(argv[8], "edf"))
-		params.scheduler = 1; 
-	else if(!strcmp(argv[8], "fifo"))
-		params.scheduler = 2; 
+		params.scheduler = 1;
+	else if (!strcmp(argv[8], "fifo"))
+		params.scheduler = 2;
 	else
 		exit(puts("DEBUG: Invalid scheduler"));
 	params.time_to_debug = ft_atopi(argv[1]);
@@ -18,5 +31,5 @@ t_params getparams(char **argv){
 	params.number_of_coders = ft_atopi(argv[6]);
 	params.dongle_cooldown = ft_atopi(argv[7]);
 
-	return params;
+	return (params);
 }
