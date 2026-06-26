@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:37:01 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/06/26 15:11:09 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/06/26 15:47:45 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	main(int argc, char **argv)
 		return (-1);
 	t_params params = getparams(argv);
 	sim = init_simulation(params);
-
 	debug(sim);
+
 	sim_cleaner(&sim);
 }

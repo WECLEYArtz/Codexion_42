@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:15:04 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/06/26 15:15:39 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/06/26 15:57:23 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,16 @@ static void	_fill_coder_vals(t_coder *coder, int order, t_sim *sim)
 	int		mod;
 
 	mod = sim->params.number_of_coders;
-	if (pthread_create(&(coder->thread), NULL, coder_routine, coder))
-	{
-		sim_cleaner(sim);
-		exit(puts("DEBUG: Failed to create a thread"));
-	}
 	coder->id = order + 1;
 	coder->time_to_burnout = sim->params.time_to_burnout;
 	coder->dongle_l = sim->dongles + (order);
 	coder->dongle_r = sim->dongles + (order + 1 % mod);
 	coder->sim = sim;
+	if (pthread_create(&(coder->thread), NULL, coder_routine, coder))
+	{
+		sim_cleaner(sim);
+		exit(puts("DEBUG: Failed to create a thread"));
+	}
 }
 
 static void	init_coders(t_sim *sim)
