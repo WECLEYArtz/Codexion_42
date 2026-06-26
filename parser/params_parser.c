@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/06/26 15:16:47 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/06/26 16:07:34 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,12 @@ t_params	getparams(char **argv)
 		params.scheduler = 2;
 	else
 		exit(puts("DEBUG: Invalid scheduler"));
-	params.time_to_debug = ft_atopi(argv[1]);
+	params.number_of_coders = ft_atopi(argv[1]);
 	params.time_to_burnout = ft_atopi(argv[2]);
 	params.time_to_compile = ft_atopi(argv[3]);
 	params.time_to_debug = ft_atopi(argv[4]);
 	params.time_to_refactor = ft_atopi(argv[5]);
-	params.number_of_coders = ft_atopi(argv[6]);
+	params.number_of_compiles_required = ft_atopi(argv[6]);
 	params.dongle_cooldown = ft_atopi(argv[7]);
 
 	return (params);
