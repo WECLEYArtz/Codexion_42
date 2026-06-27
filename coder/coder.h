@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 13:05:58 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/06/26 13:05:59 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/06/27 18:05:10 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 typedef struct s_coder
 {
 	pthread_t		thread;
-	pthread_cond_t	birth_control;
 	int				id;
 
 	int				time_to_burnout;

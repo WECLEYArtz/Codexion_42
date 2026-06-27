@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:00:49 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/06/26 16:15:35 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/06/27 19:02:22 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,13 @@ typedef struct s_sim
 
 	pthread_mutex_t	print_mutex;
 	pthread_mutex_t	running_mutex;
-	pthread_mutex_t	birth_mutex;
+
 	pthread_cond_t	birth_control;
-	bool			birth_wake;
+
 	bool			running;
 }					t_sim;
 
-t_sim	init_simulation(t_params params);
+void	init_simulation(t_sim *sim, char **argv);
 void	sim_cleaner(t_sim *sim);
 // make function to cleanup the whole simulation,
 // a cleaner compenent that knows what to d for every elements.

@@ -6,12 +6,12 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:37:01 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/06/26 16:40:36 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/06/27 19:32:24 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "debug.c"
 #include "dependencies.h"
-#include "parser/parser.h"
 #include "simulation/simulation.h"
 #include <pthread.h>
 
@@ -21,44 +21,33 @@
 // - get the parsed parameters.
 // - initialise the mutexes to be used later.
 
-static void	debug(t_sim sim)
+static void lauch_simulation(t_sim *sim)
 {
-	printf("\
-	number_of_coders : %d \n\
-	time_to_burnout : %d \n\
-	time_to_compile : %d \n\
-	time_to_debug : %d \n\
-	time_to_refactor : %d \n\
-	number_of_compiles_required : %d \n\
-	dongle_cooldown : %d \n\
-	scheduler : %d where (1)edf - (2)fifo \n",
-		sim.params.number_of_coders,
-		sim.params.time_to_burnout,
-		sim.params.time_to_compile,
-		sim.params.time_to_debug,
-		sim.params.time_to_refactor,
-		sim.params.number_of_compiles_required,
-		sim.params.dongle_cooldown,
-		sim.params.scheduler);
+	sleep(1);
+	db_announce(sim, "[SIM] taking mutex"); // debug
+
+	pthread_mutex_lock(&sim->running_mutex);
+	sim->running = true;
+
+ 	db_announce(sim, "[SIM] broadcasting..."); // debug
+
+	gettimeofday(&sim->startup, NULL);
+	pthread_cond_broadcast(&sim->birth_control);
+	pthread_mutex_unlock(&sim->running_mutex);
 }
 
 int	main(int argc, char **argv)
 {
-	t_sim		sim;
-	t_params	params;
-	pthread_cond_t birth_control;
+	t_sim	sim;
 
 	if (argc != 9)
 		return (-1);
-	params = getparams(argv);
-	sim = init_simulation(params);
+	init_simulation(&sim, argv); // all coder created here
+	printf("sim pointer is : %p\n", &sim); // debug
 
-	//bad way to start testing hh, (where is mutex locking man)
-	sim.running = true;
-	pthread_cond_broadcast(&sim.birth_control);
-	sleep(10);
-	sim.running = false;
-
-	debug(sim);
+	lauch_simulation(&sim);
+	sleep(10); //debug
+	sim.running = false; // end of simulation
+	db_announce(&sim, "ending simulation..."); // debug
 	sim_cleaner(&sim);
 }

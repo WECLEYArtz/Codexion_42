@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:15:04 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/06/26 16:16:28 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/06/27 19:38:46 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 #include "../dependencies.h"
 #include "../dongle/dongle.h"
 #include "../parser/parser.h"
+#include <pthread.h>
+#include <sys/time.h>
 #include "simulation.h"
 
 static void	_fill_coder_vals(t_coder *coder, int order, t_sim *sim)
@@ -26,7 +28,6 @@ static void	_fill_coder_vals(t_coder *coder, int order, t_sim *sim)
 	coder->dongle_l = sim->dongles + (order);
 	coder->dongle_r = sim->dongles + (order + 1 % mod);
 	coder->sim = sim;
-	coder->birth_control = sim->birth_control;
 	if (pthread_create(&(coder->thread), NULL, coder_routine, coder))
 	{
 		sim_cleaner(sim);
@@ -67,26 +68,22 @@ static void	init_dongles(t_sim *sim)
 		(sim->dongles + order++)->cooldown = sim->params.dongle_cooldown;
 }
 
-static void init_metex(t_sim *sim)
+static void init_condv_and_mutex(t_sim *sim)
 {
-	if (pthread_mutex_init(&sim->running_mutex, NULL)	||
-			pthread_mutex_init(&sim->birth_mutex, NULL) ||
-			pthread_mutex_init(&sim->print_mutex, NULL))
+	if (pthread_mutex_init(&sim->running_mutex, NULL) ||
+			pthread_mutex_init(&sim->print_mutex, NULL) ||
+			pthread_cond_init(&sim->birth_control, NULL))
 	{
 		sim_cleaner(sim);
-		exit(puts("DEBUG: Failed mutex init, must clean"));
+		exit(puts("DEBUG: Failed condv/mutex init, must clean"));
 	}
 }
 
-t_sim	init_simulation(t_params params)
+void	init_simulation(t_sim *sim, char** argv)
 {
-	t_sim	sim;
-
-	sim.params = params;
-	init_dongles(&sim);
-	init_coders(&sim);
-	init_metex(&sim);
-	sim.running = false;
-	sim.birth_wake = false;
-	return (sim);
+	sim->params = getparams(argv);
+	init_condv_and_mutex(sim);
+	init_dongles(sim);
+	init_coders(sim);
+	sim->running = false;
 }

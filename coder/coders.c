@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/06/26 16:45:39 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/06/27 19:42:21 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,18 +17,20 @@
 static void	coder_post_creation_action(t_coder *self)
 {
 	int		sleep_time;
-	bool	nigger;
+	bool	even;
 
 	sleep_time = self->sim->params.time_to_compile
 		+ self->sim->params.dongle_cooldown;
-	nigger = self->id % 2;
+	even = self->id % 2;
+	
+	pthread_mutex_lock(&self->sim->running_mutex);
 
-	while (!self->sim->running)
-		pthread_cond_wait(&self->birth_control, &self->sim->running_mutex);
-	if (!nigger)
+	while (self->sim->running == false)
+		pthread_cond_wait(&self->sim->birth_control, &self->sim->running_mutex);
+	pthread_mutex_unlock(&self->sim->running_mutex);
+	if (even)
 		return;
-	while (!self->sim->running)
-		sleep(sleep_time);
+	sleep(sleep_time);
 }
 
 static void	init_routine_arr(void (**routines)(t_coder *))
@@ -38,6 +40,7 @@ static void	init_routine_arr(void (**routines)(t_coder *))
 	routines[2] = refactor;
 }
 
+// PERF: 'init_routine_arr()' does not need to be called for every thread.
 void	*coder_routine(void *coder_p)
 {
 	t_coder	*self;
@@ -52,7 +55,7 @@ void	*coder_routine(void *coder_p)
 	{
 		if (routine_turn == 3)
 			routine_turn = 0;
-		routines[routine_turn++ - 1 % 3](self);
+		routines[routine_turn++](self);
 	}
 	return (NULL);
 }
