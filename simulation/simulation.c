@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:15:04 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/06/27 19:38:46 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/06/28 12:29:36 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,7 @@ static void	_fill_coder_vals(t_coder *coder, int order, t_sim *sim)
 	coder->dongle_r = sim->dongles + (order + 1 % mod);
 	coder->sim = sim;
 	if (pthread_create(&(coder->thread), NULL, coder_routine, coder))
-	{
 		sim_cleaner(sim);
-		exit(puts("DEBUG: Failed to create a thread"));
-	}
 }
 
 static void	init_coders(t_sim *sim)
@@ -42,10 +39,7 @@ static void	init_coders(t_sim *sim)
 	order = 0;
 	sim->coders = malloc(sizeof(t_coder) * sim->params.number_of_coders);
 	if (!sim->coders)
-	{
 		sim_cleaner(sim);
-		exit(puts("DEBUG: Failed allocation, must clean"));
-	}
 	while (order < sim->params.number_of_coders)
 	{
 		_fill_coder_vals(sim->coders + order, order, sim);
@@ -59,10 +53,7 @@ static void	init_dongles(t_sim *sim)
 
 	sim->dongles = malloc(sizeof(t_dongle) * sim->params.number_of_coders);
 	if (!sim->dongles)
-	{
 		sim_cleaner(sim);
-		exit(puts("DEBUG: Failed allocation, must clean"));
-	}
 	order = 0;
 	while (order < sim->params.number_of_coders)
 		(sim->dongles + order++)->cooldown = sim->params.dongle_cooldown;
@@ -73,10 +64,7 @@ static void init_condv_and_mutex(t_sim *sim)
 	if (pthread_mutex_init(&sim->running_mutex, NULL) ||
 			pthread_mutex_init(&sim->print_mutex, NULL) ||
 			pthread_cond_init(&sim->birth_control, NULL))
-	{
 		sim_cleaner(sim);
-		exit(puts("DEBUG: Failed condv/mutex init, must clean"));
-	}
 }
 
 void	init_simulation(t_sim *sim, char** argv)

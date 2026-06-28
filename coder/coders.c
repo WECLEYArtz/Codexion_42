@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/06/27 19:42:21 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/06/28 12:12:01 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,22 @@
 #include "../simulation/simulation.h"
 #include <pthread.h>
 
+// NOTE: if one coder, dont make it sleep...
 static void	coder_post_creation_action(t_coder *self)
 {
-	int		sleep_time;
-	bool	even;
+	int		hold_sleep_time;
 
-	sleep_time = self->sim->params.time_to_compile
-		+ self->sim->params.dongle_cooldown;
-	even = self->id % 2;
+	hold_sleep_time = (self->sim->params.time_to_compile
+		+ self->sim->params.dongle_cooldown) * 1000;
 	
 	pthread_mutex_lock(&self->sim->running_mutex);
 
 	while (self->sim->running == false)
 		pthread_cond_wait(&self->sim->birth_control, &self->sim->running_mutex);
 	pthread_mutex_unlock(&self->sim->running_mutex);
-	if (even)
+	if (self->id % 2 > 0)
 		return;
-	sleep(sleep_time);
+	usleep(hold_sleep_time);
 }
 
 static void	init_routine_arr(void (**routines)(t_coder *))

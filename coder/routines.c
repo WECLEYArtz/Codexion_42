@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/06/27 19:42:54 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/06/28 12:10:31 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,24 +16,25 @@
 #include "../parser/parser.h"
 #include "../simulation/simulation.h"
 
-// NOTE: The only thing this lacks now is taking the dongle
+// NOTE: The only thing this lacks now is taking the dongle, maybe more...
 void	compile(t_coder *coder)
 {
 	// coder->dongle_l->request(coder->id);
-	announce(coder, "compiling");
-	sleep(coder->sim->params.time_to_compile);
+	announce(coder, "has taken a dongle");
+	announce(coder, "is compiling");
+	usleep(coder->sim->params.time_to_compile * 1000);
 }
 
 void	debug(t_coder *coder)
 {
-	announce(coder, "debuging");
-	sleep(coder->sim->params.time_to_debug);
+	announce(coder, "is debuging");
+	usleep(coder->sim->params.time_to_debug * 1000);
 }
 
 void	refactor(t_coder *coder)
 {
-	announce(coder, "refactoring");
-	sleep(coder->sim->params.time_to_refactor);
+	announce(coder, "is refactoring");
+	usleep(coder->sim->params.time_to_refactor * 1000);
 }
 
 void	announce(t_coder *coder, char *action)
@@ -42,8 +43,8 @@ void	announce(t_coder *coder, char *action)
 
 	gettimeofday(&current, NULL); // search what goes instead of Null
 	pthread_mutex_lock(&coder->sim->print_mutex);
-	printf("%d %d is %s\n",
-			(int)(current.tv_sec - coder->sim->startup.tv_sec) * 100,
-		coder->id, action);
+	printf("%ld %d %s\n", (current.tv_sec * 1000 + current.tv_usec / 1000)
+		- (coder->sim->startup.tv_sec * 1000 + coder->sim->startup.tv_usec
+			/ 1000), coder->id, action);
 	pthread_mutex_unlock(&coder->sim->print_mutex);
 }
