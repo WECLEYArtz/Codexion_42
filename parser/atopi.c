@@ -1,16 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*   atopi.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ahmounsi <<marvin@42.fr>>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/20 17:30:19 by ahmounsi          #+#    #+#             */
-/*   Updated: 2025/10/29 00:59:47 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/06/29 17:21:46 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_isdigit(int c)
+#include <limits.h>
+
+static int	ft_isdigit(int c)
 {
 	return ('0' <= c && c <= '9');
 }
@@ -22,41 +24,40 @@ static int	ft_isspace(int c)
 	return (0);
 }
 
-static long	ft_atoi_convert(const char *str, int sign)
+static int	ft_atoi_convert(const char *str)
 {
-	long	result;
+	int	result;
 
 	result = 0;
 	while (*str && ft_isdigit(*str))
 	{
-		if ((long)((result * 10) + (long)(*str - '0')) < result)
-		{
-			if (sign == -1)
-				return (0);
-			else
-				return (-1);
-		}
+		if ((((long)result * 10) + (*str - '0')) > INT_MAX)
+			return (-1);
 		else
 			result = (result * 10) + (*str++ - '0');
 	}
 	return (result);
 }
 
-int	ft_atoi(const char *str)
+// NOTE: Suspecious else if condition on line 15
+// FIX: -0 passes but not "-0 "
+// FIX: " x y" gets parsed into only 'x'
+int	ft_atopi(const char *str)
 {
-	long	result;
-	int		sign;
+	int	result;
 
 	result = 0;
-	sign = 1;
 	while (ft_isspace(*str))
 		str++;
-	if (*str == '+' || (*str == '-'))
+	if (*str == '-')
 	{
-		if (*str == '-')
-			(sign = -1);
-		str++;
+		if (str[1] == '0' && !str[2])
+			return (0);
+		else
+			return (-1);
 	}
-	result = ft_atoi_convert(str, sign);
-	return (result * sign);
+	else if (*str == '+')
+		str++;
+	result = ft_atoi_convert(str);
+	return (result);
 }
