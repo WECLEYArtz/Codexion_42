@@ -6,7 +6,7 @@
 /*   By: ahmounsi <<marvin@42.fr>>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/20 17:30:19 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/06/29 17:21:46 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/06/29 20:31:40 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,6 @@
 static int	ft_isdigit(int c)
 {
 	return ('0' <= c && c <= '9');
-}
-
-static int	ft_isspace(int c)
-{
-	if (c == ' ' || (9 <= c && c <= 13))
-		return (1);
-	return (0);
 }
 
 static int	ft_atoi_convert(const char *str)
@@ -36,19 +29,18 @@ static int	ft_atoi_convert(const char *str)
 		else
 			result = (result * 10) + (*str++ - '0');
 	}
+	if (*str)
+		return (-1);
 	return (result);
 }
 
-// NOTE: Suspecious else if condition on line 15
-// FIX: -0 passes but not "-0 "
-// FIX: " x y" gets parsed into only 'x'
 int	ft_atopi(const char *str)
 {
 	int	result;
 
 	result = 0;
-	while (ft_isspace(*str))
-		str++;
+	// while (ft_isspace(*str))
+	// 	str++;
 	if (*str == '-')
 	{
 		if (str[1] == '0' && !str[2])

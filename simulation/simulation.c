@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:15:04 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/06/29 17:16:17 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/06/29 20:31:06 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,9 @@ int	init_simulation(t_sim *sim, char **argv)
 	if (getparams(argv, &params) || params.number_of_coders == 0)
 		return (1);
 	sim->params = params;
+	sim->routines[0] = compile;
+	sim->routines[1] = debug;
+	sim->routines[2] = refactor;
 	sim->running = false;
 	if (init_condv_and_mutex(sim) || init_dongles(sim) || init_coders(sim))
 		return (1);

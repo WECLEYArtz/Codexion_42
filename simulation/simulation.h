@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:00:49 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/06/29 17:17:33 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/06/29 20:31:30 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "../dependencies.h"
 # include "../parser/parser.h"
 
+typedef void		(*t_routines)(t_coder *);
 typedef struct s_sim
 {
 	t_dongle		*dongles;
@@ -28,6 +29,7 @@ typedef struct s_sim
 	pthread_mutex_t	running_mutex;
 
 	pthread_cond_t	birth_control;
+	t_routines		routines[3];
 
 	bool			running;
 }					t_sim;
