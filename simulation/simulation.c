@@ -6,21 +6,17 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:15:04 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/06/28 12:29:36 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/06/29 17:16:17 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../coder/coder.h"
-#include "../dependencies.h"
 #include "../dongle/dongle.h"
-#include "../parser/parser.h"
-#include <pthread.h>
-#include <sys/time.h>
 #include "simulation.h"
 
-static void	_fill_coder_vals(t_coder *coder, int order, t_sim *sim)
+static int	_fill_coder_vals(t_coder *coder, int order, t_sim *sim)
 {
-	int		mod;
+	int	mod;
 
 	mod = sim->params.number_of_coders;
 	coder->id = order + 1;
@@ -29,49 +25,63 @@ static void	_fill_coder_vals(t_coder *coder, int order, t_sim *sim)
 	coder->dongle_r = sim->dongles + (order + 1 % mod);
 	coder->sim = sim;
 	if (pthread_create(&(coder->thread), NULL, coder_routine, coder))
-		sim_cleaner(sim);
+		return (1);
+	return (0);
 }
 
-static void	init_coders(t_sim *sim)
+static int	init_coders(t_sim *sim)
 {
-	int		order;
+	int	order;
 
 	order = 0;
 	sim->coders = malloc(sizeof(t_coder) * sim->params.number_of_coders);
 	if (!sim->coders)
-		sim_cleaner(sim);
+		return (simcleaner(sim, INT_MAX), 1);
 	while (order < sim->params.number_of_coders)
 	{
-		_fill_coder_vals(sim->coders + order, order, sim);
-		order ++;
+		if (_fill_coder_vals(sim->coders + order, order, sim))
+			return (simcleaner(sim, INT_MAX), 1);
+		order++;
 	}
+	return (0);
 }
 
-static void	init_dongles(t_sim *sim)
+static int	init_dongles(t_sim *sim)
 {
 	int	order;
 
 	sim->dongles = malloc(sizeof(t_dongle) * sim->params.number_of_coders);
 	if (!sim->dongles)
-		sim_cleaner(sim);
+		return (simcleaner(sim, INT_MAX), 1);
 	order = 0;
 	while (order < sim->params.number_of_coders)
 		(sim->dongles + order++)->cooldown = sim->params.dongle_cooldown;
+	return (0);
 }
 
-static void init_condv_and_mutex(t_sim *sim)
+// NOTE:	do i need this when we clear once for all
+//			before closing the whole program?
+//			do i need to go back to simple?
+static int	init_condv_and_mutex(t_sim *sim)
 {
-	if (pthread_mutex_init(&sim->running_mutex, NULL) ||
-			pthread_mutex_init(&sim->print_mutex, NULL) ||
-			pthread_cond_init(&sim->birth_control, NULL))
-		sim_cleaner(sim);
+	if (pthread_mutex_init(&sim->running_mutex, NULL))
+		return (simcleaner(sim, 1), 1);
+	if (pthread_mutex_init(&sim->print_mutex, NULL))
+		return (simcleaner(sim, 1), 2);
+	if (pthread_cond_init(&sim->birth_control, NULL))
+		return (simcleaner(sim, 1), 3);
+	return (0);
 }
 
-void	init_simulation(t_sim *sim, char** argv)
+int	init_simulation(t_sim *sim, char **argv)
 {
-	sim->params = getparams(argv);
-	init_condv_and_mutex(sim);
-	init_dongles(sim);
-	init_coders(sim);
+	t_params	params;
+
+	if (getparams(argv, &params) || params.number_of_coders == 0)
+		return (1);
+	sim->params = params;
 	sim->running = false;
+	if (init_condv_and_mutex(sim) || init_dongles(sim) || init_coders(sim))
+		return (1);
+	return (0);
 }

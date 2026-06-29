@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:02:48 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/06/26 11:02:49 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/06/29 17:17:33 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ typedef struct s_params
 	short	scheduler;
 }			t_params;
 
-t_params	getparams(char **args);
+int			getparams(char **args, t_params *params);
 int			ft_atopi(const char *str);
 
 #endif

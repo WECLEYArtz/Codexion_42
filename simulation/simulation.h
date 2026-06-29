@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:00:49 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/06/27 19:02:22 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/06/29 17:17:33 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ typedef struct s_sim
 	bool			running;
 }					t_sim;
 
-void	init_simulation(t_sim *sim, char **argv);
-void	sim_cleaner(t_sim *sim);
+int					init_simulation(t_sim *sim, char **argv);
+void				simcleaner(t_sim *sim, int step);
 // make function to cleanup the whole simulation,
 // a cleaner compenent that knows what to d for every elements.
 

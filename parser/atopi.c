@@ -6,13 +6,11 @@
 /*   By: ahmounsi <<marvin@42.fr>>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/20 17:30:19 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/06/26 15:45:26 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/06/29 17:21:46 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <limits.h>
-#include <stdio.h>
-#include <stdlib.h>
 
 static int	ft_isdigit(int c)
 {
@@ -34,13 +32,16 @@ static int	ft_atoi_convert(const char *str)
 	while (*str && ft_isdigit(*str))
 	{
 		if ((((long)result * 10) + (*str - '0')) > INT_MAX)
-			exit(puts("DEBUG: big value given"));
+			return (-1);
 		else
 			result = (result * 10) + (*str++ - '0');
 	}
 	return (result);
 }
 
+// NOTE: Suspecious else if condition on line 15
+// FIX: -0 passes but not "-0 "
+// FIX: " x y" gets parsed into only 'x'
 int	ft_atopi(const char *str)
 {
 	int	result;
@@ -53,9 +54,9 @@ int	ft_atopi(const char *str)
 		if (str[1] == '0' && !str[2])
 			return (0);
 		else
-			exit(puts("DEBUG: negative value given"));
+			return (-1);
 	}
-	if (*str == '+')
+	else if (*str == '+')
 		str++;
 	result = ft_atoi_convert(str);
 	return (result);

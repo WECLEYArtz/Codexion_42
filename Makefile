@@ -4,7 +4,7 @@ NAME=		codexion
 
 DEBUG=\
 	  -g3\
-	  # -fsanitize=address\
+	  -fsanitize=address\
 	  # -fsanitize=leak
 
 SRC=		main.c\
