@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:15:04 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/06/29 20:31:06 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/01 21:21:11 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,14 @@ static int	_fill_coder_vals(t_coder *coder, int order, t_sim *sim)
 
 	mod = sim->params.number_of_coders;
 	coder->id = order + 1;
-	coder->time_to_burnout = sim->params.time_to_burnout;
 	coder->dongle_l = sim->dongles + (order);
 	coder->dongle_r = sim->dongles + (order + 1 % mod);
+	coder->monitor_link = sim->monitor.monitor_router + order;
 	coder->sim = sim;
-	if (pthread_create(&(coder->thread), NULL, coder_routine, coder))
+	if (pthread_create(sim->monitor.coders_threads + order, NULL,
+				coder_routine, coder))
 		return (1);
+	sim->monitor.coder_thread_init_ok++;
 	return (0);
 }
 
@@ -34,25 +36,32 @@ static int	init_coders(t_sim *sim)
 	int	order;
 
 	order = 0;
+	sim->routines[0] = compile;
+	sim->routines[1] = debug;
+	sim->routines[2] = refactor;
 	sim->coders = malloc(sizeof(t_coder) * sim->params.number_of_coders);
 	if (!sim->coders)
-		return (simcleaner(sim, INT_MAX), 1);
+		return (cleaner(sim, INT_MAX), 12);
 	while (order < sim->params.number_of_coders)
 	{
 		if (_fill_coder_vals(sim->coders + order, order, sim))
-			return (simcleaner(sim, INT_MAX), 1);
+		{
+			join_coders_threads(&sim->monitor);
+			return (cleaner(sim, INT_MAX), 1);
+		}
 		order++;
 	}
 	return (0);
 }
 
+// NOTE: are we sure the dongle doesn't need the whole simulation struct?
 static int	init_dongles(t_sim *sim)
 {
 	int	order;
 
 	sim->dongles = malloc(sizeof(t_dongle) * sim->params.number_of_coders);
 	if (!sim->dongles)
-		return (simcleaner(sim, INT_MAX), 1);
+		return (cleaner(sim, 3), 12);
 	order = 0;
 	while (order < sim->params.number_of_coders)
 		(sim->dongles + order++)->cooldown = sim->params.dongle_cooldown;
@@ -65,11 +74,37 @@ static int	init_dongles(t_sim *sim)
 static int	init_condv_and_mutex(t_sim *sim)
 {
 	if (pthread_mutex_init(&sim->running_mutex, NULL))
-		return (simcleaner(sim, 1), 1);
+		return (cleaner(sim, 1), 1);
 	if (pthread_mutex_init(&sim->print_mutex, NULL))
-		return (simcleaner(sim, 1), 2);
+		return (cleaner(sim, 1), 2);
 	if (pthread_cond_init(&sim->birth_control, NULL))
-		return (simcleaner(sim, 1), 3);
+		return (cleaner(sim, 1), 3);
+	return (0);
+}
+
+static int	init_monitor(t_sim *sim)
+{
+	int	order;
+	int	coders_num;
+
+	order = 0;
+	coders_num = sim->params.number_of_coders;
+	sim->monitor.coder_thread_init_ok = 0;
+	sim->monitor.cond_init_ok = 0;
+	sim->monitor.monitor_router = malloc(sizeof(pthread_cond_t) * coders_num);
+	sim->monitor.coders_threads = malloc(sizeof(pthread_t) * coders_num);
+	sim->monitor.coders_burnout_heap = malloc(sizeof(t_coder *) * coders_num);
+	if (!sim->monitor.monitor_router
+			|| !sim->monitor.coders_burnout_heap
+			|| !sim->monitor.coders_threads)
+		return (cleaner(sim, 4), 12);
+	while (order < coders_num)
+		if (pthread_cond_init(sim->monitor.monitor_router + order++, NULL))
+			return (cleaner(sim, 4), 1);
+		else
+			sim->monitor.cond_init_ok++;
+	if (pthread_create(&sim->monitor.thread, NULL, monitor, sim))
+		return (cleaner(sim, 4), 1);
 	return (0);
 }
 
@@ -79,12 +114,11 @@ int	init_simulation(t_sim *sim, char **argv)
 
 	if (getparams(argv, &params) || params.number_of_coders == 0)
 		return (1);
+	memset(sim, 0, sizeof(t_sim));
 	sim->params = params;
-	sim->routines[0] = compile;
-	sim->routines[1] = debug;
-	sim->routines[2] = refactor;
 	sim->running = false;
-	if (init_condv_and_mutex(sim) || init_dongles(sim) || init_coders(sim))
+	if (init_condv_and_mutex(sim) || init_dongles(sim) || init_monitor(sim)
+			|| init_coders(sim))
 		return (1);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:00:49 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/06/29 20:31:30 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/01 18:40:07 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,25 @@
 # include "../parser/parser.h"
 
 typedef void		(*t_routines)(t_coder *);
+
+typedef struct s_monitor
+{
+	pthread_t		thread;
+	pthread_t		*coders_threads;
+	pthread_cond_t	*monitor_router;
+	int				coder_thread_init_ok;
+	int				cond_init_ok;
+	t_coder			**coders_burnout_heap;
+	t_sim			*sim;
+
+	pthread_mutex_t	target_compile_mutex;
+	bool			target_compiled;
+
+}					t_monitor;
+
 typedef struct s_sim
 {
+	t_monitor		monitor;
 	t_dongle		*dongles;
 	t_coder			*coders;
 
@@ -35,8 +52,7 @@ typedef struct s_sim
 }					t_sim;
 
 int					init_simulation(t_sim *sim, char **argv);
-void				simcleaner(t_sim *sim, int step);
-// make function to cleanup the whole simulation,
-// a cleaner compenent that knows what to d for every elements.
+void				*monitor(void *t_sim_p);
+
 
 #endif

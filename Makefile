@@ -8,10 +8,11 @@ DEBUG=\
 	  # -fsanitize=leak
 
 SRC=		main.c\
+			cleaner.c\
 			coder/coders.c coder/routines.c\
-			dongle/dongle.c monitor/monitor.c\
+			dongle/dongle.c\
 			parser/atopi.c parser/params_parser.c\
-			simulation/simulation.c simulation/cleaner.c\
+			simulation/simulation.c simulation/monitor.c\
 			schedualer/schedualer.c\
 
 OBJ=		$(SRC:.c=.o)

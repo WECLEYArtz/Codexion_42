@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/06/29 17:16:17 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/01 21:25:48 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,16 @@
 #include "../dongle/dongle.h"
 #include "../parser/parser.h"
 #include "../simulation/simulation.h"
+#include <pthread.h>
+#include <sys/time.h>
 
 // NOTE: The only thing this lacks now is taking the dongle, maybe more...
 void	compile(t_coder *coder)
 {
 	// coder->dongle_l->request(coder->id);
 	announce(coder, "has taken a dongle");
+	gettimeofday(&coder->last_compile, NULL);
+	pthread_cond_broadcast(coder->monitor_link);
 	announce(coder, "is compiling");
 	usleep(coder->sim->params.time_to_compile * 1000);
 }
