@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/29 17:16:54 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/01 21:03:27 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/04 12:52:37 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@
 # include <unistd.h>
 
 typedef struct s_sim		t_sim;
+typedef struct s_args		t_args;
 typedef struct s_coder		t_coder;
 typedef struct s_dongle		t_dongle;
-typedef struct s_params		t_params;
 typedef struct s_monitor	t_monitor;
 
 typedef struct timeval		t_timeval;

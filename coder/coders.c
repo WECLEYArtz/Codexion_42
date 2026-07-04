@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/01 18:15:29 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/04 12:54:11 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,18 @@
 
 static void	_coder_post_creation_action(t_sim *sim, int id)
 {
-	int	hold_sleep_time;
+	int	hold_time;
 
-	if (sim->params.number_of_coders == 1)
+	if (sim->args.number_of_coders == 1)
 		return ;
-	hold_sleep_time = (sim->params.time_to_compile
-			+ sim->params.dongle_cooldown) * 1000;
+	hold_time = (sim->args.time_to_compile + sim->args.dongle_cooldown) * 1000;
 	pthread_mutex_lock(&sim->running_mutex);
 	while (sim->running == false)
 		pthread_cond_wait(&sim->birth_control, &sim->running_mutex);
 	pthread_mutex_unlock(&sim->running_mutex);
 	if (id % 2 == 0)
 		return ;
-	usleep(hold_sleep_time);
+	usleep(hold_time);
 }
 
 void	*coder_routine(void *coder_p)

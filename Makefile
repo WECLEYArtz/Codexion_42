@@ -11,7 +11,7 @@ SRC=		main.c\
 			cleaner.c\
 			coder/coders.c coder/routines.c\
 			dongle/dongle.c\
-			parser/atopi.c parser/params_parser.c\
+			parser/atopi.c parser/args_parser.c\
 			simulation/simulation.c simulation/monitor.c\
 			schedualer/schedualer.c\
 

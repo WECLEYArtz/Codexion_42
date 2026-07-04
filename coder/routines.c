@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/01 21:25:48 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/04 12:51:50 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,19 +26,19 @@ void	compile(t_coder *coder)
 	gettimeofday(&coder->last_compile, NULL);
 	pthread_cond_broadcast(coder->monitor_link);
 	announce(coder, "is compiling");
-	usleep(coder->sim->params.time_to_compile * 1000);
+	usleep(coder->sim->args.time_to_compile * 1000);
 }
 
 void	debug(t_coder *coder)
 {
 	announce(coder, "is debuging");
-	usleep(coder->sim->params.time_to_debug * 1000);
+	usleep(coder->sim->args.time_to_debug * 1000);
 }
 
 void	refactor(t_coder *coder)
 {
 	announce(coder, "is refactoring");
-	usleep(coder->sim->params.time_to_refactor * 1000);
+	usleep(coder->sim->args.time_to_refactor * 1000);
 }
 
 void	announce(t_coder *coder, char *action)

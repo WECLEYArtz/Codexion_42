@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:00:49 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/01 18:40:07 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/04 12:51:50 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ typedef struct s_sim
 	t_dongle		*dongles;
 	t_coder			*coders;
 
-	t_params		params;
+	t_args		args;
 	t_timeval		startup;
 
 	pthread_mutex_t	print_mutex;
