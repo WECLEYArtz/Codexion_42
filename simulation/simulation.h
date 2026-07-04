@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:00:49 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/04 12:51:50 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/04 18:26:03 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ typedef struct s_sim
 	t_args		args;
 	t_timeval		startup;
 
-	pthread_mutex_t	print_mutex;
 	pthread_mutex_t	running_mutex;
 
 	pthread_cond_t	birth_control;

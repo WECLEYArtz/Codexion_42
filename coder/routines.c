@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/04 12:51:50 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/04 18:30:57 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,13 @@ void	refactor(t_coder *coder)
 
 void	announce(t_coder *coder, char *action)
 {
-	t_timeval	current;
+	t_timeval		current;
+	static pthread_mutex_t print_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 	gettimeofday(&current, NULL); // search what goes instead of Null
-	pthread_mutex_lock(&coder->sim->print_mutex);
+	pthread_mutex_lock(&print_mutex);
 	printf("%ld %d %s\n", (current.tv_sec * 1000 + current.tv_usec / 1000)
 		- (coder->sim->startup.tv_sec * 1000 + coder->sim->startup.tv_usec
 			/ 1000), coder->id, action);
-	pthread_mutex_unlock(&coder->sim->print_mutex);
+	pthread_mutex_unlock(&print_mutex);
 }

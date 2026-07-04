@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:15:04 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/04 12:51:07 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/04 18:27:10 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,6 @@ static int	init_condv_and_mutex(t_sim *sim)
 {
 	if (pthread_mutex_init(&sim->running_mutex, NULL))
 		return (cleaner(sim, 1), 1);
-	if (pthread_mutex_init(&sim->print_mutex, NULL))
-		return (cleaner(sim, 1), 2);
 	if (pthread_cond_init(&sim->birth_control, NULL))
 		return (cleaner(sim, 1), 3);
 	return (0);

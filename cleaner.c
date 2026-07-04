@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 14:29:38 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/01 21:18:54 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/04 18:26:43 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,6 @@ void	cleaner(t_sim *sim, int step)
 {
 	if (step >= 1)
 		pthread_mutex_destroy(&sim->running_mutex);
-	if (step >= 2)
-		pthread_mutex_destroy(&sim->print_mutex);
 	if (step >= 3)
 		pthread_cond_destroy(&sim->birth_control);
 	if (step >= 4)
