@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   simulation.c                                       :+:      :+:    :+:   */
+/*   simulation_init.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:15:04 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/04 18:27:10 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/07 14:33:58 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ static int	_fill_coder_vals(t_coder *coder, int order, t_sim *sim)
 	coder->dongle_r = sim->dongles + (order + 1 % mod);
 	coder->monitor_link = sim->monitor.monitor_router + order;
 	coder->sim = sim;
-	if (pthread_create(sim->monitor.coders_threads + order, NULL,
-				coder_routine, coder))
+	if (pthread_create(sim->monitor.coders_threads + order, NULL, coder_routine,
+			coder))
 		return (1);
 	sim->monitor.coder_thread_init_ok++;
 	return (0);
@@ -36,9 +36,6 @@ static int	init_coders(t_sim *sim)
 	int	order;
 
 	order = 0;
-	sim->routines[0] = compile;
-	sim->routines[1] = debug;
-	sim->routines[2] = refactor;
 	sim->coders = malloc(sizeof(t_coder) * sim->args.number_of_coders);
 	if (!sim->coders)
 		return (cleaner(sim, INT_MAX), 12);
@@ -68,18 +65,6 @@ static int	init_dongles(t_sim *sim)
 	return (0);
 }
 
-// NOTE:	do i need this when we clear once for all
-//			before closing the whole program?
-//			do i need to go back to simple?
-static int	init_condv_and_mutex(t_sim *sim)
-{
-	if (pthread_mutex_init(&sim->running_mutex, NULL))
-		return (cleaner(sim, 1), 1);
-	if (pthread_cond_init(&sim->birth_control, NULL))
-		return (cleaner(sim, 1), 3);
-	return (0);
-}
-
 static int	init_monitor(t_sim *sim)
 {
 	int	order;
@@ -91,10 +76,9 @@ static int	init_monitor(t_sim *sim)
 	sim->monitor.cond_init_ok = 0;
 	sim->monitor.monitor_router = malloc(sizeof(pthread_cond_t) * coders_num);
 	sim->monitor.coders_threads = malloc(sizeof(pthread_t) * coders_num);
-	sim->monitor.coders_burnout_heap = malloc(sizeof(t_coder *) * coders_num);
 	if (!sim->monitor.monitor_router
-			|| !sim->monitor.coders_burnout_heap
-			|| !sim->monitor.coders_threads)
+		// || !sim->monitor.coders_burnout_heap
+		|| !sim->monitor.coders_threads)
 		return (cleaner(sim, 4), 12);
 	while (order < coders_num)
 		if (pthread_cond_init(sim->monitor.monitor_router + order++, NULL))
@@ -110,13 +94,12 @@ int	init_simulation(t_sim *sim, char **argv)
 {
 	t_args	args;
 
-	if (getargs(argv, &args) || args.number_of_coders == 0)
-		return (1);
 	memset(sim, 0, sizeof(t_sim));
+	if (getargs(argv, &args) || args.number_of_coders == 0
+		|| gettimeofday(&sim->startup, NULL))
+		return (1);
 	sim->args = args;
-	sim->running = false;
-	if (init_condv_and_mutex(sim) || init_dongles(sim) || init_monitor(sim)
-			|| init_coders(sim))
+	if (init_dongles(sim) || init_monitor(sim) || init_coders(sim))
 		return (1);
 	return (0);
 }
