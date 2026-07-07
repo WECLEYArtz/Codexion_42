@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:00:49 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/04 18:26:03 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/07 14:11:16 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@
 # include "../dependencies.h"
 # include "../parser/parser.h"
 
-typedef void		(*t_routines)(t_coder *);
-
 typedef struct s_monitor
 {
 	pthread_t		thread;
@@ -25,12 +23,7 @@ typedef struct s_monitor
 	pthread_cond_t	*monitor_router;
 	int				coder_thread_init_ok;
 	int				cond_init_ok;
-	t_coder			**coders_burnout_heap;
-	t_sim			*sim;
-
-	pthread_mutex_t	target_compile_mutex;
-	bool			target_compiled;
-
+	// t_coder			**coders_burnout_heap; (replace with linked list)
 }					t_monitor;
 
 typedef struct s_sim
@@ -39,19 +32,11 @@ typedef struct s_sim
 	t_dongle		*dongles;
 	t_coder			*coders;
 
-	t_args		args;
+	t_args			args;
 	t_timeval		startup;
-
-	pthread_mutex_t	running_mutex;
-
-	pthread_cond_t	birth_control;
-	t_routines		routines[3];
-
-	bool			running;
 }					t_sim;
 
 int					init_simulation(t_sim *sim, char **argv);
 void				*monitor(void *t_sim_p);
-
 
 #endif

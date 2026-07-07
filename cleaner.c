@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 14:29:38 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/04 18:26:43 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/07 14:11:37 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,8 @@ void	join_coders_threads(t_monitor *monitor)
 // NOTE: the cleaner must also wait for threads to finish before cleaning them
 void	cleaner(t_sim *sim, int step)
 {
-	if (step >= 1)
-		pthread_mutex_destroy(&sim->running_mutex);
-	if (step >= 3)
-		pthread_cond_destroy(&sim->birth_control);
 	if (step >= 4)
 		_uninit_and_free_monitor_router(&sim->monitor);
-	free(sim->monitor.coders_burnout_heap);
 	free(sim->monitor.coders_threads);
 	free(sim->dongles);
 	free(sim->coders);
