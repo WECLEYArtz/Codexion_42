@@ -6,13 +6,12 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/07 14:08:40 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/07 15:51:22 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../coder/coder.h"
 #include "../simulation/simulation.h"
-#include "../simulation/launch_handler.h"
 
 static void	_coder_post_creation_action(t_sim *sim, int id)
 {

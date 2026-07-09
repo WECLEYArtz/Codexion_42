@@ -6,14 +6,16 @@ DEBUG=\
 	  -g3\
 	  # -fsanitize=address\
 	  # -fsanitize=leak
+	  # -fsanitize=thread
 
 SRC=		main.c\
 			cleaner.c\
-			coder/coders.c coder/routines.c\
-			dongle/dongle.c\
-			parser/atopi.c parser/args_parser.c\
-			simulation/simulation_init.c simulation/simulation_utils.c simulation/monitor.c\
-			schedualer/schedualer.c\
+			coder/coders.c coder/routines.c \
+			dongle/dongle.c \
+			monitor/monitor.c monitor/burnoutpq_control.c \
+			parser/args_parser.c parser/atopi.c \
+			schedualer/schedualer.c \
+			simulation/simulation_control.c simulation/simulation_init.c \
 
 OBJ=		$(SRC:.c=.o)
 

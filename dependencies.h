@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/29 17:16:54 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/04 12:52:37 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/08 21:52:18 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ typedef struct timeval		t_timeval;
 
 // Util functions
 void						announce(t_coder *coder, char *action);
-void						cleaner(t_sim *sim, int step);
-void						join_coders_threads(t_monitor *monitor);
-
+void						cleaner(t_sim *sim);
+void						join_coders(t_monitor *monitor,
+								int join_count);
 #endif

@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   simulation_utils.c                                 :+:      :+:    :+:   */
+/*   simulation_control.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 13:20:47 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/07 14:24:07 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/07 15:50:16 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../dependencies.h"
-#include "./launch_handler.h"
+#include "./simulation.h"
 
 static bool	_simulation_runtime_handler(short choice)
 {

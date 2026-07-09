@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:00:49 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/07 14:11:16 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/08 21:51:24 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,25 @@
 # define SIMULATION_H
 
 # include "../dependencies.h"
+# include "../monitor/monitor.h"
 # include "../parser/parser.h"
 
-typedef struct s_monitor
+# define STOP 0
+# define HOLD 1
+# define RUN 2
+# define STAT 3
+
+bool				sim_running_status(void);
+void				sim_stop(void);
+void				sim_launch_hold(void);
+void				sim_lauch_run(void);
+
+typedef struct s_init_records
 {
-	pthread_t		thread;
-	pthread_t		*coders_threads;
-	pthread_cond_t	*monitor_router;
-	int				coder_thread_init_ok;
-	int				cond_init_ok;
-	// t_coder			**coders_burnout_heap; (replace with linked list)
-}					t_monitor;
+	int				c_thread_init_ok;
+	int				c_mutex_init_ok;
+	int				m_cond_init_ok;
+}					t_init_records;
 
 typedef struct s_sim
 {
@@ -34,6 +42,7 @@ typedef struct s_sim
 
 	t_args			args;
 	t_timeval		startup;
+	t_init_records	init_records;
 }					t_sim;
 
 int					init_simulation(t_sim *sim, char **argv);

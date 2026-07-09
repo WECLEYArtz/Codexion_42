@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/04 18:30:57 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/09 00:28:06 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,10 @@
 #include "../dongle/dongle.h"
 #include "../parser/parser.h"
 #include "../simulation/simulation.h"
-#include <pthread.h>
-#include <sys/time.h>
 
 // NOTE: The only thing this lacks now is taking the dongle, maybe more...
+//
+// NOTE: The order of locking -> unlocking -> broadcasting is suspecious
 void	compile(t_coder *coder)
 {
 	// coder->dongle_l->request(coder->id);
@@ -27,6 +27,12 @@ void	compile(t_coder *coder)
 	pthread_cond_broadcast(coder->monitor_link);
 	announce(coder, "is compiling");
 	usleep(coder->sim->args.time_to_compile * 1000);
+
+	pthread_mutex_lock(&coder->compiled_mutex);
+	coder->compiled++;
+	burnoutpq_mvback(&coder->burnout_node);
+	pthread_mutex_unlock(&coder->compiled_mutex);
+	pthread_cond_broadcast(coder->monitor_link);
 }
 
 void	debug(t_coder *coder)
