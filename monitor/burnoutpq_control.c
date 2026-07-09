@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 17:31:10 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/09 02:03:46 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/09 12:25:57 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static t_burnoutpq_node	*_burnoutpq_handler(short choice,
 	pthread_mutex_lock(&burnoutpq_mutex);
 	if (choice == MVBACK)
 		_addback(&head, node);
-	else if (choice == EXTRCT)
+	else if (choice == POP)
 	{
 		tmp = head;
 		head = head->next;
@@ -64,7 +64,7 @@ static t_burnoutpq_node	*_burnoutpq_handler(short choice,
 
 t_burnoutpq_node	*burnoutpq_pop(void)
 {
-	return (_burnoutpq_handler(EXTRCT, NULL));
+	return (_burnoutpq_handler(POP, NULL));
 }
 
 void	burnoutpq_mvback(t_burnoutpq_node *node)

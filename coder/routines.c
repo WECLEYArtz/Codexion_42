@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/09 00:28:06 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/09 13:53:59 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include "../simulation/simulation.h"
 
 // NOTE: The only thing this lacks now is taking the dongle, maybe more...
-//
+
 // NOTE: The order of locking -> unlocking -> broadcasting is suspecious
 void	compile(t_coder *coder)
 {

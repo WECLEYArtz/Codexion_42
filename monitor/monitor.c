@@ -6,14 +6,12 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/09 00:27:55 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/09 12:26:10 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../dependencies.h"
 #include "../simulation/simulation.h"
-
-
 
 void	*monitor(void *t_sim_p)
 {

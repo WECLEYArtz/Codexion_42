@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 21:41:30 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/09 00:55:12 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/09 12:25:11 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define MONTIR_H
 
 # define MVBACK 0
-# define EXTRCT 1
+# define POP 1
 
 # include "../dependencies.h"
 # include "../parser/parser.h"
