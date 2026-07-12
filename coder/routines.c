@@ -25,11 +25,13 @@ static void	_compile_work(t_coder *coder)
 	announce(coder, "is compiling");
 
 
-	// announce(coder, "Locking mutex CMPL	 [debug]");
+	if (DEBUG)
+		announce(coder, RED "Locking mutex CMPL	 [debug]" RESET);
 	pthread_mutex_lock(&coder->compiled_mutex);
 	coder->compiled++;
 	pthread_mutex_unlock(&coder->compiled_mutex);
-	// announce(coder, "Unlocking mutex CMPL...	[debug]");
+	if (DEBUG)
+		announce(coder, GREEN "Unlocking mutex CMPL...	[debug]" RESET);
 
 
 

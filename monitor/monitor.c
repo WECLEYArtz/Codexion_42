@@ -25,7 +25,8 @@ static int	wait_coder_burnout(t_coder *target_coder, t_timeoutadd *timeoutadd)
 	int				rc;
 	struct timespec	timeout;
 
-	// puts("[MONITOR] Locking Mutex");
+	if (DEBUG)
+		puts(RED "[MONITOR] Locking Mutex" RESET);
 	pthread_mutex_lock(&target_coder->compiled_mutex);
 	old_compiles = target_coder->compiled;
 	
@@ -39,24 +40,28 @@ static int	wait_coder_burnout(t_coder *target_coder, t_timeoutadd *timeoutadd)
 	while(1)
 	{
 
-		// puts("[MONITOR] CondW UnLocking Mutex");
+		if (DEBUG)
+			puts(GREEN "[MONITOR] CondW UnLocking Mutex" RESET);
 		rc = pthread_cond_timedwait(target_coder->monitor_link,
 				&target_coder->compiled_mutex, &timeout);
-		// puts("[MONITOR] CondW locking Mutex");
+		if (DEBUG)
+			puts(RED "[MONITOR] CondW locking Mutex" RESET);
 		if (!rc && old_compiles == target_coder->compiled)
 			continue;
 		else if (rc && old_compiles == target_coder->compiled)
 		{
 			// announce(target_coder, "Failed to compile [MONITOR] ---");
 
-			// puts("[MONITOR] Unlocking Mutex CMPL");
+			if (DEBUG)
+				puts(GREEN "[MONITOR] Unlocking Mutex CMPL" RESET);
 			return (pthread_mutex_unlock(&target_coder->compiled_mutex), 1);
 		}
 		else
 		{
 			announce(target_coder, "burnouted");
 
-			// puts("[MONITOR] Unlocking Mutex CMPL");
+			if (DEBUG)
+				puts(GREEN "[MONITOR] Unlocking Mutex CMPL" RESET);
 			return (pthread_mutex_unlock(&target_coder->compiled_mutex), 0);
 		}
 	}

@@ -104,9 +104,11 @@ t_coder	*burnoutpq_pop(void)
 
 void	burnoutpq_mvback(t_burnoutpq_node *node)
 {
-	// announce(node->coder ,"Locking mutex BPQ	 [debug]");
+	if (DEBUG)
+		announce(node->coder, RED "Locking mutex BPQ	 [debug]" RESET);
 	_burnoutpq_handler(MVBACK, node);
-	// announce(node->coder ,"UnLocking mutex BPQ	 [debug]");
+	if (DEBUG)
+		announce(node->coder, GREEN "UnLocking mutex BPQ	 [debug]" RESET);
 }
 
 void	burnoutpq_monitor_watch(t_monitor *monitor)

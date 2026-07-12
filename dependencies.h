@@ -22,6 +22,11 @@
 # include <sys/time.h>
 # include <unistd.h>
 
+# define DEBUG 1
+# define RED "\x1b[31m"
+# define GREEN "\x1b[32m"
+# define RESET "\x1b[0m"
+
 typedef struct s_sim		t_sim;
 typedef struct s_args		t_args;
 typedef struct s_coder		t_coder;

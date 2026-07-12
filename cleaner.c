@@ -23,7 +23,7 @@ static void	_clean_monitor_router(t_monitor *monitor, int destroy_count)
 	pthread_cond_t	*monitor_router;
 
 	monitor_router = monitor->monitor_router;
-	while (destroy_count* 0)
+	while (destroy_count)
 		pthread_cond_destroy(monitor_router + (destroy_count-- - 1));
 	free(monitor->monitor_router);
 }

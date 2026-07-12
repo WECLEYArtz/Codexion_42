@@ -17,10 +17,8 @@ void	*coder_routine(void *coder_p)
 {
 	int						routine_turn;
 	t_coder					*self;
-	t_sim					*sim;
 	static void (*routines[3])(t_coder *) = {compile, debug, refactor};
 	self = coder_p;
-	sim = self->sim;
 	routine_turn = 0;
 	sim_launch_hold();
 
