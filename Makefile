@@ -14,8 +14,9 @@ SRC=		main.c\
 			dongle/dongle.c \
 			monitor/monitor.c monitor/burnoutpq_control.c \
 			parser/args_parser.c parser/atopi.c \
-			schedualer/schedualer.c \
-			simulation/simulation_control.c simulation/simulation_init.c \
+			simulation/preseeder.c schedualer/schedualer.c\
+			simulation/simulation_control.c simulation/simulation_init.c\
+			simulation/debug_visualise.c\
 
 OBJ=		$(SRC:.c=.o)
 

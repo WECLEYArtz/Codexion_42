@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:00:49 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/08 21:51:24 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/11 14:10:40 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ typedef struct s_init_records
 	int				c_thread_init_ok;
 	int				c_mutex_init_ok;
 	int				m_cond_init_ok;
+	int				m_gcond_init_ok;
 }					t_init_records;
 
 typedef struct s_sim
@@ -46,6 +47,13 @@ typedef struct s_sim
 }					t_sim;
 
 int					init_simulation(t_sim *sim, char **argv);
+void				preseeder(t_sim *sim);
 void				*monitor(void *t_sim_p);
+
+// ========================
+// DEBUGING == DELETE LATER
+void				debug_visualise(t_sim *sim);
+// DEBUGING == DELETE LATER
+// ========================
 
 #endif

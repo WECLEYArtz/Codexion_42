@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/09 13:53:59 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/12 01:25:21 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,22 +17,48 @@
 #include "../simulation/simulation.h"
 
 // NOTE: The only thing this lacks now is taking the dongle, maybe more...
-
-// NOTE: The order of locking -> unlocking -> broadcasting is suspecious
-void	compile(t_coder *coder)
+static void	_compile_work(t_coder *coder)
 {
 	// coder->dongle_l->request(coder->id);
 	announce(coder, "has taken a dongle");
 	gettimeofday(&coder->last_compile, NULL);
-	pthread_cond_broadcast(coder->monitor_link);
 	announce(coder, "is compiling");
-	usleep(coder->sim->args.time_to_compile * 1000);
 
+
+	// announce(coder, "Locking mutex CMPL	 [debug]");
 	pthread_mutex_lock(&coder->compiled_mutex);
 	coder->compiled++;
-	burnoutpq_mvback(&coder->burnout_node);
 	pthread_mutex_unlock(&coder->compiled_mutex);
+	// announce(coder, "Unlocking mutex CMPL...	[debug]");
+
+
+
+	burnoutpq_mvback(&coder->burnout_node);
+}
+
+void	first_compile(t_coder *coder)
+{
+	static pthread_mutex_t	first_compile_mutex = PTHREAD_MUTEX_INITIALIZER;
+	static bool				first_compile_taken = false;
+
+	pthread_mutex_lock(&first_compile_mutex);
+	if (!first_compile_taken)
+		first_compile_taken = true;
+	else
+		return ;
+	pthread_mutex_unlock(&first_compile_mutex);
+
+	announce(coder, "Took first compile");
+	_compile_work(coder);
+	pthread_cond_broadcast(&coder->sim->monitor.general_cond);
+	usleep(coder->sim->args.time_to_compile * 1000);
+}
+
+void	compile(t_coder *coder)
+{
+	_compile_work(coder);
 	pthread_cond_broadcast(coder->monitor_link);
+	usleep(coder->sim->args.time_to_compile * 1000);
 }
 
 void	debug(t_coder *coder)
@@ -49,8 +75,8 @@ void	refactor(t_coder *coder)
 
 void	announce(t_coder *coder, char *action)
 {
-	t_timeval		current;
-	static pthread_mutex_t print_mutex = PTHREAD_MUTEX_INITIALIZER;
+	t_timeval				current;
+	static pthread_mutex_t	print_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 	gettimeofday(&current, NULL); // search what goes instead of Null
 	pthread_mutex_lock(&print_mutex);

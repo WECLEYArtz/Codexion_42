@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:15:04 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/09 00:30:38 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/12 01:03:57 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ static int	_fill_coder_vals(t_coder *coder, int order, t_sim *sim)
 
 	mod = sim->args.number_of_coders;
 	coder->id = order + 1;
-	coder->dongle_l = sim->dongles + (order);
-	coder->dongle_r = sim->dongles + (order + 1 % mod);
+	coder->dongle_r = sim->dongles + (order);
+	coder->dongle_l = sim->dongles + ((order + 1) % mod);
 	coder->monitor_link = sim->monitor.monitor_router + order;
 	coder->sim = sim;
 	coder->burnout_node.previous = NULL;
@@ -66,15 +66,22 @@ static int	init_monitor(t_sim *sim)
 	coders_num = sim->args.number_of_coders;
 	sim->monitor.monitor_router = malloc(sizeof(pthread_cond_t) * coders_num);
 	sim->monitor.coders_threads = malloc(sizeof(pthread_t) * coders_num);
+	sim->monitor.timeoutadd.sec = sim->args.time_to_burnout/1000;
+	sim->monitor.timeoutadd.usec = (sim->args.time_to_burnout%1000)*1000;
+	printf("Deadline	compile init - p:%ld n:%ld\n",
+			sim->monitor.timeoutadd.sec, sim->monitor.timeoutadd.usec);
+	// exit(0);
 	if (!sim->monitor.monitor_router || !sim->monitor.coders_threads)
 		return (cleaner(sim), 12);
 	while (order < coders_num)
 	{
-		if (pthread_cond_init(sim->monitor.monitor_router + order++, NULL))
+		if (pthread_cond_init(sim->monitor.monitor_router + order, NULL))
 			return (cleaner(sim), 1);
-		else
-			sim->init_records.m_cond_init_ok++;
+		sim->init_records.m_cond_init_ok = ++order;
 	}
+	if (pthread_cond_init(&sim->monitor.general_cond, NULL))
+		return (cleaner(sim), 1);
+	sim->init_records.m_gcond_init_ok = 1;
 	if (pthread_create(&sim->monitor.thread, NULL, monitor, sim))
 		return (cleaner(sim), 1);
 	return (0);
@@ -90,7 +97,10 @@ static int	init_dongles(t_sim *sim)
 		return (cleaner(sim), 12);
 	order = 0;
 	while (order < sim->args.number_of_coders)
+	{
+		(sim->dongles + order)->id = order+1;
 		(sim->dongles + order++)->cooldown = sim->args.dongle_cooldown;
+	}
 	return (0);
 }
 
@@ -105,5 +115,12 @@ int	init_simulation(t_sim *sim, char **argv)
 	sim->args = args;
 	if (init_dongles(sim) || init_monitor(sim) || init_coders(sim))
 		return (1);
+	preseeder(sim);
+
+	//DEBUG
+	// debug_visualise(sim);
+	// return(cleaner(sim),1);
+	//DEBUG
+
 	return (0);
 }
