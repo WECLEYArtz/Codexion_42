@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:00:49 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/13 20:12:05 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/13 22:08:09 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,13 @@ typedef struct s_sim
 	t_init_records	init_records;
 }					t_sim;
 
+
 int					init_simulation(t_sim *sim, char **argv);
-void				preseeder(t_sim *sim);
+void				preseed_dongles_heap(t_sim *sim);
 void				*monitor(void *t_sim_p);
+
+void				_init_ta(t_timeadd *time, int ms);
+int					_fill_coder_vals(t_coder *coder, int order, t_sim *sim);
 
 // ========================
 // DEBUGING == DELETE LATER
