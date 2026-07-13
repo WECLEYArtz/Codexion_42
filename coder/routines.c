@@ -6,13 +6,12 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/13 00:12:00 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/13 20:29:36 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../coder/coder.h"
 #include "../dependencies.h"
-#include "../dongle/dongle.h"
 #include "../parser/parser.h"
 #include "../simulation/simulation.h"
 
@@ -38,7 +37,6 @@ void	first_compile(t_coder *coder)
 	static pthread_mutex_t	first_compile_mutex = PTHREAD_MUTEX_INITIALIZER;
 	static bool				first_compile_taken = false;
 
-	announce(coder, "[debug] tries to take first compile...");
 	pthread_mutex_lock(&first_compile_mutex);
 	if (!first_compile_taken)
 		first_compile_taken = true;
@@ -51,13 +49,16 @@ void	first_compile(t_coder *coder)
 	announce(coder, "Took first compile");
 	_compile_work(coder);
 	pthread_cond_broadcast(&coder->sim->monitor.general_cond);
+	// burnoutpq_monitor_watch(&coder->sim->monitor);
 	usleep(coder->sim->args.time_to_compile * 1000);
 }
 
 void	compile(t_coder *coder)
 {
 	_compile_work(coder);
+	pthread_mutex_lock(&coder->compiled_mutex);
 	pthread_cond_broadcast(coder->monitor_link);
+	pthread_mutex_unlock(&coder->compiled_mutex);
 	usleep(coder->sim->args.time_to_compile * 1000);
 }
 

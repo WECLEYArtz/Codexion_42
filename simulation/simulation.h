@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:00:49 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/11 14:10:40 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/13 20:12:05 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,13 @@
 
 # define STOP 0
 # define HOLD 1
-# define RUN 2
+# define TOGGLE 2
 # define STAT 3
 
 bool				sim_running_status(void);
 void				sim_stop(void);
 void				sim_launch_hold(void);
-void				sim_lauch_run(void);
+void				sim_lauch_toggle(void);
 
 typedef struct s_init_records
 {

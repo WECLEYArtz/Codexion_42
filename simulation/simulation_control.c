@@ -6,11 +6,10 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 13:20:47 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/12 23:21:58 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/13 20:17:13 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../dependencies.h"
 #include "./simulation.h"
 
 static bool	_simulation_runtime_handler(short choice)
@@ -29,18 +28,18 @@ static bool	_simulation_runtime_handler(short choice)
 			pthread_cond_wait(&run_call, &running_mutex);
 	else if (choice == STAT)
 		return (pthread_mutex_unlock(&running_mutex), _is_running);
-	else if (choice == RUN)
+	else if (choice == TOGGLE)
 	{
 		pthread_cond_broadcast(&run_call);
-		is_running = true;
+		is_running = !_is_running;
 	}
 	pthread_mutex_unlock(&running_mutex);
 	return (0);
 }
 
-void	sim_lauch_run(void)
+void	sim_lauch_toggle(void)
 {
-	_simulation_runtime_handler(RUN);
+	_simulation_runtime_handler(TOGGLE);
 }
 
 void	sim_launch_hold(void)

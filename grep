@@ -1,9 +1,0 @@
-==57375== Helgrind, a thread error detector
-==57375== Copyright (C) 2007-2017, and GNU GPL'd, by OpenWorks LLP et al.
-==57375== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
-==57375== Command: ./codexion 2 100 100 100 100 100 500 edf -v warning
-==57375== 
-==57375== 
-==57375== Use --history-level=approx or =none to gain increased speed, at
-==57375== the cost of reduced accuracy of conflicting-access information
-==57375== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

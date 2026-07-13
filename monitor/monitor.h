@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 21:41:30 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/12 01:00:51 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/13 20:14:26 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@
 # include "../dependencies.h"
 # include "../parser/parser.h"
 
-typedef struct s_timeoutadd{
+typedef struct s_timeadd{
 	long sec;
 	long usec;
-} t_timeoutadd;
+} t_timeadd;
 
 typedef struct s_burnoutpq_node
 {
@@ -39,7 +39,10 @@ typedef struct s_monitor
 	pthread_cond_t			general_cond;
 	pthread_t				*coders_threads;
 	pthread_cond_t			*monitor_router;
-	t_timeoutadd			timeoutadd;
+	t_timeadd				ta_burnout;
+	t_timeadd				ta_compile;
+	t_timeadd				ta_debug;
+	t_timeadd				ta_refactor;
 }							t_monitor;
 
 t_coder						*burnoutpq_pop(void);

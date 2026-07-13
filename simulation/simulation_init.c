@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:15:04 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/13 00:04:10 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/13 20:21:11 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,13 +67,21 @@ static int	init_monitor(t_sim *sim)
 	coders_num = sim->args.number_of_coders;
 	sim->monitor.monitor_router = malloc(sizeof(pthread_cond_t) * coders_num);
 	sim->monitor.coders_threads = malloc(sizeof(pthread_t) * coders_num);
-	sim->monitor.timeoutadd.sec = sim->args.time_to_burnout/1000;
-	sim->monitor.timeoutadd.usec = (sim->args.time_to_burnout%1000)*1000;
-	printf("Deadline	compile init - p:%ld n:%ld\n",
-			sim->monitor.timeoutadd.sec, sim->monitor.timeoutadd.usec);
-	// exit(0);
 	if (!sim->monitor.monitor_router || !sim->monitor.coders_threads)
 		return (cleaner(sim), 12);
+
+	sim->monitor.ta_burnout.sec = sim->args.time_to_burnout/1000;
+	sim->monitor.ta_burnout.usec = (sim->args.time_to_burnout%1000)*1000;
+
+	sim->monitor.ta_compile.sec = sim->args.time_to_compile/1000;
+	sim->monitor.ta_compile.usec = (sim->args.time_to_compile%1000)*1000;
+
+	sim->monitor.ta_debug.sec = sim->args.time_to_debug/1000;
+	sim->monitor.ta_debug.usec = (sim->args.time_to_debug%1000)*1000;
+
+	sim->monitor.ta_refactor.sec = sim->args.time_to_refactor/1000;
+	sim->monitor.ta_refactor.usec = (sim->args.time_to_refactor%1000)*1000;
+
 	while (order < coders_num)
 	{
 		if (pthread_cond_init(sim->monitor.monitor_router + order, NULL))
@@ -117,11 +125,5 @@ int	init_simulation(t_sim *sim, char **argv)
 	if (init_dongles(sim) || init_monitor(sim) || init_coders(sim))
 		return (1);
 	preseeder(sim);
-
-	//DEBUG
-	// debug_visualise(sim);
-	// return(cleaner(sim),1);
-	//DEBUG
-
 	return (0);
 }
