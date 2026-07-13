@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:15:04 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/12 01:03:57 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/13 00:04:10 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ static int	_fill_coder_vals(t_coder *coder, int order, t_sim *sim)
 
 	mod = sim->args.number_of_coders;
 	coder->id = order + 1;
+	coder->compiled = 0;
 	coder->dongle_r = sim->dongles + (order);
 	coder->dongle_l = sim->dongles + ((order + 1) % mod);
 	coder->monitor_link = sim->monitor.monitor_router + order;

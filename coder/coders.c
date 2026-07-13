@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/11 22:54:10 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/13 00:20:45 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,5 +33,6 @@ void	*coder_routine(void *coder_p)
 			routine_turn = 0;
 		routines[routine_turn++](self);
 	}
+	puts("Exiting...");
 	return (NULL);
 }

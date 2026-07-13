@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/12 01:20:35 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/13 01:58:51 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 // 		target_coder->last_compile.tv_sec, target_coder->last_compile.tv_usec);
 // printf("Deadline	compile - p:%ld n:%ld\n",
 // 		timeout.tv_sec, timeout.tv_nsec);
+
 #include "../coder/coder.h"
 #include "../dependencies.h"
 #include "../simulation/simulation.h"
@@ -26,7 +27,7 @@ static int	wait_coder_burnout(t_coder *target_coder, t_timeoutadd *timeoutadd)
 	struct timespec	timeout;
 
 	if (DEBUG)
-		puts(RED "[MONITOR] Locking Mutex" RESET);
+		puts(RED "[MONITOR] Locking Mutex CMPL" RESET);
 	pthread_mutex_lock(&target_coder->compiled_mutex);
 	old_compiles = target_coder->compiled;
 	
@@ -36,16 +37,15 @@ static int	wait_coder_burnout(t_coder *target_coder, t_timeoutadd *timeoutadd)
     timeout.tv_nsec = timeout.tv_nsec % 1000000000;  
 
 	// printf("[MONITOR] waiting burnout using %p\n", target_coder->monitor_link);
-	//
 	while(1)
 	{
 
 		if (DEBUG)
-			puts(GREEN "[MONITOR] CondW UnLocking Mutex" RESET);
+			puts(GREEN "[debug] [MONITOR] UnLocking Mutex CMPL (CondW)" RESET);
 		rc = pthread_cond_timedwait(target_coder->monitor_link,
 				&target_coder->compiled_mutex, &timeout);
 		if (DEBUG)
-			puts(RED "[MONITOR] CondW locking Mutex" RESET);
+			puts(RED "[debug] [MONITOR] Locking Mutex CMPL (CondW)" RESET);
 		if (!rc && old_compiles == target_coder->compiled)
 			continue;
 		else if (rc && old_compiles == target_coder->compiled)
@@ -53,16 +53,18 @@ static int	wait_coder_burnout(t_coder *target_coder, t_timeoutadd *timeoutadd)
 			// announce(target_coder, "Failed to compile [MONITOR] ---");
 
 			if (DEBUG)
-				puts(GREEN "[MONITOR] Unlocking Mutex CMPL" RESET);
-			return (pthread_mutex_unlock(&target_coder->compiled_mutex), 1);
+				puts(GREEN "[debug] [MONITOR] Unlocking Mutex CMPL" RESET);
+
+			announce(target_coder, "has burnouted");
+			pthread_mutex_unlock(&target_coder->compiled_mutex);
+			return(1);
 		}
 		else
 		{
-			announce(target_coder, "burnouted");
-
 			if (DEBUG)
-				puts(GREEN "[MONITOR] Unlocking Mutex CMPL" RESET);
-			return (pthread_mutex_unlock(&target_coder->compiled_mutex), 0);
+				puts(GREEN "[debug] [MONITOR] Unlocking Mutex CMPL" RESET);
+			pthread_mutex_unlock(&target_coder->compiled_mutex);
+			return(0);
 		}
 	}
 }
