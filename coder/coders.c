@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/14 02:20:58 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/14 19:40:49 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	*coder_routine(void *coder_p)
 	static void (*routines[3])(t_coder *) = {compile, debug, refactor};
 	self = coder_p;
 	routine_turn = 0;
-	sim_launch_hold();
+	sim_wait_run();
 	if (sim_running_status() && first_compile(self))
 		routine_turn++;
 	while (sim_running_status())

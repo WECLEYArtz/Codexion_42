@@ -9,6 +9,7 @@ DEBUG=\
 	  # -fsanitize=thread
 
 SRC=		main.c\
+			utils.c\
 			cleaner.c\
 			coder/coders.c coder/routines.c \
 			dongle/dongle.c \

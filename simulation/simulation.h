@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:00:49 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/14 03:31:23 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/14 19:59:51 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,17 @@
 # include "../parser/parser.h"
 
 # define STOP 0
-# define HOLD 1
-# define TOGGLE 2
-# define STAT 3
+# define WAITRUN 1
+# define WAITSTP 2
+# define TOGGLE 3
+# define STAT 4
 
 bool				sim_running_status(void);
 void				sim_stop(void);
-void				sim_launch_hold(void);
-void				sim_lauch_toggle(void);
+void				sim_wait_run(void);
+
+void				sim_wait_stop(void);
+void				sim_running_toggle(void);
 
 typedef struct s_init_records
 {
@@ -42,6 +45,12 @@ typedef struct s_sim
 	t_coder			*coders;
 
 	t_args			args;
+
+	t_timeadd		ta_burnout;
+	t_timeadd		ta_compile;
+	t_timeadd		ta_debug;
+	t_timeadd		ta_refactor;
+
 	t_timeval		startup;
 	t_init_records	init_records;
 }					t_sim;

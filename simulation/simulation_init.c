@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:15:04 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/14 00:58:21 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/14 20:11:39 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ static int	init_coders(t_sim *sim)
 	return (0);
 }
 
+// NOTE: refactore init_ta to handle all of them
 static int	init_monitor(t_sim *sim)
 {
 	int	order;
@@ -46,10 +47,13 @@ static int	init_monitor(t_sim *sim)
 	sim->monitor.coders_threads = malloc(sizeof(pthread_t) * coders_num);
 	if (!sim->monitor.monitor_router || !sim->monitor.coders_threads)
 		return (cleaner(sim), 12);
-	_init_ta(&sim->monitor.ta_burnout, sim->args.time_to_burnout);
-	_init_ta(&sim->monitor.ta_compile, sim->args.time_to_compile);
-	_init_ta(&sim->monitor.ta_debug, sim->args.time_to_debug);
-	_init_ta(&sim->monitor.ta_refactor, sim->args.time_to_refactor);
+	_init_ta(&sim->ta_burnout, sim->args.time_to_burnout);
+	_init_ta(&sim->ta_compile, sim->args.time_to_compile);
+	_init_ta(&sim->ta_debug, sim->args.time_to_compile +
+			sim->args.time_to_debug);
+	_init_ta(&sim->ta_refactor, sim->args.time_to_compile +
+			sim->args.time_to_debug +
+			sim->args.time_to_refactor);
 	while (order < coders_num)
 	{
 		if (pthread_cond_init(sim->monitor.monitor_router + order, NULL))

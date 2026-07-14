@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 13:20:47 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/13 20:17:13 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/14 19:55:39 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static bool	_simulation_runtime_handler(short choice)
 	_is_running = is_running;
 	if (choice == STOP)
 		is_running = false;
-	else if (choice == HOLD)
+	else if (choice == WAITRUN)
 		while (is_running == false)
 			pthread_cond_wait(&run_call, &running_mutex);
 	else if (choice == STAT)
@@ -37,15 +37,22 @@ static bool	_simulation_runtime_handler(short choice)
 	return (0);
 }
 
-void	sim_lauch_toggle(void)
+void	sim_running_toggle(void)
 {
 	_simulation_runtime_handler(TOGGLE);
 }
 
-void	sim_launch_hold(void)
+void	sim_wait_run(void)
 {
-	_simulation_runtime_handler(HOLD);
+	_simulation_runtime_handler(WAITRUN);
 }
+
+//wip
+void	sim_wait_stop(void)
+{
+	_simulation_runtime_handler(WAITSTP);
+}
+
 
 void	sim_stop(void)
 {
