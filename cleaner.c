@@ -6,37 +6,48 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 14:29:38 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/12 01:25:35 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/14 01:38:52 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "simulation/simulation.h"
+#include "coder/coder.h"
 
-void	join_coders(t_monitor *monitor, int join_count)
+void	join_coders(pthread_t *coders_threads, int join_count)
 {
 	while (join_count)
-		pthread_join(*(monitor->coders_threads + (join_count-- - 1)), NULL);
+		pthread_join(*(coders_threads + (join_count-- - 1)), NULL);
 }
 
-static void	_clean_monitor_router(t_monitor *monitor, int destroy_count)
+static void	_clean_monitor(t_monitor *monitor, t_init_records *rec)
 {
-	pthread_cond_t	*monitor_router;
+	int	count;
 
-	monitor_router = monitor->monitor_router;
-	while (destroy_count)
-		pthread_cond_destroy(monitor_router + (destroy_count-- - 1));
+	count = rec->m_cond_init_ok;
+	while (count)
+		pthread_cond_destroy(monitor->monitor_router + (count-- - 1));
 	free(monitor->monitor_router);
+	if (rec->m_gcond_init_ok)
+		pthread_cond_destroy(&monitor->general_cond);
+}
+
+static void	_clean_coders(t_coder *coders, t_init_records *rec)
+{
+	int	count;
+
+	count = rec->c_mutex_init_ok;
+	while (count)
+		pthread_mutex_destroy(&(coders+(count-- -1))->compiled_mutex);
+	free(coders);
 }
 
 void	cleaner(t_sim *sim)
 {
-	t_init_records *init_records;
+	t_init_records	*init_records;
 	init_records = &sim->init_records;
 
-	_clean_monitor_router(&sim->monitor, init_records->m_cond_init_ok);
-	if (init_records->m_gcond_init_ok)
-		pthread_cond_destroy(&sim->monitor.general_cond);
+	_clean_monitor(&sim->monitor, init_records);
+	_clean_coders(sim->coders, init_records);
 	free(sim->monitor.coders_threads);
 	free(sim->dongles);
-	free(sim->coders);
 }

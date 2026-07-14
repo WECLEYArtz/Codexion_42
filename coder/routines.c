@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/13 20:29:36 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/14 02:20:29 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,15 @@ static void	_compile_work(t_coder *coder)
 	announce(coder, "has taken a dongle");
 	gettimeofday(&coder->last_compile, NULL);
 	announce(coder, "is compiling");
-	if (DEBUG)
-		announce(coder, RED "[debug] Locking mutex CMPL" RESET);
+	// if (DEBUG) announce(coder, RED "[debug] Locking mutex CMPL" RESET);
 	pthread_mutex_lock(&coder->compiled_mutex);
 	coder->compiled++;
 	pthread_mutex_unlock(&coder->compiled_mutex);
-	if (DEBUG)
-		announce(coder, GREEN "[debug] Unlocking mutex CMPL" RESET);
+	// if (DEBUG) announce(coder, GREEN "[debug] Unlocking mutex CMPL" RESET);
 	burnoutpq_mvback(&coder->burnout_node);
 }
 
-void	first_compile(t_coder *coder)
+int		first_compile(t_coder *coder)
 {
 	static pthread_mutex_t	first_compile_mutex = PTHREAD_MUTEX_INITIALIZER;
 	static bool				first_compile_taken = false;
@@ -43,14 +41,14 @@ void	first_compile(t_coder *coder)
 	else
 	{
 		pthread_mutex_unlock(&first_compile_mutex);
-		return ;
+		return(0) ;
 	}
 	pthread_mutex_unlock(&first_compile_mutex);
-	announce(coder, "Took first compile");
 	_compile_work(coder);
 	pthread_cond_broadcast(&coder->sim->monitor.general_cond);
 	// burnoutpq_monitor_watch(&coder->sim->monitor);
 	usleep(coder->sim->args.time_to_compile * 1000);
+	return(1);
 }
 
 void	compile(t_coder *coder)

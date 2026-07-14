@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:15:04 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/13 22:08:47 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/14 00:58:21 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ static int	init_coders(t_sim *sim)
 	{
 		if (_fill_coder_vals(sim->coders + order, order, sim))
 		{
-			join_coders(&sim->monitor, sim->init_records.c_thread_init_ok);
+			join_coders(sim->monitor.coders_threads,
+				sim->init_records.c_thread_init_ok);
 			return (cleaner(sim), 1);
 		}
 		order++;
@@ -34,7 +35,7 @@ static int	init_coders(t_sim *sim)
 	return (0);
 }
 
-int	init_monitor(t_sim *sim)
+static int	init_monitor(t_sim *sim)
 {
 	int	order;
 	int	coders_num;
@@ -74,7 +75,7 @@ static int	init_dongles(t_sim *sim)
 	order = 0;
 	while (order < sim->args.number_of_coders)
 	{
-		(sim->dongles + order)->id = order+1;
+		(sim->dongles + order)->id = order + 1;
 		(sim->dongles + order++)->cooldown = sim->args.dongle_cooldown;
 	}
 	return (0);
@@ -85,10 +86,10 @@ int	init_simulation(t_sim *sim, char **argv)
 	t_args	args;
 
 	memset(sim, 0, sizeof(t_sim));
-	if (getargs(argv, &args) || args.number_of_coders == 0
-			|| gettimeofday(&sim->startup, NULL))
+	if (getargs(argv, &args) || args.number_of_coders == 0)
 		return (1);
 	sim->args = args;
+	gettimeofday(&sim->startup, NULL);
 	if (init_dongles(sim) || init_monitor(sim) || init_coders(sim))
 		return (1);
 	preseed_dongles_heap(sim);
