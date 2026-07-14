@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:37:01 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/14 19:44:22 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/14 23:23:04 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	main(int argc, char **argv)
 		return (1);
 	else
 	{
-		sim_running_toggle();
+		sim_toggle();
 		pthread_join(sim.monitor.thread, NULL);
 		cleaner(&sim);
 	}

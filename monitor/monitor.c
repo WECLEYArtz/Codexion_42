@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/14 22:42:37 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/14 23:25:12 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	*monitor(void *t_sim_p)
 	monitor = &sim->monitor;
 	burnoutpq_monitor_watch(monitor);
 	while (!wait_coder_burnout(burnoutpq_pop(), &sim->ta_burnout)) ;
-	sim_stop();
+	sim_toggle();
 	join_coders(monitor->coders_threads, sim->init_records.c_thread_init_ok);
 	return (NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:00:49 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/14 19:59:51 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/14 23:24:14 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,18 +17,15 @@
 # include "../monitor/monitor.h"
 # include "../parser/parser.h"
 
-# define STOP 0
+# define STAT 0
 # define WAITRUN 1
 # define WAITSTP 2
 # define TOGGLE 3
-# define STAT 4
 
-bool				sim_running_status(void);
-void				sim_stop(void);
+void				sim_toggle(void);
 void				sim_wait_run(void);
-
 void				sim_wait_stop(void);
-void				sim_running_toggle(void);
+bool				sim_get_status(void);
 
 typedef struct s_init_records
 {
@@ -54,7 +51,6 @@ typedef struct s_sim
 	t_timeval		startup;
 	t_init_records	init_records;
 }					t_sim;
-
 
 int					init_simulation(t_sim *sim, char **argv);
 void				preseed_dongles_heap(t_sim *sim);

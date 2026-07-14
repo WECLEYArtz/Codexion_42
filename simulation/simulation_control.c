@@ -6,60 +6,76 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 13:20:47 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/14 19:55:39 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/14 23:24:24 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./simulation.h"
+#include "../dependencies.h"
 
-static bool	_simulation_runtime_handler(short choice)
+static  bool _routine_wait(pthread_cond_t *cond, pthread_mutex_t *mutex,
+		t_timespec *abstime, bool* is_running)
 {
-	static pthread_mutex_t	running_mutex = PTHREAD_MUTEX_INITIALIZER;
-	static pthread_cond_t	run_call = PTHREAD_COND_INITIALIZER;
-	static bool				is_running = false;
-	bool					_is_running;
+	int timeout_code;
 
-	pthread_mutex_lock(&running_mutex);
-	_is_running = is_running;
-	if (choice == STOP)
-		is_running = false;
-	else if (choice == WAITRUN)
-		while (is_running == false)
-			pthread_cond_wait(&run_call, &running_mutex);
-	else if (choice == STAT)
-		return (pthread_mutex_unlock(&running_mutex), _is_running);
-	else if (choice == TOGGLE)
+	while(1)
 	{
-		pthread_cond_broadcast(&run_call);
-		is_running = !_is_running;
+		timeout_code = pthread_cond_timedwait(cond, mutex, abstime);
+		if (*is_running == false)
+			return (1);
+		if (!timeout_code)
+			continue;
 	}
-	pthread_mutex_unlock(&running_mutex);
 	return (0);
 }
 
-void	sim_running_toggle(void)
+// NOTE: the way we cache value of running, unlock, then rueturn, is sus.
+//
+// NOTE: we no longer check "STAT" because wei'll always have to return something
+static bool	_simulation_runtime_handler(short choice, t_timespec *abstime)
 {
-	_simulation_runtime_handler(TOGGLE);
+	static pthread_mutex_t	run_mutex = PTHREAD_MUTEX_INITIALIZER;
+	static pthread_cond_t	run_call = PTHREAD_COND_INITIALIZER;
+	static bool				is_running = false;
+	bool					ret_val;
+
+	pthread_mutex_lock(&run_mutex);
+	ret_val = is_running;
+	if(choice != STAT)
+	{
+		if (choice == WAITRUN)
+			while (is_running == false)
+				pthread_cond_wait(&run_call, &run_mutex);
+		else if (choice == WAITSTP)
+		{
+			ret_val = _routine_wait(&run_call, &run_mutex, abstime, &is_running);
+			return (pthread_mutex_unlock(&run_mutex), ret_val);
+		}
+		else if (choice == TOGGLE)
+		{
+			pthread_cond_broadcast(&run_call);
+			is_running = !ret_val;
+		}
+	}
+	return (pthread_mutex_unlock(&run_mutex), ret_val);
+}
+
+void	sim_toggle(void)
+{
+	_simulation_runtime_handler(TOGGLE, NULL);
 }
 
 void	sim_wait_run(void)
 {
-	_simulation_runtime_handler(WAITRUN);
+	_simulation_runtime_handler(WAITRUN, NULL);
 }
 
-//wip
-void	sim_wait_stop(void)
+void	sim_routine_wait(t_timespec abstime)
 {
-	_simulation_runtime_handler(WAITSTP);
+	_simulation_runtime_handler(WAITSTP, &abstime);
 }
 
-
-void	sim_stop(void)
+bool	sim_get_status(void)
 {
-	_simulation_runtime_handler(STOP);
-}
-
-bool	sim_running_status(void)
-{
-	return (_simulation_runtime_handler(STAT));
+	return (_simulation_runtime_handler(STAT, NULL));
 }
