@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 21:41:30 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/13 20:14:26 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/14 02:33:57 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ typedef struct s_timeadd{
 
 typedef struct s_burnoutpq_node
 {
-	int						id;
 	t_coder					*coder;
 	struct s_burnoutpq_node	*previous;
 	struct s_burnoutpq_node	*next;
