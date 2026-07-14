@@ -6,14 +6,13 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 17:31:10 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/14 02:17:24 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/14 03:37:13 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../dependencies.h"
 #include "./monitor.h"
 #include "../coder/coder.h"
-#include <fcntl.h>
 
 // static void visualise(t_burnoutpq_node *head, int step)
 // {
@@ -91,6 +90,8 @@ static t_coder	*_burnoutpq_handler(short choice, void *pointer)
 	else if (choice == MWATCH)
 		while (!head)
 			pthread_cond_wait(&((t_monitor *)pointer)->general_cond, &mutex);
+	else if (choice == GWAKE)
+		pthread_cond_broadcast((pthread_cond_t *)pointer);
 	// if (DEBUGBPQ) visualise(head, 1);
 	pthread_mutex_unlock(&mutex);
 
@@ -112,4 +113,9 @@ void	burnoutpq_mvback(t_burnoutpq_node *node)
 void	burnoutpq_monitor_watch(t_monitor *monitor)
 {
 	_burnoutpq_handler(MWATCH, monitor);
-};
+}
+
+void	burnoutpq_monitor_gwake(pthread_cond_t *general_cond)
+{
+	_burnoutpq_handler(GWAKE, general_cond);
+}

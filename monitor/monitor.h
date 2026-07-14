@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 21:41:30 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/14 02:33:57 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/14 03:34:28 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,16 @@
 # define MVBACK 0
 # define POP 1
 # define MWATCH 2
+# define GWAKE 4
 
 # include "../dependencies.h"
 # include "../parser/parser.h"
 
-typedef struct s_timeadd{
-	long sec;
-	long usec;
-} t_timeadd;
+typedef struct s_timeadd
+{
+	long					sec;
+	long					usec;
+}							t_timeadd;
 
 typedef struct s_burnoutpq_node
 {
@@ -47,5 +49,6 @@ typedef struct s_monitor
 t_coder						*burnoutpq_pop(void);
 void						burnoutpq_mvback(t_burnoutpq_node *node);
 void						burnoutpq_monitor_watch(t_monitor *monitor);
+void						burnoutpq_monitor_gwake(pthread_cond_t *gcond);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/14 02:20:29 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/14 03:37:04 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,9 @@ int		first_compile(t_coder *coder)
 	}
 	pthread_mutex_unlock(&first_compile_mutex);
 	_compile_work(coder);
-	pthread_cond_broadcast(&coder->sim->monitor.general_cond);
-	// burnoutpq_monitor_watch(&coder->sim->monitor);
+
+	burnoutpq_monitor_gwake(&coder->sim->monitor.general_cond);
+
 	usleep(coder->sim->args.time_to_compile * 1000);
 	return(1);
 }
@@ -77,7 +78,7 @@ void	announce(t_coder *coder, char *action)
 	t_timeval				current;
 	static pthread_mutex_t	print_mutex = PTHREAD_MUTEX_INITIALIZER;
 
-	gettimeofday(&current, NULL); // search what goes instead of Null
+	gettimeofday(&current, NULL);
 	pthread_mutex_lock(&print_mutex);
 	printf("%ld %d %s\n", (current.tv_sec * 1000 + current.tv_usec / 1000)
 		- (coder->sim->startup.tv_sec * 1000 + coder->sim->startup.tv_usec
