@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:00:49 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/15 14:15:09 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/15 15:59:45 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,13 @@
 # include "../monitor/monitor.h"
 # include "../parser/parser.h"
 
-# define STAT 0
-# define WAITRUN 1
-# define WAITSTP 2
-# define TOGGLE 3
+# define OFF 0
+# define ON 1
+# define STAT 2
+# define WAITRUN 3
+# define WAITSTP 4
 
-void				sim_toggle(void);
+void				sim_toggle(int);
 void				sim_wait_run(void);
 bool				sim_get_status(void);
 void				sim_routine_wait(t_timespec abstime);

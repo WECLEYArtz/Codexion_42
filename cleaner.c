@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 14:29:38 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/14 01:38:52 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/15 16:01:24 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 void	join_coders(pthread_t *coders_threads, int join_count)
 {
+	sim_toggle(OFF);
 	while (join_count)
 		pthread_join(*(coders_threads + (join_count-- - 1)), NULL);
 }

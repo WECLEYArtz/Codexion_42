@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 13:20:47 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/15 15:32:53 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/15 15:57:47 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,18 +40,18 @@ static bool	_simulation_runtime_handler(short choice, t_timespec *abstime)
 		else if (choice == WAITRUN)
 			while (is_running == false)
 				pthread_cond_wait(&run_call, &run_mutex);
-		else if (choice == TOGGLE)
+		else if (choice == OFF || choice == ON)
 		{
-			is_running = !is_running;
+			is_running = choice;
 			pthread_cond_broadcast(&run_call);
 		}
 	}
 	return (pthread_mutex_unlock(&run_mutex), tmp);
 }
 
-void	sim_toggle(void)
+void	sim_toggle(int ON_OFF)
 {
-	_simulation_runtime_handler(TOGGLE, NULL);
+	_simulation_runtime_handler(ON_OFF, NULL);
 }
 
 void	sim_wait_run(void)
