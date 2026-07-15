@@ -6,15 +6,12 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:02:48 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/04 12:51:30 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/15 16:49:27 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARSER_H
 # define PARSER_H
-
-// The one time used structure for a shared prointer to all depending on it.
-// preventing data duplication in runtime
 
 typedef struct s_args
 {

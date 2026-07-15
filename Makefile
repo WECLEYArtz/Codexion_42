@@ -11,12 +11,12 @@ DEBUG=\
 SRC=		main.c\
 			utils.c\
 			cleaner.c\
-			coder/coders.c coder/routines.c \
 			dongle/dongle.c \
-			monitor/monitor.c monitor/burnoutpq_control.c \
+			schedualer/schedualer.c\
+			coder/coders.c coder/routines.c \
 			parser/args_parser.c parser/atopi.c \
-			simulation/preseeder.c schedualer/schedualer.c\
-			simulation/simulation_control.c simulation/debug_visualise.c\
+			monitor/monitor.c monitor/burnoutpq_control.c \
+			simulation/simulation_control.c\
 			simulation/simulation_init.c simulation/simulation_init_utils.c\
 
 OBJ=		$(SRC:.c=.o)

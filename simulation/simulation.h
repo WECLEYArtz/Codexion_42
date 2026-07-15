@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:00:49 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/15 15:59:45 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/15 16:49:35 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,13 +57,7 @@ int					init_simulation(t_sim *sim, char **argv);
 void				preseed_dongles_heap(t_sim *sim);
 void				*monitor(void *t_sim_p);
 
-void				_init_ta(t_timeadd *time, int ms);
+void				init_sim_ta(t_sim *sim);
 int					_fill_coder_vals(t_coder *coder, int order, t_sim *sim);
-
-// ========================
-// DEBUGING == DELETE LATER
-void				debug_visualise(t_sim *sim);
-// DEBUGING == DELETE LATER
-// ========================
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:15:04 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/15 15:04:04 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/15 16:50:13 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ static int	init_coders(t_sim *sim)
 	return (0);
 }
 
-// NOTE: refactore init_ta to handle all of them
 static int	init_monitor(t_sim *sim)
 {
 	int	order;
@@ -47,13 +46,7 @@ static int	init_monitor(t_sim *sim)
 	sim->monitor.coders_threads = malloc(sizeof(pthread_t) * coders_num);
 	if (!sim->monitor.monitor_router || !sim->monitor.coders_threads)
 		return (cleaner(sim), 12);
-	_init_ta(&sim->ta_burnout, sim->args.time_to_burnout);
-	_init_ta(&sim->ta_compile, sim->args.time_to_compile);
-	_init_ta(&sim->ta_debug, sim->args.time_to_compile +
-			sim->args.time_to_debug);
-	_init_ta(&sim->ta_refactor, sim->args.time_to_compile +
-			sim->args.time_to_debug +
-			sim->args.time_to_refactor);
+	init_sim_ta(sim);
 	while (order < coders_num)
 	{
 		if (pthread_cond_init(sim->monitor.monitor_router + order, NULL))
@@ -95,7 +88,6 @@ int	init_simulation(t_sim *sim, char **argv)
 	sim->args = args;
 
 	clock_gettime(CLOCK_REALTIME, &sim->startup);
-	// gettimeofday(&sim->startup, NULL);
 	if (init_dongles(sim) || init_monitor(sim) || init_coders(sim))
 		return (1);
 	preseed_dongles_heap(sim);

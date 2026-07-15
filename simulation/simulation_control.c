@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 13:20:47 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/15 15:57:47 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/15 16:34:14 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,6 @@ static  void _routine_wait(pthread_cond_t *cond, pthread_mutex_t *mutex,
 			return;
 }
 
-// NOTE: the way we cache value of running, unlock, then rueturn, is sus.
-//
-// NOTE: we no longer check "STAT" because wei'll always have to return something
 static bool	_simulation_runtime_handler(short choice, t_timespec *abstime)
 {
 	static pthread_mutex_t	run_mutex = PTHREAD_MUTEX_INITIALIZER;

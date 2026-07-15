@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/15 15:15:03 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/15 16:48:52 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,16 +18,13 @@
 // NOTE: The only thing this lacks now is taking the dongle, maybe more...
 static void	_compile_work(t_coder *coder)
 {
-	// coder->dongle_l->request(coder->id);
 	announce(coder, "has taken a dongle", 0);
 	clock_gettime(CLOCK_REALTIME, &coder->last_compile);
 
 	announce(coder, "is compiling", 0);
-	// if (DEBUG) announce(coder, RED "[debug] Locking mutex CMPL" RESET);
 	pthread_mutex_lock(&coder->compiled_mutex);
 	coder->compiled++;
 	pthread_mutex_unlock(&coder->compiled_mutex);
-	// if (DEBUG) announce(coder, GREEN "[debug] Unlocking mutex CMPL" RESET);
 	burnoutpq_mvback(&coder->burnout_node);
 }
 
@@ -79,4 +76,3 @@ void	refactor(t_coder *coder)
 	announce(coder, "is refactoring", 0);
 	sim_routine_wait(get_abstime(&coder->last_compile,	&coder->sim->ta_refactor));
 }
-

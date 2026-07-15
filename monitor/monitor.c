@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/15 15:58:41 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/15 16:46:15 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,7 @@ static int	wait_coder_burnout(t_coder *coder, t_timeadd *ta_burnout)
 	abstime = get_abstime(&coder->last_compile, ta_burnout);
 	while (1)
 	{
-		rc = pthread_cond_timedwait(coder->monitor_link,
-				&coder->compiled_mutex,
+		rc = pthread_cond_timedwait(coder->monitor_link, &coder->compiled_mutex,
 				&abstime);
 		if (!rc && old_compiles == coder->compiled)
 			continue ;
@@ -34,14 +33,10 @@ static int	wait_coder_burnout(t_coder *coder, t_timeadd *ta_burnout)
 		{
 			pthread_mutex_unlock(&coder->compiled_mutex);
 			sim_toggle(OFF);
-			announce(coder, RED "has burnouted" RESET, 1);
-			return (1);
+			return (announce(coder, RED "has burnouted" RESET, 1), 1);
 		}
 		else
-		{
-			pthread_mutex_unlock(&coder->compiled_mutex);
-			return (0);
-		}
+			return (pthread_mutex_unlock(&coder->compiled_mutex), 0);
 	}
 }
 

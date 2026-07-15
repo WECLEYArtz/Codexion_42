@@ -1,8 +1,8 @@
+#include "coder/coder.h"
 #include "dependencies.h"
 #include "simulation/simulation.h"
-#include "coder/coder.h"
 
-t_timespec	 get_abstime(t_timespec *last_compile, t_timeadd *timeadd)
+t_timespec	get_abstime(t_timespec *last_compile, t_timeadd *timeadd)
 {
 	struct timespec	abstime;
 
@@ -13,20 +13,20 @@ t_timespec	 get_abstime(t_timespec *last_compile, t_timeadd *timeadd)
 	return (abstime);
 }
 
-
 void	announce(t_coder *coder, char *action, int force)
 {
 	t_timespec				current;
+	long					timelap;
 	static pthread_mutex_t	print_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 	pthread_mutex_lock(&print_mutex);
-	if(sim_get_status() || force)
+	if (sim_get_status() || force)
 	{
 		clock_gettime(CLOCK_REALTIME, &current);
-		printf("%ld %d %s\n",
-				(current.tv_sec * 1000 + current.tv_nsec / 1000000)
-				- (coder->sim->startup.tv_sec * 1000 + coder->sim->startup.tv_nsec
-					/ 1000000), coder->id, action);
+		timelap = (current.tv_sec * 1000 + current.tv_nsec / 1000000)
+			- (coder->sim->startup.tv_sec * 1000 + coder->sim->startup.tv_nsec
+					/ 1000000);
+		printf("%ld %d %s\n", timelap, coder->id, action);
 	}
 	pthread_mutex_unlock(&print_mutex);
 }
