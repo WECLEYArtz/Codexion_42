@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/29 17:16:54 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/14 20:15:45 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/15 01:56:33 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ typedef struct s_timeadd
 }							t_timeadd;
 
 // Util functions
-void						announce(t_coder *coder, char *action);
+void						announce(t_coder *coder, char *action, int force);
 void						cleaner(t_sim *sim);
 void						join_coders(pthread_t *coders_threads, int count);
 t_timespec					get_abstime(t_timeval *lst_cmpl, t_timeadd *add);

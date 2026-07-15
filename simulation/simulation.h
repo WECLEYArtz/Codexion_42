@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:00:49 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/14 23:24:14 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/14 23:39:35 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@
 
 void				sim_toggle(void);
 void				sim_wait_run(void);
-void				sim_wait_stop(void);
 bool				sim_get_status(void);
+void				sim_routine_wait(t_timespec abstime);
 
 typedef struct s_init_records
 {

@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:37:01 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/14 23:23:04 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/15 00:03:49 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,3 +26,5 @@ int	main(int argc, char **argv)
 		cleaner(&sim);
 	}
 }
+
+// try:	./codexion 40 300 100 100 100 7 0 edf (not well handeled)

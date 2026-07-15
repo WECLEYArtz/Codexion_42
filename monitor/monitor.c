@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/14 23:25:12 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/15 01:56:39 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@ static int	wait_coder_burnout(t_coder *coder, t_timeadd *ta_burnout)
 		else if (rc && old_compiles == coder->compiled)
 		{
 			// if (DEBUG) puts(GREEN "[debug] [MONITOR] Unlocking Mutex CMPL" RESET);
-			announce(coder, "has burnouted");
+			sim_toggle();
+			announce(coder, RED"has burnouted"RESET, 1);
 			pthread_mutex_unlock(&coder->compiled_mutex);
 			return (1);
 		}
@@ -58,7 +59,6 @@ void	*monitor(void *t_sim_p)
 	monitor = &sim->monitor;
 	burnoutpq_monitor_watch(monitor);
 	while (!wait_coder_burnout(burnoutpq_pop(), &sim->ta_burnout)) ;
-	sim_toggle();
 	join_coders(monitor->coders_threads, sim->init_records.c_thread_init_ok);
 	return (NULL);
 }
