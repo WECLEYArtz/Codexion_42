@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 13:05:58 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/14 02:20:47 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/15 14:12:21 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ typedef struct s_coder
 
 	t_dongle			*dongle_r;
 	t_dongle			*dongle_l;
-	t_timeval			last_compile;
+	t_timespec			last_compile;
 	pthread_cond_t		*monitor_link;
 	pthread_mutex_t		compiled_mutex;
 	t_burnoutpq_node	burnout_node;

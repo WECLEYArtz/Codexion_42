@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:00:49 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/14 23:39:35 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/15 14:15:09 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ typedef struct s_sim
 	t_timeadd		ta_debug;
 	t_timeadd		ta_refactor;
 
-	t_timeval		startup;
+	t_timespec		startup;
 	t_init_records	init_records;
 }					t_sim;
 

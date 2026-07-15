@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/15 01:57:41 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/15 14:13:48 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ static void	_compile_work(t_coder *coder)
 {
 	// coder->dongle_l->request(coder->id);
 	announce(coder, "has taken a dongle", 0);
-	gettimeofday(&coder->last_compile, NULL);
+	clock_gettime(CLOCK_MONOTONIC, &coder->last_compile);
+	// gettimeofday(&coder->last_compile, NULL); // (OLD)
 	announce(coder, "is compiling", 0);
 	// if (DEBUG) announce(coder, RED "[debug] Locking mutex CMPL" RESET);
 	pthread_mutex_lock(&coder->compiled_mutex);

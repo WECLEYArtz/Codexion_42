@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/29 17:16:54 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/15 01:56:33 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/15 14:26:14 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <string.h>
 # include <sys/time.h>
 # include <unistd.h>
+# include <time.h>
 
 # define DEBUG 0
 # define DEBUGBPQ 0
@@ -41,13 +42,13 @@ typedef struct timespec		t_timespec;
 typedef struct s_timeadd
 {
 	long					sec;
-	long					usec;
+	long					nsec;
 }							t_timeadd;
 
 // Util functions
 void						announce(t_coder *coder, char *action, int force);
 void						cleaner(t_sim *sim);
 void						join_coders(pthread_t *coders_threads, int count);
-t_timespec					get_abstime(t_timeval *lst_cmpl, t_timeadd *add);
+t_timespec					get_abstime(t_timespec *last_compile, t_timeadd *timeadd);
 
 #endif
