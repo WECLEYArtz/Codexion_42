@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/13 21:48:08 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/15 14:36:14 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/15 14:58:47 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 void	_init_ta(t_timeadd *time, int ms)
 {
 	time->sec = ms / 1000;
-	time->nsec = (ms % 1000000) * 1000000;
+	time->nsec = (ms % 1000) * 1000000;
 }
 
 int	_fill_coder_vals(t_coder *coder, int order, t_sim *sim)

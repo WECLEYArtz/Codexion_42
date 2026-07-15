@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 13:20:47 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/15 01:58:52 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/15 15:32:53 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,10 @@ static bool	_simulation_runtime_handler(short choice, t_timespec *abstime)
 	static pthread_mutex_t	run_mutex = PTHREAD_MUTEX_INITIALIZER;
 	static pthread_cond_t	run_call = PTHREAD_COND_INITIALIZER;
 	static bool				is_running = false;
+	bool tmp;
 
 	pthread_mutex_lock(&run_mutex);
+	tmp = is_running;
 	if(choice != STAT)
 	{
 		if (choice == WAITSTP)
@@ -44,7 +46,7 @@ static bool	_simulation_runtime_handler(short choice, t_timespec *abstime)
 			pthread_cond_broadcast(&run_call);
 		}
 	}
-	return (pthread_mutex_unlock(&run_mutex), is_running);
+	return (pthread_mutex_unlock(&run_mutex), tmp);
 }
 
 void	sim_toggle(void)

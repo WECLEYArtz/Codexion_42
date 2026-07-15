@@ -19,16 +19,14 @@ void	announce(t_coder *coder, char *action, int force)
 	t_timespec				current;
 	static pthread_mutex_t	print_mutex = PTHREAD_MUTEX_INITIALIZER;
 
+	pthread_mutex_lock(&print_mutex);
 	if(sim_get_status() || force)
 	{
-
-		clock_gettime(CLOCK_MONOTONIC, &current);
-		// gettimeofday(&current, NULL);
-		pthread_mutex_lock(&print_mutex);
+		clock_gettime(CLOCK_REALTIME, &current);
 		printf("%ld %d %s\n",
 				(current.tv_sec * 1000 + current.tv_nsec / 1000000)
 				- (coder->sim->startup.tv_sec * 1000 + coder->sim->startup.tv_nsec
 					/ 1000000), coder->id, action);
-		pthread_mutex_unlock(&print_mutex);
 	}
+	pthread_mutex_unlock(&print_mutex);
 }

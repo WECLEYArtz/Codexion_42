@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:15:04 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/15 14:14:57 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/15 15:04:04 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ int	init_simulation(t_sim *sim, char **argv)
 		return (1);
 	sim->args = args;
 
-	clock_gettime(CLOCK_MONOTONIC, &sim->startup);
+	clock_gettime(CLOCK_REALTIME, &sim->startup);
 	// gettimeofday(&sim->startup, NULL);
 	if (init_dongles(sim) || init_monitor(sim) || init_coders(sim))
 		return (1);
