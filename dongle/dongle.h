@@ -6,21 +6,22 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:00:49 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/10 15:24:44 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/16 00:26:25 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef DONGLE_H
-#define DONGLE_H
+# define DONGLE_H
 
-#include "../dependencies.h"
+# include "../dependencies.h"
 
-typedef struct s_dongle {
-  t_coder *duel_slots[2];
-  int cooldown;
-  void (*request)(int id);
-  void (*letgo)(int id);
-  int id;
-} t_dongle;
+typedef struct s_dongle
+{
+	t_coder	*duel_slots[2];
+	int		cooldown;
+	void	(*request)(int id);
+	void	(*letgo)(int id);
+	int		id;
+}			t_dongle;
 
 #endif

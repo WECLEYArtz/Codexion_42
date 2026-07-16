@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:37:01 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/15 16:00:27 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/16 12:32:30 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,12 @@ int	main(int argc, char **argv)
 		return (1);
 	else
 	{
-		sim_toggle(ON);
+		sim_action(ON, NULL);
 		pthread_join(sim.monitor.thread, NULL);
 		cleaner(&sim);
 	}
 }
 
-// try:	./codexion 40 300 100 100 100 7 0 edf (not well handeled)
+// try:	./codexion 40 300 100 100 100 7 0 edf
+// try: valgrind --tool=helgrind ./codexion 200 301 100 100 100 7 0 edf
+// try ./codexion 400 202 1 100 100 7 0 edf (may deadlock)

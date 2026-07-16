@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/07/16 00:21:31 by ahmounsi          #+#    #+#             */
+/*   Updated: 2026/07/16 12:48:24 by ahmounsi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "coder/coder.h"
 #include "dependencies.h"
 #include "simulation/simulation.h"
@@ -20,12 +32,12 @@ void	announce(t_coder *coder, char *action, int force)
 	static pthread_mutex_t	print_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 	pthread_mutex_lock(&print_mutex);
-	if (sim_get_status() || force)
+	if (sim_action(STAT, NULL) || force)
 	{
 		clock_gettime(CLOCK_REALTIME, &current);
 		timelap = (current.tv_sec * 1000 + current.tv_nsec / 1000000)
 			- (coder->sim->startup.tv_sec * 1000 + coder->sim->startup.tv_nsec
-					/ 1000000);
+				/ 1000000);
 		printf("%ld %d %s\n", timelap, coder->id, action);
 	}
 	pthread_mutex_unlock(&print_mutex);

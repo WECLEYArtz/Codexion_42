@@ -6,32 +6,32 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/15 16:48:52 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/16 15:46:22 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../coder/coder.h"
 #include "../dependencies.h"
-#include "../parser/parser.h"
 #include "../simulation/simulation.h"
 
 // NOTE: The only thing this lacks now is taking the dongle, maybe more...
+// 			add takin dongle later...
 static void	_compile_work(t_coder *coder)
 {
 	announce(coder, "has taken a dongle", 0);
 	clock_gettime(CLOCK_REALTIME, &coder->last_compile);
-
 	announce(coder, "is compiling", 0);
 	pthread_mutex_lock(&coder->compiled_mutex);
 	coder->compiled++;
 	pthread_mutex_unlock(&coder->compiled_mutex);
-	burnoutpq_mvback(&coder->burnout_node);
+	burnoutpq_action(MVBACK, &coder->burnout_node);
 }
 
-int		first_compile(t_coder *coder)
+int	first_compile(t_coder *coder)
 {
 	static pthread_mutex_t	first_compile_mutex = PTHREAD_MUTEX_INITIALIZER;
 	static bool				first_compile_taken = false;
+	t_timespec				abstime;
 
 	pthread_mutex_lock(&first_compile_mutex);
 	if (!first_compile_taken)
@@ -39,40 +39,47 @@ int		first_compile(t_coder *coder)
 	else
 	{
 		pthread_mutex_unlock(&first_compile_mutex);
-		return(0) ;
+		return (0);
 	}
 	pthread_mutex_unlock(&first_compile_mutex);
-	if (sim_get_status())
+	if (sim_action(STAT, NULL))
 	{
+		abstime = get_abstime(&coder->last_compile, &coder->sim->ta_compile);
 		_compile_work(coder);
-
-		burnoutpq_monitor_gwake(&coder->sim->monitor.general_cond);
-
-		sim_routine_wait(get_abstime(&coder->last_compile,	&coder->sim->ta_compile));
+		burnoutpq_action(GWAKE, &coder->sim->monitor.general_cond);
+		sim_action(WAITSTP, &abstime);
 	}
-	return(1);
+	return (1);
 }
 
 void	compile(t_coder *coder)
 {
+	t_timespec	abstime;
+
 	_compile_work(coder);
 	pthread_mutex_lock(&coder->compiled_mutex);
 	pthread_cond_signal(coder->monitor_link);
 	pthread_mutex_unlock(&coder->compiled_mutex);
-	if (sim_get_status() == false)
-		return;
-	usleep(coder->sim->args.time_to_compile * 1000);
-	sim_routine_wait(get_abstime(&coder->last_compile,	&coder->sim->ta_compile));
+	if (sim_action(STAT, NULL) == false)
+		return ;
+	abstime = get_abstime(&coder->last_compile, &coder->sim->ta_compile);
+	sim_action(WAITSTP, &abstime);
 }
 
 void	debug(t_coder *coder)
 {
+	t_timespec	abstime;
+
 	announce(coder, "is debuging", 0);
-	sim_routine_wait(get_abstime(&coder->last_compile,	&coder->sim->ta_debug));
+	abstime = get_abstime(&coder->last_compile, &coder->sim->ta_debug);
+	sim_action(WAITSTP, &abstime);
 }
 
 void	refactor(t_coder *coder)
 {
+	t_timespec	abstime;
+
 	announce(coder, "is refactoring", 0);
-	sim_routine_wait(get_abstime(&coder->last_compile,	&coder->sim->ta_refactor));
+	abstime = get_abstime(&coder->last_compile, &coder->sim->ta_refactor);
+	sim_action(WAITSTP, &abstime);
 }

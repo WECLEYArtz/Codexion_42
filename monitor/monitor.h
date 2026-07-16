@@ -6,12 +6,12 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 21:41:30 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/14 20:05:49 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/16 13:43:24 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MONTIR_H
-# define MONTIR_H
+#ifndef MONITOR_H
+# define MONITOR_H
 
 # define MVBACK 0
 # define POP 1
@@ -40,5 +40,7 @@ t_coder						*burnoutpq_pop(void);
 void						burnoutpq_mvback(t_burnoutpq_node *node);
 void						burnoutpq_monitor_watch(t_monitor *monitor);
 void						burnoutpq_monitor_gwake(pthread_cond_t *gcond);
+
+t_coder						*burnoutpq_action(short choice, void *pointer);
 
 #endif

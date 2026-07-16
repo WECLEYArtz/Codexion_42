@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/15 16:46:15 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/16 13:47:06 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static int	wait_coder_burnout(t_coder *coder, t_timeadd *ta_burnout)
 		else if (rc && old_compiles == coder->compiled)
 		{
 			pthread_mutex_unlock(&coder->compiled_mutex);
-			sim_toggle(OFF);
+			sim_action(OFF, NULL);
 			return (announce(coder, RED "has burnouted" RESET, 1), 1);
 		}
 		else
@@ -47,8 +47,8 @@ void	*monitor(void *t_sim_p)
 
 	sim = t_sim_p;
 	monitor = &sim->monitor;
-	burnoutpq_monitor_watch(monitor);
-	while (!wait_coder_burnout(burnoutpq_pop(), &sim->ta_burnout))
+	burnoutpq_action(MWATCH, monitor);
+	while (!wait_coder_burnout(burnoutpq_action(POP, NULL), &sim->ta_burnout))
 		;
 	join_coders(monitor->coders_threads, sim->init_records.c_thread_init_ok);
 	return (NULL);

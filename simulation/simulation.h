@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:00:49 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/15 16:49:35 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/16 13:42:25 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,7 @@
 # define WAITRUN 3
 # define WAITSTP 4
 
-void				sim_toggle(int);
-void				sim_wait_run(void);
-bool				sim_get_status(void);
-void				sim_routine_wait(t_timespec abstime);
-
+bool				sim_action(short choice, t_timespec *abstime);
 typedef struct s_init_records
 {
 	int				c_thread_init_ok;
