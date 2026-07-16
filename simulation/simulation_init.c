@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:15:04 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/16 00:19:58 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/16 20:20:52 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,8 @@ static int	init_coders(t_sim *sim)
 		return (cleaner(sim), 12);
 	while (order < sim->args.number_of_coders)
 	{
-		if (_fill_coder_vals(sim->coders + order, order, sim))
+		if (_create_coder(sim->coders + order, order, sim))
 		{
-			join_coders(sim->monitor.coders_threads,
-				sim->init_records.c_thread_init_ok);
 			return (cleaner(sim), 1);
 		}
 		order++;

@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 14:29:38 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/16 12:32:24 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/16 20:25:13 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,9 @@ void	cleaner(t_sim *sim)
 	t_init_records	*init_records;
 
 	init_records = &sim->init_records;
+	sim_action(OFF, NULL);
+
+	join_coders(sim->monitor.coders_threads, init_records->c_thread_init_ok);
 	_clean_monitor(&sim->monitor, init_records);
 	_clean_coders(sim->coders, init_records);
 	free(sim->monitor.coders_threads);

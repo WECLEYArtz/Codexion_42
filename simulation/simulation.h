@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:00:49 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/16 13:42:25 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/16 20:20:31 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,6 @@ void				preseed_dongles_heap(t_sim *sim);
 void				*monitor(void *t_sim_p);
 
 void				init_sim_ta(t_sim *sim);
-int					_fill_coder_vals(t_coder *coder, int order, t_sim *sim);
+int					_create_coder(t_coder *coder, int order, t_sim *sim);
 
 #endif

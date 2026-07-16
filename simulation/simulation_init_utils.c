@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/13 21:48:08 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/15 16:42:15 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/16 20:20:19 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,9 @@ void	init_sim_ta(t_sim *sim)
 		+ sim->args.time_to_debug + sim->args.time_to_refactor);
 }
 
-int	_fill_coder_vals(t_coder *coder, int order, t_sim *sim)
+// NOTE:	The coder struct itself can be used as the burnout pq node?
+// 			why not give it previus and next directly?
+int	_create_coder(t_coder *coder, int order, t_sim *sim)
 {
 	coder->id = order + 1;
 	coder->compiled = 0;
