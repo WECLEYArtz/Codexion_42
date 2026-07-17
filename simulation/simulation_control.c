@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 13:20:47 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/16 15:41:05 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/17 11:00:47 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,11 @@ bool	sim_action(short choice, t_timespec *abstime)
 		if (choice == WAITSTP)
 			_routine_wait(&run_call, &run_mutex, abstime, &is_running);
 		else if (choice == WAITRUN)
+		{
 			while (is_running == false)
 				pthread_cond_wait(&run_call, &run_mutex);
+			tmp = is_running;
+		}
 		else if (choice == OFF || choice == ON)
 		{
 			is_running = choice;
