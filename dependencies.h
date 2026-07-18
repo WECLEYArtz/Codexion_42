@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/29 17:16:54 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/16 00:20:32 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/17 23:59:49 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,5 +50,4 @@ void						cleaner(t_sim *sim);
 void						join_coders(pthread_t *coders_threads, int count);
 t_timespec					get_abstime(t_timespec *last_compile,
 								t_timeadd *timeadd);
-
 #endif

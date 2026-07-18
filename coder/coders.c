@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/17 11:16:07 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/18 01:34:40 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	*coder_routine(void *coder_p)
 
 	routine_turn = 0;
 	if (!sim_action(STAT, NULL))
-		if(!sim_action(WAITRUN, NULL))
+		if (!sim_action(WAITRUN, NULL))
 			return (NULL);
 	if (first_compile((t_coder *)coder_p))
 		routine_turn++;

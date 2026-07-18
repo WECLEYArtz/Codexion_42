@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/16 15:46:22 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/18 01:21:21 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static void	_compile_work(t_coder *coder)
 	pthread_mutex_lock(&coder->compiled_mutex);
 	coder->compiled++;
 	pthread_mutex_unlock(&coder->compiled_mutex);
-	burnoutpq_action(MVBACK, &coder->burnout_node);
+	burnoutpq_action(MVBACK, coder);
 }
 
 int	first_compile(t_coder *coder)
@@ -46,7 +46,7 @@ int	first_compile(t_coder *coder)
 	{
 		abstime = get_abstime(&coder->last_compile, &coder->sim->ta_compile);
 		_compile_work(coder);
-		burnoutpq_action(GWAKE, &coder->sim->monitor.general_cond);
+		burnoutpq_action(MWAKE, NULL);
 		sim_action(WAITSTP, &abstime);
 	}
 	return (1);

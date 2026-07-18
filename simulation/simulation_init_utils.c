@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/13 21:48:08 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/16 20:20:19 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/18 01:34:09 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,8 @@ int	_create_coder(t_coder *coder, int order, t_sim *sim)
 	coder->dongle_r = sim->dongles + order;
 	coder->dongle_l = sim->dongles + (order + 1) % sim->args.number_of_coders;
 	coder->monitor_link = sim->monitor.monitor_router + order;
-	coder->burnout_node.coder = coder;
-	coder->burnout_node.previous = NULL;
-	coder->burnout_node.next = NULL;
+	coder->previous = NULL;
+	coder->next = NULL;
 	coder->sim = sim;
 	if (pthread_mutex_init(&coder->compiled_mutex, NULL))
 		return (1);

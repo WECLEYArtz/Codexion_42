@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:15:04 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/16 20:20:52 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/18 01:33:48 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,17 @@
 static int	init_coders(t_sim *sim)
 {
 	int	order;
+	int	coders_num;
 
 	order = 0;
-	sim->coders = malloc(sizeof(t_coder) * sim->args.number_of_coders);
+	coders_num = sim->args.number_of_coders;
+	sim->coders = malloc(sizeof(t_coder) * coders_num);
 	if (!sim->coders)
-		return (cleaner(sim), 12);
-	while (order < sim->args.number_of_coders)
+		return (12);
+	while (order < coders_num)
 	{
 		if (_create_coder(sim->coders + order, order, sim))
-		{
-			return (cleaner(sim), 1);
-		}
+			return (1);
 		order++;
 	}
 	return (0);
@@ -43,19 +43,15 @@ static int	init_monitor(t_sim *sim)
 	sim->monitor.monitor_router = malloc(sizeof(pthread_cond_t) * coders_num);
 	sim->monitor.coders_threads = malloc(sizeof(pthread_t) * coders_num);
 	if (!sim->monitor.monitor_router || !sim->monitor.coders_threads)
-		return (cleaner(sim), 12);
-	init_sim_ta(sim);
+		return (12);
 	while (order < coders_num)
 	{
 		if (pthread_cond_init(sim->monitor.monitor_router + order, NULL))
-			return (cleaner(sim), 1);
+			return (1);
 		sim->init_records.m_cond_init_ok = ++order;
 	}
-	if (pthread_cond_init(&sim->monitor.general_cond, NULL))
-		return (cleaner(sim), 1);
-	sim->init_records.m_gcond_init_ok = 1;
 	if (pthread_create(&sim->monitor.thread, NULL, monitor, sim))
-		return (cleaner(sim), 1);
+		return (1);
 	return (0);
 }
 
@@ -63,16 +59,15 @@ static int	init_monitor(t_sim *sim)
 static int	init_dongles(t_sim *sim)
 {
 	int	order;
+	int	coders_num;
 
-	sim->dongles = malloc(sizeof(t_dongle) * sim->args.number_of_coders);
+	coders_num = sim->args.number_of_coders;
+	sim->dongles = malloc(sizeof(t_dongle) * coders_num);
 	if (!sim->dongles)
-		return (cleaner(sim), 12);
+		return (12);
 	order = 0;
-	while (order < sim->args.number_of_coders)
-	{
-		(sim->dongles + order)->id = order + 1;
+	while (order < coders_num)
 		(sim->dongles + order++)->cooldown = sim->args.dongle_cooldown;
-	}
 	return (0);
 }
 
@@ -84,9 +79,12 @@ int	init_simulation(t_sim *sim, char **argv)
 	if (getargs(argv, &args) || args.number_of_coders == 0)
 		return (1);
 	sim->args = args;
-	clock_gettime(CLOCK_REALTIME, &sim->startup);
+	init_sim_ta(sim);
 	if (init_dongles(sim) || init_monitor(sim) || init_coders(sim))
+	{
+		cleaner(sim);
 		return (1);
+	}
 	preseed_dongles_heap(sim);
 	return (0);
 }

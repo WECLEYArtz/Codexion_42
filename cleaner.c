@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 14:29:38 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/16 20:25:13 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/18 01:35:25 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,6 @@ static void	_clean_monitor(t_monitor *monitor, t_init_records *rec)
 	while (count)
 		pthread_cond_destroy(monitor->monitor_router + (count-- - 1));
 	free(monitor->monitor_router);
-	if (rec->m_gcond_init_ok)
-		pthread_cond_destroy(&monitor->general_cond);
 }
 
 static void	_clean_coders(t_coder *coders, t_init_records *rec)
@@ -48,7 +46,6 @@ void	cleaner(t_sim *sim)
 
 	init_records = &sim->init_records;
 	sim_action(OFF, NULL);
-
 	join_coders(sim->monitor.coders_threads, init_records->c_thread_init_ok);
 	_clean_monitor(&sim->monitor, init_records);
 	_clean_coders(sim->coders, init_records);

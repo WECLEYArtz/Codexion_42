@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:00:49 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/16 20:20:31 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/18 01:22:01 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,23 +29,23 @@ typedef struct s_init_records
 	int				c_thread_init_ok;
 	int				c_mutex_init_ok;
 	int				m_cond_init_ok;
-	int				m_gcond_init_ok;
 }					t_init_records;
 
 typedef struct s_sim
 {
-	t_monitor		monitor;
 	t_dongle		*dongles;
 	t_coder			*coders;
-
-	t_args			args;
+	t_monitor		monitor;
 
 	t_timeadd		ta_burnout;
 	t_timeadd		ta_compile;
 	t_timeadd		ta_debug;
 	t_timeadd		ta_refactor;
 
+	t_args			args;
+
 	t_timespec		startup;
+
 	t_init_records	init_records;
 }					t_sim;
 

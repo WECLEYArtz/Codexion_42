@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/16 20:32:35 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/18 01:26:10 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,12 @@ static int	wait_coder_burnout(t_coder *coder, t_timeadd *ta_burnout)
 void	*monitor(void *t_sim_p)
 {
 	t_monitor	*monitor;
-	t_timeadd	*burnout;
+	t_timeadd	*burnout_ta;
 
-	burnout = &((t_sim *)t_sim_p)->ta_burnout;
+	burnout_ta = &((t_sim *)t_sim_p)->ta_burnout;
 	monitor = &((t_sim *)t_sim_p)->monitor;
 	burnoutpq_action(MWATCH, monitor);
-	while (!wait_coder_burnout(burnoutpq_action(POP, NULL), burnout))
+	while (!wait_coder_burnout(burnoutpq_action(POP, NULL), burnout_ta))
 		;
 	return (NULL);
 }

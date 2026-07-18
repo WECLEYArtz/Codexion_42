@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:00:49 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/16 00:26:25 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/17 23:07:25 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ typedef struct s_dongle
 	int		cooldown;
 	void	(*request)(int id);
 	void	(*letgo)(int id);
-	int		id;
 }			t_dongle;
 
 #endif
