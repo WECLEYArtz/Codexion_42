@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/18 01:21:21 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/18 01:43:45 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,8 @@ int	first_compile(t_coder *coder)
 	pthread_mutex_unlock(&first_compile_mutex);
 	if (sim_action(STAT, NULL))
 	{
-		abstime = get_abstime(&coder->last_compile, &coder->sim->ta_compile);
 		_compile_work(coder);
+		abstime = get_abstime(&coder->last_compile, &coder->sim->ta_compile);
 		burnoutpq_action(MWAKE, NULL);
 		sim_action(WAITSTP, &abstime);
 	}
