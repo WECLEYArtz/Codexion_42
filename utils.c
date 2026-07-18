@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/16 00:21:31 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/18 13:37:02 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/18 22:45:15 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	announce(t_coder *coder, char *action, int force)
 	static pthread_mutex_t	print_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 	pthread_mutex_lock(&print_mutex);
-	if (sim_action(STAT, NULL) || force)
+	if (sim_action(STAT, NULL) == ON || force)
 	{
 		clock_gettime(CLOCK_REALTIME, &current);
 		timelap = (current.tv_sec * 1000 + current.tv_nsec / 1000000)

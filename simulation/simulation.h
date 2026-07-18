@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:00:49 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/18 01:22:01 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/18 22:52:25 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 # define WAITRUN 3
 # define WAITSTP 4
 
-bool				sim_action(short choice, t_timespec *abstime);
+short				sim_action(short choice, t_timespec *abstime);
 typedef struct s_init_records
 {
 	int				c_thread_init_ok;

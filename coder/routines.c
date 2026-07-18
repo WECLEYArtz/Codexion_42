@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/18 13:38:00 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/18 22:48:15 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	first_compile(t_coder *coder)
 		return (0);
 	}
 	pthread_mutex_unlock(&first_compile_mutex);
-	if (sim_action(STAT, NULL))
+	if (sim_action(STAT, NULL) == ON)
 	{
 		_compile_work(coder);
 		pthread_mutex_lock(&coder->compiled_mutex);
@@ -62,7 +62,7 @@ void	compile(t_coder *coder)
 	abstime = get_abstime(&coder->last_compile, &coder->sim->ta_compile);
 	pthread_cond_signal(coder->monitor_link);
 	pthread_mutex_unlock(&coder->compiled_mutex);
-	if (sim_action(STAT, NULL) == false)
+	if (sim_action(STAT, NULL) == OFF)
 		return ;
 	sim_action(WAITSTP, &abstime);
 }
