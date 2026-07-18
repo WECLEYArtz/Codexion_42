@@ -50,8 +50,6 @@ static int	init_monitor(t_sim *sim)
 			return (1);
 		sim->init_records.m_cond_init_ok = ++order;
 	}
-	if (pthread_create(&sim->monitor.thread, NULL, monitor, sim))
-		return (1);
 	return (0);
 }
 
@@ -80,10 +78,11 @@ int	init_simulation(t_sim *sim, char **argv)
 		return (1);
 	sim->args = args;
 	init_sim_ta(sim);
-	if (init_dongles(sim) || init_monitor(sim) || init_coders(sim))
+	if (init_dongles(sim) || init_monitor(sim) || init_coders(sim)
+			|| pthread_create(&sim->monitor.thread, NULL, monitor, sim))
 	{
-		cleaner(sim);
 		return (1);
+		cleaner(sim);
 	}
 	preseed_dongles_heap(sim);
 	return (0);
