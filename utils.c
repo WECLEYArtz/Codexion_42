@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/16 00:21:31 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/18 12:26:16 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/18 13:37:02 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,14 @@
 #include "dependencies.h"
 #include "simulation/simulation.h"
 
-t_timespec	get_abstime(t_timespec *last_compile, t_timeadd *timeadd,
-		pthread_mutex_t *mutex)
+t_timespec	get_abstime(t_timespec *last_compile, t_timeadd *timeadd)
 {
 	struct timespec	abstime;
 
-	pthread_mutex_lock(mutex);
 	abstime.tv_sec = last_compile->tv_sec + timeadd->sec;
 	abstime.tv_nsec = last_compile->tv_nsec + timeadd->nsec;
 	abstime.tv_sec += abstime.tv_nsec / 1000000000;
 	abstime.tv_nsec = abstime.tv_nsec % 1000000000;
-	pthread_mutex_unlock(mutex);
 	return (abstime);
 }
 
