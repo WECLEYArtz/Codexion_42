@@ -9,13 +9,13 @@ DEBUG=\
 	  # -fsanitize=thread
 
 SRC=		main.c\
-			utils.c\
 			cleaner.c\
+			utils/utils.c\
 			dongle/dongle.c \
 			schedualer/schedualer.c\
 			coder/coders.c coder/routines.c \
 			parser/args_parser.c parser/atopi.c \
-			monitor/monitor.c monitor/burnoutpq_control.c \
+			monitor/monitor.c monitor/burnout_wl_control.c \
 			simulation/simulation_control.c\
 			simulation/simulation_init.c simulation/simulation_init_utils.c\
 

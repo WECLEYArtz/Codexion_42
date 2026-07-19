@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:00:49 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/19 03:33:07 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/19 15:34:27 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,12 @@
 # define WAITRUN 4
 # define WAITSTP 5
 
-short				sim_action(short choice, t_timespec *abstime);
+typedef struct s_timeadd
+{
+	long			sec;
+	long			nsec;
+}					t_timeadd;
+
 typedef struct s_init_records
 {
 	int				c_thread_init_ok;
@@ -51,10 +56,10 @@ typedef struct s_sim
 }					t_sim;
 
 int					init_simulation(t_sim *sim, char **argv);
+short				sim_action(short choice, t_timespec *abstime);
 void				preseed_dongles_heap(t_sim *sim);
-void				*monitor(void *t_sim_p);
 
-void				init_sim_ta(t_sim *sim);
+void				_init_sim_ta(t_sim *sim);
 int					_create_coder(t_coder *coder, int order, t_sim *sim);
 
 #endif

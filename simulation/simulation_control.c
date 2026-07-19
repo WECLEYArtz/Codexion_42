@@ -6,11 +6,10 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 13:20:47 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/19 01:42:47 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/19 15:32:09 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../dependencies.h"
 #include "./simulation.h"
 
 static void	_routine_wait(pthread_cond_t *cond, pthread_mutex_t *mutex,

@@ -6,12 +6,12 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/19 02:29:52 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/19 15:31:49 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../coder/coder.h"
-#include "../dependencies.h"
+#include "../utils/utils.h"
 #include "../simulation/simulation.h"
 
 static int	wait_coder_burnout(t_coder *coder, t_timeadd *ta_burnout)
@@ -47,8 +47,8 @@ void	*monitor(void *t_sim_p)
 
 	burnout_ta = &((t_sim *)t_sim_p)->ta_burnout;
 	monitor = &((t_sim *)t_sim_p)->monitor;
-	burnoutpq_action(MWATCH, monitor);
-	while (!wait_coder_burnout(burnoutpq_action(POP, NULL), burnout_ta))
+	burnout_wl_action(MWATCH, monitor);
+	while (!wait_coder_burnout(burnout_wl_action(POP, NULL), burnout_ta))
 		;
 	return (NULL);
 }

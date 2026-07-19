@@ -1,33 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   monitor.h                                          :+:      :+:    :+:   */
+/*   utils.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/07/07 21:41:30 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/19 15:26:31 by ahmounsi         ###   ########.fr       */
+/*   Created: 2026/07/19 15:34:43 by ahmounsi          #+#    #+#             */
+/*   Updated: 2026/07/19 15:35:02 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MONITOR_H
-# define MONITOR_H
-
-# define MVBACK 0
-# define POP 1
-# define MWATCH 2
-# define MWAKE 4
+#ifndef UTILS_H
+# define UTILS_H
 
 # include "../dependencies.h"
 
-typedef struct s_monitor
-{
-	pthread_t				thread;
-	pthread_t				*coders_threads;
-	pthread_cond_t			*monitor_router;
-}							t_monitor;
+void		announce(t_coder *coder, short action, bool force);
+void		cleaner(t_sim *sim);
+void		join_coders(pthread_t *coders_threads, int count);
 
-void						*monitor(void *t_sim_p);
-t_coder						*burnout_wl_action(short choice, void *pointer);
+t_timespec	get_abstime(t_timespec *last_compile, t_timeadd *timeadd);
 
 #endif

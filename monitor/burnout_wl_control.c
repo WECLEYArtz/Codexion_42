@@ -1,17 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   burnoutpq_control.c                                :+:      :+:    :+:   */
+/*   burnout_wl_control.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 17:31:10 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/18 01:26:03 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/19 15:31:42 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../coder/coder.h"
-#include "../dependencies.h"
 #include "./monitor.h"
 
 static void	_addback(t_coder **head_p, t_coder *node)
@@ -42,7 +41,7 @@ static void	_addback(t_coder **head_p, t_coder *node)
 	node->next = NULL;
 }
 
-t_coder	*burnoutpq_action(short choice, void *pointer)
+t_coder	*burnout_wl_action(short choice, void *pointer)
 {
 	static pthread_mutex_t	mutex = PTHREAD_MUTEX_INITIALIZER;
 	static pthread_cond_t	fc_cond = PTHREAD_COND_INITIALIZER;

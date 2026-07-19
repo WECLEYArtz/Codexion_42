@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 13:05:58 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/18 01:35:15 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/19 15:17:43 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define CODER_H
 
 # include "../dependencies.h"
-# include "../monitor/monitor.h"
 
 // NOTE:	the reason we have sim is usually just to access sim->params.
 // 			try to optimise if uneeded later

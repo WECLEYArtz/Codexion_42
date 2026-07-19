@@ -6,12 +6,12 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/19 02:29:20 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/19 15:31:27 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../coder/coder.h"
-#include "../dependencies.h"
+#include "../utils/utils.h"
 #include "../simulation/simulation.h"
 
 // NOTE: The only thing this lacks now is taking the dongle, maybe more...
@@ -23,7 +23,7 @@ static void	_compile_work(t_coder *coder)
 	clock_gettime(CLOCK_REALTIME, &coder->last_compile);
 	coder->compiled++;
 	pthread_mutex_unlock(&coder->compiled_mutex);
-	burnoutpq_action(MVBACK, coder);
+	burnout_wl_action(MVBACK, coder);
 }
 
 int	first_compile(t_coder *coder)
@@ -47,7 +47,7 @@ int	first_compile(t_coder *coder)
 		pthread_mutex_lock(&coder->compiled_mutex);
 		abstime = get_abstime(&coder->last_compile, &coder->sim->ta_compile);
 		pthread_mutex_unlock(&coder->compiled_mutex);
-		burnoutpq_action(MWAKE, NULL);
+		burnout_wl_action(MWAKE, NULL);
 		sim_action(WAITSTP, &abstime);
 	}
 	return (1);

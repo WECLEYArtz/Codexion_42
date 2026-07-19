@@ -6,12 +6,12 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:15:04 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/19 03:46:54 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/19 15:32:27 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../coder/coder.h"
 #include "../dongle/dongle.h"
+#include "../utils/utils.h"
 #include "simulation.h"
 
 static int	init_coders(t_sim *sim)
@@ -77,7 +77,7 @@ int	init_simulation(t_sim *sim, char **argv)
 	if (getargs(argv, &args) || args.number_of_coders == 0)
 		return (1);
 	sim->args = args;
-	init_sim_ta(sim);
+	_init_sim_ta(sim);
 	if (init_dongles(sim) || init_monitor(sim) || init_coders(sim)
 		|| pthread_create(&sim->monitor.thread, NULL, monitor, sim))
 	{

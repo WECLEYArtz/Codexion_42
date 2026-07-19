@@ -6,11 +6,11 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:37:01 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/18 01:52:32 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/19 15:33:04 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "dependencies.h"
+#include "utils/utils.h"
 #include "simulation/simulation.h"
 
 int	main(int argc, char **argv)
@@ -21,8 +21,8 @@ int	main(int argc, char **argv)
 		return (1);
 	else
 	{
-		clock_gettime(CLOCK_REALTIME, &sim.startup);
 		sim_action(ON, NULL);
+		clock_gettime(CLOCK_REALTIME, &sim.startup);
 		pthread_join(sim.monitor.thread, NULL);
 		cleaner(&sim);
 	}

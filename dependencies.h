@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/29 17:16:54 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/19 02:49:02 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/19 15:21:37 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 # define YELLOW "\x1b[33m"
 # define BLUE "\x1b[34m"
 
-# define ANNOUCE_COMPILE 1
+# define ANNOUCE_COMPILE 255
 # define ANNOUCE_DEBUG 0
 # define ANNOUCE_REFACTOR 12
 # define ANNOUCE_BURNOUT 27
@@ -41,17 +41,6 @@ typedef struct s_monitor	t_monitor;
 
 typedef struct timeval		t_timeval;
 typedef struct timespec		t_timespec;
-typedef struct s_timeadd
-{
-	long					sec;
-	long					nsec;
-}							t_timeadd;
+typedef struct s_timeadd	t_timeadd;
 
-// Util functions
-void						announce(t_coder *coder, short action, bool force);
-void						cleaner(t_sim *sim);
-void						join_coders(pthread_t *coders_threads, int count);
-
-t_timespec					get_abstime(t_timespec *last_compile,
-								t_timeadd *timeadd);
 #endif

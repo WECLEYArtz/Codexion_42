@@ -6,27 +6,26 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/13 21:48:08 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/19 01:44:13 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/19 15:32:36 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../coder/coder.h"
 #include "../dongle/dongle.h"
 #include "simulation.h"
 
-void	_init_ta(t_timeadd *time, int ms)
+void	__init_ta(t_timeadd *time, int ms)
 {
 	time->sec = ms / 1000;
 	time->nsec = (ms % 1000) * 1000000;
 }
 
-void	init_sim_ta(t_sim *sim)
+void	_init_sim_ta(t_sim *sim)
 {
-	_init_ta(&sim->ta_burnout, sim->args.time_to_burnout);
-	_init_ta(&sim->ta_compile, sim->args.time_to_compile);
-	_init_ta(&sim->ta_debug, sim->args.time_to_compile
+	__init_ta(&sim->ta_burnout, sim->args.time_to_burnout);
+	__init_ta(&sim->ta_compile, sim->args.time_to_compile);
+	__init_ta(&sim->ta_debug, sim->args.time_to_compile
 		+ sim->args.time_to_debug);
-	_init_ta(&sim->ta_refactor, sim->args.time_to_compile
+	__init_ta(&sim->ta_refactor, sim->args.time_to_compile
 		+ sim->args.time_to_debug + sim->args.time_to_refactor);
 }
 
