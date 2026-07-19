@@ -3,16 +3,21 @@ CFLAGS=		-pthread -Wall -Werror -Wextra
 NAME=		codexion
 
 DEBUG=\
-	  -g3\
-	  -fsanitize=address\
+	  -g3 -O0\
+	  # -fsanitize=address\
 	  # -fsanitize=leak
+	  # -fsanitize=thread
 
 SRC=		main.c\
-			coder/coders.c coder/routines.c\
-			dongle/dongle.c monitor/monitor.c\
-			parser/atopi.c parser/params_parser.c\
-			simulation/simulation.c simulation/cleaner.c\
+			utils.c\
+			cleaner.c\
+			dongle/dongle.c \
 			schedualer/schedualer.c\
+			coder/coders.c coder/routines.c \
+			parser/args_parser.c parser/atopi.c \
+			monitor/monitor.c monitor/burnoutpq_control.c \
+			simulation/simulation_control.c\
+			simulation/simulation_init.c simulation/simulation_init_utils.c\
 
 OBJ=		$(SRC:.c=.o)
 
