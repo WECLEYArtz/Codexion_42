@@ -6,12 +6,13 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:15:04 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/19 15:32:27 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/19 17:15:47 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../dongle/dongle.h"
 #include "../utils/utils.h"
+#include "../monitor/monitor.h"
 #include "simulation.h"
 
 static int	init_coders(t_sim *sim)
@@ -33,20 +34,21 @@ static int	init_coders(t_sim *sim)
 	return (0);
 }
 
-static int	init_monitor(t_sim *sim)
+static int	init_monitor(t_sim *sim, t_monitor *monitor)
 {
 	int	order;
 	int	coders_num;
 
+	memset(monitor, 0, sizeof(t_monitor));
 	order = 0;
 	coders_num = sim->args.number_of_coders;
-	sim->monitor.monitor_router = malloc(sizeof(pthread_cond_t) * coders_num);
-	sim->monitor.coders_threads = malloc(sizeof(pthread_t) * coders_num);
-	if (!sim->monitor.monitor_router || !sim->monitor.coders_threads)
+	monitor->monitor_router = malloc(sizeof(pthread_cond_t) * coders_num);
+	monitor->coders_threads = malloc(sizeof(pthread_t) * coders_num);
+	if (!monitor->monitor_router || !monitor->coders_threads)
 		return (12);
 	while (order < coders_num)
 	{
-		if (pthread_cond_init(sim->monitor.monitor_router + order, NULL))
+		if (pthread_cond_init(monitor->monitor_router + order, NULL))
 			return (1);
 		sim->init_records.m_cond_init_ok = ++order;
 	}
@@ -69,17 +71,18 @@ static int	init_dongles(t_sim *sim)
 	return (0);
 }
 
-int	init_simulation(t_sim *sim, char **argv)
+int	init_simulation(t_sim *sim, t_monitor *monitor, char **argv)
 {
 	t_args	args;
 
 	memset(sim, 0, sizeof(t_sim));
-	if (getargs(argv, &args) || args.number_of_coders == 0)
+	if (get_args(argv, &args) || args.number_of_coders == 0)
 		return (1);
 	sim->args = args;
+	sim->monitor = monitor;
 	_init_sim_ta(sim);
-	if (init_dongles(sim) || init_monitor(sim) || init_coders(sim)
-		|| pthread_create(&sim->monitor.thread, NULL, monitor, sim))
+	if (init_dongles(sim) || init_monitor(sim, monitor) || init_coders(sim)
+		|| pthread_create(&monitor->thread, NULL, monitor_routine, sim))
 	{
 		return (1);
 		cleaner(sim);

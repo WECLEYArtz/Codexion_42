@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 17:31:10 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/19 15:31:42 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/19 17:24:28 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static void	_addback(t_coder **head_p, t_coder *node)
 	node->next = NULL;
 }
 
-t_coder	*burnout_wl_action(short choice, void *pointer)
+t_coder	*burnout_list_action(short choice, void *pointer)
 {
 	static pthread_mutex_t	mutex = PTHREAD_MUTEX_INITIALIZER;
 	static pthread_cond_t	fc_cond = PTHREAD_COND_INITIALIZER;
@@ -49,7 +49,7 @@ t_coder	*burnout_wl_action(short choice, void *pointer)
 	t_coder					*tmp;
 
 	pthread_mutex_lock(&mutex);
-	if (choice == MVBACK)
+	if (choice == MV_BACK)
 		_addback(&head, (t_coder *)pointer);
 	else if (choice == POP)
 	{
@@ -61,10 +61,10 @@ t_coder	*burnout_wl_action(short choice, void *pointer)
 			head->previous = NULL;
 		return (pthread_mutex_unlock(&mutex), tmp);
 	}
-	else if (choice == MWATCH)
+	else if (choice == M_WATCH)
 		while (!head)
 			pthread_cond_wait(&fc_cond, &mutex);
-	else if (choice == MWAKE)
+	else if (choice == M_WAKE)
 		pthread_cond_signal(&fc_cond);
 	pthread_mutex_unlock(&mutex);
 	return (NULL);

@@ -6,24 +6,26 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:37:01 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/19 15:33:04 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/19 17:16:19 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "utils/utils.h"
+#include "monitor/monitor.h"
 #include "simulation/simulation.h"
+#include "utils/utils.h"
 
 int	main(int argc, char **argv)
 {
-	t_sim	sim;
+	t_sim		sim;
+	t_monitor	monitor;
 
-	if (argc != 9 || init_simulation(&sim, argv))
+	if (argc != 9 || init_simulation(&sim, &monitor, argv))
 		return (1);
 	else
 	{
 		sim_action(ON, NULL);
 		clock_gettime(CLOCK_REALTIME, &sim.startup);
-		pthread_join(sim.monitor.thread, NULL);
+		pthread_join(monitor.thread, NULL);
 		cleaner(&sim);
 	}
 }

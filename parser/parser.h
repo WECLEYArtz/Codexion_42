@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:02:48 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/15 16:49:27 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/19 16:40:53 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ typedef struct s_args
 	short	scheduler;
 }			t_args;
 
-int			getargs(char **args, t_args *args_struct);
+int			get_args(char **args, t_args *args_struct);
 int			ft_atopi(const char *str);
 
 #endif

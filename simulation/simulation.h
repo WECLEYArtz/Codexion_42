@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:00:49 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/19 15:34:27 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/19 17:10:43 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,20 @@
 # define SIMULATION_H
 
 # include "../dependencies.h"
-# include "../monitor/monitor.h"
 # include "../parser/parser.h"
 
 # define OFF 0
 # define ON 1
 # define END 2
 # define STAT 3
-# define WAITRUN 4
-# define WAITSTP 5
+# define WAIT_RUN 4
+# define WAIT_STP 5
 
-typedef struct s_timeadd
+typedef struct s_time_add
 {
 	long			sec;
 	long			nsec;
-}					t_timeadd;
+}					t_time_add;
 
 typedef struct s_init_records
 {
@@ -41,12 +40,12 @@ typedef struct s_sim
 {
 	t_dongle		*dongles;
 	t_coder			*coders;
-	t_monitor		monitor;
+	t_monitor		*monitor;
 
-	t_timeadd		ta_burnout;
-	t_timeadd		ta_compile;
-	t_timeadd		ta_debug;
-	t_timeadd		ta_refactor;
+	t_time_add		ta_burnout;
+	t_time_add		ta_compile;
+	t_time_add		ta_debug;
+	t_time_add		ta_refactor;
 
 	t_args			args;
 
@@ -55,7 +54,8 @@ typedef struct s_sim
 	t_init_records	init_records;
 }					t_sim;
 
-int					init_simulation(t_sim *sim, char **argv);
+int					init_simulation(t_sim *sim, t_monitor *monitor,
+						char **argv);
 short				sim_action(short choice, t_timespec *abstime);
 void				preseed_dongles_heap(t_sim *sim);
 

@@ -6,14 +6,14 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/16 00:21:31 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/19 15:32:41 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/19 16:44:54 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../coder/coder.h"
 #include "../simulation/simulation.h"
 
-t_timespec	get_abstime(t_timespec *last_compile, t_timeadd *timeadd)
+t_timespec	get_abstime(t_timespec *last_compile, t_time_add *timeadd)
 {
 	struct timespec	abstime;
 

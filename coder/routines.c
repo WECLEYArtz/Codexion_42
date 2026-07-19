@@ -6,13 +6,14 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/19 15:31:27 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/19 17:21:49 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../coder/coder.h"
-#include "../utils/utils.h"
+#include "../monitor/monitor.h"
 #include "../simulation/simulation.h"
+#include "../utils/utils.h"
 
 // NOTE: The only thing this lacks now is taking the dongle, maybe more...
 // 			add takin dongle later...
@@ -23,7 +24,7 @@ static void	_compile_work(t_coder *coder)
 	clock_gettime(CLOCK_REALTIME, &coder->last_compile);
 	coder->compiled++;
 	pthread_mutex_unlock(&coder->compiled_mutex);
-	burnout_wl_action(MVBACK, coder);
+	burnout_list_action(MV_BACK, coder);
 }
 
 int	first_compile(t_coder *coder)
@@ -47,8 +48,8 @@ int	first_compile(t_coder *coder)
 		pthread_mutex_lock(&coder->compiled_mutex);
 		abstime = get_abstime(&coder->last_compile, &coder->sim->ta_compile);
 		pthread_mutex_unlock(&coder->compiled_mutex);
-		burnout_wl_action(MWAKE, NULL);
-		sim_action(WAITSTP, &abstime);
+		burnout_list_action(M_WAKE, NULL);
+		sim_action(WAIT_STP, &abstime);
 	}
 	return (1);
 }
@@ -64,7 +65,7 @@ void	compile(t_coder *coder)
 	pthread_mutex_unlock(&coder->compiled_mutex);
 	if (sim_action(STAT, NULL) == OFF)
 		return ;
-	sim_action(WAITSTP, &abstime);
+	sim_action(WAIT_STP, &abstime);
 }
 
 void	debug(t_coder *coder)
@@ -75,7 +76,7 @@ void	debug(t_coder *coder)
 	pthread_mutex_lock(&coder->compiled_mutex);
 	abstime = get_abstime(&coder->last_compile, &coder->sim->ta_debug);
 	pthread_mutex_unlock(&coder->compiled_mutex);
-	sim_action(WAITSTP, &abstime);
+	sim_action(WAIT_STP, &abstime);
 }
 
 void	refactor(t_coder *coder)
@@ -86,5 +87,5 @@ void	refactor(t_coder *coder)
 	pthread_mutex_lock(&coder->compiled_mutex);
 	abstime = get_abstime(&coder->last_compile, &coder->sim->ta_refactor);
 	pthread_mutex_unlock(&coder->compiled_mutex);
-	sim_action(WAITSTP, &abstime);
+	sim_action(WAIT_STP, &abstime);
 }

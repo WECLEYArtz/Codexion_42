@@ -6,11 +6,12 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 14:29:38 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/19 00:58:48 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/19 17:20:08 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "coder/coder.h"
+#include "monitor/monitor.h"
 #include "simulation/simulation.h"
 
 void	join_coders(pthread_t *coders_threads, int join_count)
@@ -46,9 +47,9 @@ void	cleaner(t_sim *sim)
 
 	init_records = &sim->init_records;
 	sim_action(END, NULL);
-	join_coders(sim->monitor.coders_threads, init_records->c_thread_init_ok);
-	_clean_monitor(&sim->monitor, init_records);
+	join_coders(sim->monitor->coders_threads, init_records->c_thread_init_ok);
+	_clean_monitor(sim->monitor, init_records);
 	_clean_coders(sim->coders, init_records);
-	free(sim->monitor.coders_threads);
+	free(sim->monitor->coders_threads);
 	free(sim->dongles);
 }

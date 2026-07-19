@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/04 12:51:50 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/19 17:24:55 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static int	_isvalidate_args(t_args *args)
 	return (1);
 }
 
-int	getargs(char **argv, t_args *args)
+int	get_args(char **argv, t_args *args)
 {
 	if (!strcmp(argv[8], "edf"))
 		args->scheduler = 1;
