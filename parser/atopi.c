@@ -6,7 +6,7 @@
 /*   By: ahmounsi <<marvin@42.fr>>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/20 17:30:19 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/06/29 20:31:40 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/19 01:57:56 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,6 @@ int	ft_atopi(const char *str)
 	int	result;
 
 	result = 0;
-	// while (ft_isspace(*str))
-	// 	str++;
 	if (*str == '-')
 	{
 		if (str[1] == '0' && !str[2])

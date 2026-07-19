@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/16 00:21:31 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/18 22:45:15 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/19 03:45:22 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,20 +25,27 @@ t_timespec	get_abstime(t_timespec *last_compile, t_timeadd *timeadd)
 	return (abstime);
 }
 
-void	announce(t_coder *coder, char *action, int force)
+void	announce(t_coder *coder, short action, bool force)
 {
 	t_timespec				current;
-	long					timelap;
+	long					diff_ms;
 	static pthread_mutex_t	print_mutex = PTHREAD_MUTEX_INITIALIZER;
+	static char				*str = "is debuging\0is refactoring\0burned out\0";
 
+	if (sim_action(STAT, NULL) == END && force == false)
+		return ;
 	pthread_mutex_lock(&print_mutex);
-	if (sim_action(STAT, NULL) == ON || force)
 	{
 		clock_gettime(CLOCK_REALTIME, &current);
-		timelap = (current.tv_sec * 1000 + current.tv_nsec / 1000000)
-			- (coder->sim->startup.tv_sec * 1000 + coder->sim->startup.tv_nsec
-				/ 1000000);
-		printf("%ld %d %s\n", timelap, coder->id, action);
+		diff_ms = ((current.tv_sec - coder->sim->startup.tv_sec) * 1000)
+			+ ((current.tv_nsec - coder->sim->startup.tv_nsec) / 1000000);
+		if (action == ANNOUCE_COMPILE)
+		{
+			printf("%ld %d has taken a dongle\n", diff_ms, coder->id);
+			printf("%ld %d is compiling\n", diff_ms, coder->id);
+		}
+		else
+			printf("%ld %d %s\n", diff_ms, coder->id, &str[action]);
 	}
 	pthread_mutex_unlock(&print_mutex);
 }

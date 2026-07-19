@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/29 17:16:54 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/18 13:37:09 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/19 02:49:02 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,16 @@
 # include <time.h>
 # include <unistd.h>
 
-# define DEBUG 0
-# define DEBUGBPQ 0
 # define RED "\x1b[31m"
 # define GREEN "\x1b[32m"
 # define RESET "\x1b[0m"
 # define YELLOW "\x1b[33m"
 # define BLUE "\x1b[34m"
+
+# define ANNOUCE_COMPILE 1
+# define ANNOUCE_DEBUG 0
+# define ANNOUCE_REFACTOR 12
+# define ANNOUCE_BURNOUT 27
 
 typedef struct s_sim		t_sim;
 typedef struct s_args		t_args;
@@ -45,7 +48,7 @@ typedef struct s_timeadd
 }							t_timeadd;
 
 // Util functions
-void						announce(t_coder *coder, char *action, int force);
+void						announce(t_coder *coder, short action, bool force);
 void						cleaner(t_sim *sim);
 void						join_coders(pthread_t *coders_threads, int count);
 

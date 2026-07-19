@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/18 22:48:15 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/19 02:29:20 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 // 			add takin dongle later...
 static void	_compile_work(t_coder *coder)
 {
-	announce(coder, "has taken a dongle\nis compiling", 0);
+	announce(coder, ANNOUCE_COMPILE, false);
 	pthread_mutex_lock(&coder->compiled_mutex);
 	clock_gettime(CLOCK_REALTIME, &coder->last_compile);
 	coder->compiled++;
@@ -71,7 +71,7 @@ void	debug(t_coder *coder)
 {
 	t_timespec	abstime;
 
-	announce(coder, "is debuging", 0);
+	announce(coder, ANNOUCE_DEBUG, false);
 	pthread_mutex_lock(&coder->compiled_mutex);
 	abstime = get_abstime(&coder->last_compile, &coder->sim->ta_debug);
 	pthread_mutex_unlock(&coder->compiled_mutex);
@@ -82,7 +82,7 @@ void	refactor(t_coder *coder)
 {
 	t_timespec	abstime;
 
-	announce(coder, "is refactoring", 0);
+	announce(coder, ANNOUCE_REFACTOR, false);
 	pthread_mutex_lock(&coder->compiled_mutex);
 	abstime = get_abstime(&coder->last_compile, &coder->sim->ta_refactor);
 	pthread_mutex_unlock(&coder->compiled_mutex);
