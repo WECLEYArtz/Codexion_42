@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:00:49 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/18 22:52:25 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/18 22:56:26 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,10 @@
 
 # define OFF 0
 # define ON 1
-# define STAT 2
-# define WAITRUN 3
-# define WAITSTP 4
+# define END 2
+# define STAT 3
+# define WAITRUN 4
+# define WAITSTP 5
 
 short				sim_action(short choice, t_timespec *abstime);
 typedef struct s_init_records
