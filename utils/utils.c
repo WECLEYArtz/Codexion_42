@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/16 00:21:31 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/19 16:44:54 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/19 17:45:20 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,8 @@ void	announce(t_coder *coder, short action, bool force)
 	static pthread_mutex_t	print_mutex = PTHREAD_MUTEX_INITIALIZER;
 	static char				*str = "is debuging\0is refactoring\0burned out\0";
 
-	if (sim_action(STAT, NULL) == END && force == false)
-		return ;
 	pthread_mutex_lock(&print_mutex);
+	if (sim_action(STAT, NULL) == ON || force == true)
 	{
 		clock_gettime(CLOCK_REALTIME, &current);
 		diff_ms = ((current.tv_sec - coder->sim->startup.tv_sec) * 1000)
