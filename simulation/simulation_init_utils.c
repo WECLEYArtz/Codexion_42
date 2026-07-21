@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/13 21:48:08 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/19 17:25:24 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/21 16:12:51 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,8 @@ void	preseed_dongles_heap(t_sim *sim)
 	{
 		while (i < coders_count)
 		{
-			(coder + i)->dongle_r->slots[priority] = (coder + i)->id;
-			(coder + i)->dongle_l->slots[priority] = (coder + i)->id;
+			(coder + i)->dongle_r->slots[priority] = (coder + i);
+			(coder + i)->dongle_l->slots[priority] = (coder + i);
 			i += 2;
 		}
 		i = 0 + 2 * (coders_count > 2 && coders_count % 2);
@@ -74,7 +74,7 @@ void	preseed_dongles_heap(t_sim *sim)
 	}
 	if (coders_count > 2 && coders_count % 2)
 	{
-		(coder)->dongle_r->slots[0] = coder->id;
-		(coder)->dongle_l->slots[1] = coder->id;
+		(coder)->dongle_r->slots[0] = coder;
+		(coder)->dongle_l->slots[1] = coder;
 	}
 }

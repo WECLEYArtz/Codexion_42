@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   dongle.c                                           :+:      :+:    :+:   */
+/*   dongle_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/16 00:26:08 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/21 16:35:13 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,8 @@ void	_unequip_edf_(t_dongle *dongle, t_coder *coder)
 	pthread_mutex_unlock(&dongle->mutex);
 }
 
-void	__heapify_down()
+void	__bubble_down()
 {
 
+	__bubble_down9();
 }

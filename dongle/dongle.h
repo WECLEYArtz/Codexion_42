@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:00:49 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/19 15:04:52 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/21 16:01:31 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ typedef struct s_dongle
 	pthread_cond_t	cond;
 	t_coder			*slots[DONGLE_CAPACITY];
 	int				cooldown;
-	void			(*request)(int id);
-	void			(*unequip)(int id);
+	void			(*request)(t_coder *coder);
+	void			(*unequip)(t_coder *coder);
 }					t_dongle;
 
 void				request(t_dongle *dongle, t_coder *coder);

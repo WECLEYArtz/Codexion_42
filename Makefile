@@ -11,7 +11,7 @@ DEBUG=\
 SRC=		main.c\
 			cleaner.c\
 			utils/utils.c\
-			dongle/dongle.c \
+			dongle/dongle_utils.c \
 			schedualer/schedualer.c\
 			coder/coders.c coder/routines.c \
 			parser/args_parser.c parser/atopi.c \

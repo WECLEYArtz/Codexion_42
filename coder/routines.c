@@ -6,11 +6,12 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/19 17:21:49 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/21 16:01:41 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../coder/coder.h"
+#include "../dongle/dongle.h"
 #include "../monitor/monitor.h"
 #include "../simulation/simulation.h"
 #include "../utils/utils.h"
@@ -19,12 +20,14 @@
 // 			add takin dongle later...
 static void	_compile_work(t_coder *coder)
 {
+	coder->dongle_l->request(coder);
 	announce(coder, ANNOUCE_COMPILE, false);
 	pthread_mutex_lock(&coder->compiled_mutex);
 	clock_gettime(CLOCK_REALTIME, &coder->last_compile);
 	coder->compiled++;
 	pthread_mutex_unlock(&coder->compiled_mutex);
 	burnout_list_action(MV_BACK, coder);
+	coder->dongle_l->unequip(coder);
 }
 
 int	first_compile(t_coder *coder)

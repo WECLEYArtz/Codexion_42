@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/19 16:41:58 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/21 16:02:02 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	*coder_routine(void *coder_p)
 	self = (t_coder *)coder_p;
 	if (!sim_action(WAIT_RUN, NULL))
 		return (NULL);
+	clock_gettime(CLOCK_REALTIME, &self->last_compile);
 	if (first_compile(self))
 		routine_turn++;
 	while (sim_action(STAT, NULL) == ON)
