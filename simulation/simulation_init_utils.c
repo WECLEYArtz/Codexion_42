@@ -55,26 +55,26 @@ void	preseed_dongles_heap(t_sim *sim)
 	int		i;
 	int		coders_count;
 	t_coder	*coder;
-	short	priority_order;
+	short	priority;
 
-	priority_order = 0;
+	priority = 0;
 	coders_count = sim->args.number_of_coders;
 	coder = sim->coders;
 	i = 1;
-	while (priority_order < 2)
+	while (priority < 2)
 	{
 		while (i < coders_count)
 		{
-			(coder + i)->dongle_r->duel_slots[priority_order] = coder + i;
-			(coder + i)->dongle_l->duel_slots[priority_order] = coder + i;
+			(coder + i)->dongle_r->slots[priority] = (coder + i)->id;
+			(coder + i)->dongle_l->slots[priority] = (coder + i)->id;
 			i += 2;
 		}
 		i = 0 + 2 * (coders_count > 2 && coders_count % 2);
-		priority_order++;
+		priority++;
 	}
 	if (coders_count > 2 && coders_count % 2)
 	{
-		(coder)->dongle_r->duel_slots[0] = coder;
-		(coder)->dongle_l->duel_slots[1] = coder;
+		(coder)->dongle_r->slots[0] = coder->id;
+		(coder)->dongle_l->slots[1] = coder->id;
 	}
 }

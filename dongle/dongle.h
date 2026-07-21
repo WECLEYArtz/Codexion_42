@@ -13,14 +13,21 @@
 #ifndef DONGLE_H
 # define DONGLE_H
 
+# define DONGLE_CAPACITY 3
 # include "../coder/coder.h"
 
 typedef struct s_dongle
 {
-	t_coder	*duel_slots[2];
-	int		cooldown;
-	void	(*request)(int id);
-	void	(*letgo)(int id);
-}			t_dongle;
+	pthread_mutex_t	mutex;
+	pthread_cond_t	cond;
+	t_coder			*slots[DONGLE_CAPACITY];
+	int				cooldown;
+	void			(*request)(int id);
+	void			(*unequip)(int id);
+}					t_dongle;
+
+void				request(t_dongle *dongle, t_coder *coder);
+void				_unequip_fifo_(t_dongle *dongle, t_coder *coder);
+void				_unequip_edf_(t_dongle *dongle, t_coder *coder);
 
 #endif

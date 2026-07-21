@@ -34,6 +34,8 @@ typedef struct s_init_records
 	int				c_thread_init_ok;
 	int				c_mutex_init_ok;
 	int				m_cond_init_ok;
+	int				d_mutex_init_ok;
+	int				d_cond_init_ok;
 }					t_init_records;
 
 typedef struct s_sim
