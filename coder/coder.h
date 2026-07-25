@@ -5,11 +5,10 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/07/24 22:14:53 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/24 22:25:43 by ahmounsi         ###   ########.fr       */
+/*   Created: 2026/06/26 13:05:58 by ahmounsi          #+#    #+#             */
+/*   Updated: 2026/07/24 17:56:22 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #ifndef CODER_H
 # define CODER_H
@@ -35,6 +34,7 @@ typedef struct s_coder
 	t_timespec		burnout_date;
 }					t_coder;
 
+void				coder_dates_update(t_coder *coder);
 void				*coder_routine(void *coder_p);
 int					first_compile(t_coder *coder);
 void				compile(t_coder *coder);

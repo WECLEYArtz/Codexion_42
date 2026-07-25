@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/07/24 22:15:06 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/24 22:23:00 by ahmounsi         ###   ########.fr       */
+/*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
+/*   Updated: 2026/07/24 21:56:06 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,7 @@ static void	_compile_work(t_coder *coder)
 	// request(coder->dongle_l, coder);
 	announce(coder, ANNOUCE_COMPILE, false);
 	pthread_mutex_lock(&coder->compiled_mutex);
-	clock_gettime(CLOCK_REALTIME, &coder->last_compile);
-	coder->burnout_date = get_abstime(
-			&coder->last_compile,
-			&coder->sim->ta_burnout);
+	coder_dates_update(coder);
 	coder->compiled++;
 	pthread_mutex_unlock(&coder->compiled_mutex);
 	burnout_list_action(MV_BACK, coder);
