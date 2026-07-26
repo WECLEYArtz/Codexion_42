@@ -43,9 +43,7 @@ static int	wait_coder_burnout(t_coder *coder)
 void	*monitor_routine(void *t_sim_p)
 {
 	t_monitor	*monitor;
-	t_time_add	*ta_burnout;
 
-	ta_burnout = &((t_sim *)t_sim_p)->ta_burnout;
 	monitor = ((t_sim *)t_sim_p)->monitor;
 	burnout_list_action(M_WATCH, monitor);
 	while (!wait_coder_burnout(burnout_list_action(POP, NULL)))

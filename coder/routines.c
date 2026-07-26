@@ -26,9 +26,9 @@ static void	_compile_work(t_coder *coder)
 	coder->compiled++;
 	pthread_mutex_unlock(&coder->compiled_mutex);
 	burnout_list_action(MV_BACK, coder);
-
-
 }
+
+// PERF:	optimise this, only use one compile function with flag
 
 int	first_compile(t_coder *coder)
 {
@@ -54,11 +54,11 @@ int	first_compile(t_coder *coder)
 		burnout_list_action(M_WAKE, NULL);
 		sim_action(WAIT_STP, &abstime);
 
-		__debug_heap__(coder->dongle_l, coder, "Unequiping dongle_l");
-		unequip(coder->dongle_l, coder);
+		__debug_heap__(coder->dongle_r, coder, "dropping dongle_r");
+		untake_dongle(coder->dongle_r, coder);
 
-		__debug_heap__(coder->dongle_r, coder, "Unequiping dongle_r");
-		unequip(coder->dongle_r, coder);
+		__debug_heap__(coder->dongle_l, coder, "dropping dongle_l");
+		untake_dongle(coder->dongle_l, coder);
 	}
 	puts(RED"First compile END"RESET);
 	return (1);
@@ -77,11 +77,11 @@ void	compile(t_coder *coder)
 		return ;
 	sim_action(WAIT_STP, &abstime);
 
-	__debug_heap__(coder->dongle_l, coder, "Unequiping dongle_l");
-	unequip(coder->dongle_l, coder);
+	// __debug_heap__(coder->dongle_r, coder, "Unequiping dongle_r");
+	untake_dongle(coder->dongle_r, coder);
 
-	__debug_heap__(coder->dongle_r, coder, "Unequiping dongle_r");
-	unequip(coder->dongle_r, coder);
+	// __debug_heap__(coder->dongle_l, coder, "Unequiping dongle_l");
+	untake_dongle(coder->dongle_l, coder);
 }
 
 void	debug(t_coder *coder)

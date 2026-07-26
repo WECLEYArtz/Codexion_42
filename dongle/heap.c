@@ -62,6 +62,7 @@ static void	dhq_bubble_up(t_coder *heap[HEAP_SIZE], int i)
 
 void	dhq_insert(t_dongle *dongle, t_coder *coder)
 {
+
 	if(dongle->heap_occupied < HEAP_SIZE)
 	{
 		dongle->heap[dongle->heap_occupied] = coder;

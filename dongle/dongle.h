@@ -36,7 +36,7 @@ typedef struct s_dongle
 }					t_dongle;
 
 void				try_take_dongles(t_dongle *dr, t_dongle *dl, t_coder *cdr);
-void				unequip(t_dongle *dongle, t_coder *coder);
+void				untake_dongle(t_dongle *dongle, t_coder *coder);
 
 void				dhq_insert(t_dongle *dongle, t_coder *coder);
 void				dhq_pop(t_dongle *dongle);
