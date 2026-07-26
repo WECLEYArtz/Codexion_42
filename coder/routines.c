@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/24 21:56:06 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/25 18:49:16 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,20 +17,23 @@
 #include "../simulation/simulation.h"
 #include "../utils/utils.h"
 
-// NOTE: The only thing this lacks now is taking the dongle, maybe more...
-// 			add takin dongle later...
 static void	_compile_work(t_coder *coder)
 {
-	// request(coder->dongle_r, coder);
-	// request(coder->dongle_l, coder);
+	__debug_heap__(coder->dongle_r, coder, "Request dongle_r");
+	request(coder->dongle_r, coder);
+
+	__debug_heap__(coder->dongle_l, coder, "Request dongle_l");
+	request(coder->dongle_l, coder);
+
+
 	announce(coder, ANNOUCE_COMPILE, false);
 	pthread_mutex_lock(&coder->compiled_mutex);
 	coder_dates_update(coder);
 	coder->compiled++;
 	pthread_mutex_unlock(&coder->compiled_mutex);
 	burnout_list_action(MV_BACK, coder);
-	// unequip(coder->dongle_l, coder);
-	// unequip(coder->dongle_r, coder);
+
+
 }
 
 int	first_compile(t_coder *coder)
@@ -56,7 +59,14 @@ int	first_compile(t_coder *coder)
 		pthread_mutex_unlock(&coder->compiled_mutex);
 		burnout_list_action(M_WAKE, NULL);
 		sim_action(WAIT_STP, &abstime);
+
+		__debug_heap__(coder->dongle_l, coder, "Unequiping dongle_l");
+		unequip(coder->dongle_l, coder);
+
+		__debug_heap__(coder->dongle_r, coder, "Unequiping dongle_r");
+		unequip(coder->dongle_r, coder);
 	}
+	puts(RED"First compile END"RESET);
 	return (1);
 }
 
@@ -72,6 +82,12 @@ void	compile(t_coder *coder)
 	if (sim_action(STAT, NULL) == OFF)
 		return ;
 	sim_action(WAIT_STP, &abstime);
+
+	__debug_heap__(coder->dongle_l, coder, "Unequiping dongle_l");
+	unequip(coder->dongle_l, coder);
+
+	__debug_heap__(coder->dongle_r, coder, "Unequiping dongle_r");
+	unequip(coder->dongle_r, coder);
 }
 
 void	debug(t_coder *coder)

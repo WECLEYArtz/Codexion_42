@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/29 17:16:54 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/19 16:45:48 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/25 14:10:57 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ typedef struct s_coder		t_coder;
 typedef struct s_dongle		t_dongle;
 typedef struct s_monitor	t_monitor;
 
-typedef struct timeval		t_timeval;
 typedef struct timespec		t_timespec;
 typedef struct s_time_add	t_time_add;
 

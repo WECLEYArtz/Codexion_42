@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/13 21:48:08 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/19 17:25:24 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/25 21:43:52 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	_init_sim_ta(t_sim *sim)
 		+ sim->args.time_to_debug);
 	__init_ta(&sim->ta_refactor, sim->args.time_to_compile
 		+ sim->args.time_to_debug + sim->args.time_to_refactor);
+	__init_ta(&sim->ta_dongle_cooldown, sim->args.dongle_cooldown);
 }
 
 int	_create_coder(t_coder *coder, int order, t_sim *sim)
@@ -50,6 +51,28 @@ int	_create_coder(t_coder *coder, int order, t_sim *sim)
 	return (0);
 }
 
+void	preseed_coders_firstcompile(t_sim *sim)
+{
+	int		i;
+	int		coders_count;
+	t_coder	*coder;
+
+	i = 1;
+	coders_count = sim->args.number_of_coders;
+	coder = sim->coders;
+	while (i < coders_count)
+	{
+		coder_dates_update(coder + i);
+		i += 2;
+	}
+	i = 0;
+	while (i < coders_count)
+	{
+		coder_dates_update(coder + i);
+		i += 2;
+	}
+}
+
 void	preseed_dongles_heap(t_sim *sim)
 {
 	int		i;
@@ -65,8 +88,8 @@ void	preseed_dongles_heap(t_sim *sim)
 	{
 		while (i < coders_count)
 		{
-			(coder + i)->dongle_r->duel_slots[priority_order] = coder + i;
-			(coder + i)->dongle_l->duel_slots[priority_order] = coder + i;
+			(coder + i)->dongle_r->heap[priority_order] = coder + i;
+			(coder + i)->dongle_l->heap[priority_order] = coder + i;
 			i += 2;
 		}
 		i = 0 + 2 * (coders_count > 2 && coders_count % 2);
@@ -74,7 +97,7 @@ void	preseed_dongles_heap(t_sim *sim)
 	}
 	if (coders_count > 2 && coders_count % 2)
 	{
-		(coder)->dongle_r->duel_slots[0] = coder;
-		(coder)->dongle_l->duel_slots[1] = coder;
+		(coder)->dongle_r->heap[0] = coder;
+		(coder)->dongle_l->heap[1] = coder;
 	}
 }

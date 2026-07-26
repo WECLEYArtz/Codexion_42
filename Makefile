@@ -8,16 +8,16 @@ DEBUG=\
 	  # -fsanitize=leak
 	  # -fsanitize=thread
 
-SRC=		main.c\
-			cleaner.c\
-			utils/utils.c\
-			dongle/dongle.c \
-			schedualer/schedualer.c\
+SRC=		main.c \
+			cleaner.c \
+			utils/utils.c \
+			schedualer/schedualer.c \
+			simulation/simulation_control.c \
 			coder/coders.c coder/routines.c \
 			parser/args_parser.c parser/atopi.c \
+			dongle/dongle_utils.c dongle/heap.c \
 			monitor/monitor.c monitor/burnout_wl_control.c \
-			simulation/simulation_control.c\
-			simulation/simulation_init.c simulation/simulation_init_utils.c\
+			simulation/simulation_init.c simulation/simulation_init_utils.c \
 
 OBJ=		$(SRC:.c=.o)
 

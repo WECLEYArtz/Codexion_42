@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:15:04 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/19 17:15:47 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/26 13:43:41 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,28 @@ static int	init_dongles(t_sim *sim)
 		return (12);
 	order = 0;
 	while (order < coders_num)
-		(sim->dongles + order++)->cooldown = sim->args.dongle_cooldown;
+	{
+		if(pthread_cond_init(&(sim->dongles + order)->cond, NULL))
+			return (cleaner(sim),1);
+		else
+			sim->init_records.d_cond_init_ok++;
+		if(pthread_mutex_init(&(sim->dongles + order)->mutex, NULL))
+			return (cleaner(sim),1);
+		else
+			sim->init_records.d_mutex_init_ok++;
+		(sim->dongles + order)->heap[0] = NULL;
+		(sim->dongles + order)->heap[1] = NULL;
+		(sim->dongles + order)->heap_occupied = 2;
+
+		(sim->dongles + order)->cooldown = sim->args.dongle_cooldown;
+		(sim->dongles + order)->scheduler = sim->args.scheduler;
+
+
+		(sim->dongles + order)->taken = false;
+		clock_gettime(CLOCK_REALTIME, &(sim->dongles + order)->available_date);
+		(sim->dongles + order)->sim = sim;
+		order++;
+	}
 	return (0);
 }
 
@@ -82,11 +103,12 @@ int	init_simulation(t_sim *sim, t_monitor *monitor, char **argv)
 	sim->monitor = monitor;
 	_init_sim_ta(sim);
 	if (init_dongles(sim) || init_monitor(sim, monitor) || init_coders(sim)
-		|| pthread_create(&monitor->thread, NULL, monitor_routine, sim))
+			|| pthread_create(&monitor->thread, NULL, monitor_routine, sim))
 	{
 		return (1);
 		cleaner(sim);
 	}
 	preseed_dongles_heap(sim);
+	preseed_coders_firstcompile(sim);
 	return (0);
 }

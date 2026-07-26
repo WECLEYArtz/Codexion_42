@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/21 16:02:02 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/25 18:26:05 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ void	*coder_routine(void *coder_p)
 	self = (t_coder *)coder_p;
 	if (!sim_action(WAIT_RUN, NULL))
 		return (NULL);
-	coder_dates_update(self);
 	if (first_compile(self))
 		routine_turn++;
 	while (sim_action(STAT, NULL) == ON)
@@ -36,9 +35,8 @@ void	*coder_routine(void *coder_p)
 	return (NULL);
 }
 
-//	The function responsible for updating last compile and burnout date
-//	called everytime a coder compiles
-//	and once when the coder is first created
+//	Responsible for updating last compile and burnout date.
+//	First called when the coder is created, then everytime a coder compiles.
 void	coder_dates_update(t_coder *coder)
 {
 	clock_gettime(CLOCK_REALTIME, &coder->last_compile);

@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/19 15:34:43 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/19 16:45:16 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/25 10:40:03 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,5 +20,6 @@ void		cleaner(t_sim *sim);
 void		join_coders(pthread_t *coders_threads, int count);
 
 t_timespec	get_abstime(t_timespec *last_compile, t_time_add *timeadd);
+void		__debug_heap__(t_dongle *dongle, t_coder *coder, char *msg);
 
 #endif

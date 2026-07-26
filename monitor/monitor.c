@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/19 17:18:14 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/25 14:24:08 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,17 @@
 #include "../utils/utils.h"
 #include "../simulation/simulation.h"
 
-static int	wait_coder_burnout(t_coder *coder, t_time_add *ta_burnout)
+static int	wait_coder_burnout(t_coder *coder)
 {
 	int			old_compiles;
 	int			rc;
-	t_timespec	abstime;
 
 	pthread_mutex_lock(&coder->compiled_mutex);
 	old_compiles = coder->compiled;
-	abstime = get_abstime(&coder->last_compile, ta_burnout);
 	while (1)
 	{
 		rc = pthread_cond_timedwait(coder->monitor_link, &coder->compiled_mutex,
-				&abstime);
+				&coder->burnout_date);
 		if (!rc && old_compiles == coder->compiled)
 			continue ;
 		else if (rc && old_compiles == coder->compiled)
@@ -41,15 +39,16 @@ static int	wait_coder_burnout(t_coder *coder, t_time_add *ta_burnout)
 	}
 }
 
+// PERF: just copy ta_burnout for locality and performance
 void	*monitor_routine(void *t_sim_p)
 {
 	t_monitor	*monitor;
-	t_time_add	*burnout_ta;
+	t_time_add	*ta_burnout;
 
-	burnout_ta = &((t_sim *)t_sim_p)->ta_burnout;
+	ta_burnout = &((t_sim *)t_sim_p)->ta_burnout;
 	monitor = ((t_sim *)t_sim_p)->monitor;
 	burnout_list_action(M_WATCH, monitor);
-	while (!wait_coder_burnout(burnout_list_action(POP, NULL), burnout_ta))
+	while (!wait_coder_burnout(burnout_list_action(POP, NULL)))
 		;
 	return (NULL);
 }

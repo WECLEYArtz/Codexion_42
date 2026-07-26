@@ -6,11 +6,12 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 14:29:38 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/19 17:20:08 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/25 19:24:03 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "coder/coder.h"
+#include "dongle/dongle.h"
 #include "monitor/monitor.h"
 #include "simulation/simulation.h"
 
@@ -41,6 +42,20 @@ static void	_clean_coders(t_coder *coders, t_init_records *rec)
 	free(coders);
 }
 
+
+static void	_clean_dongles(t_dongle *dongles, t_init_records *rec)
+{
+	int	count;
+
+	count = rec->d_cond_init_ok;
+	while (count)
+		pthread_cond_destroy(&(dongles + (count-- - 1))->cond);
+	count = rec->d_mutex_init_ok;
+	while (count)
+		pthread_mutex_destroy(&(dongles + (count-- - 1))->mutex);
+	free(dongles);
+}
+
 void	cleaner(t_sim *sim)
 {
 	t_init_records	*init_records;
@@ -49,7 +64,7 @@ void	cleaner(t_sim *sim)
 	sim_action(END, NULL);
 	join_coders(sim->monitor->coders_threads, init_records->c_thread_init_ok);
 	_clean_monitor(sim->monitor, init_records);
+	_clean_dongles(sim->dongles, init_records);
 	_clean_coders(sim->coders, init_records);
 	free(sim->monitor->coders_threads);
-	free(sim->dongles);
 }

@@ -6,13 +6,13 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 13:20:47 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/19 16:44:36 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/24 14:35:16 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./simulation.h"
 
-static void	_routine_wait(pthread_cond_t *cond, pthread_mutex_t *mutex,
+static void	_action_wait(pthread_cond_t *cond, pthread_mutex_t *mutex,
 		t_timespec *abstime, short *is_running)
 {
 	while (1)
@@ -32,7 +32,7 @@ short	sim_action(short choice, t_timespec *abstime)
 	if (choice != STAT)
 	{
 		if (choice == WAIT_STP)
-			_routine_wait(&run_call, &run_mutex, abstime, &status);
+			_action_wait(&run_call, &run_mutex, abstime, &status);
 		else if (choice == WAIT_RUN)
 		{
 			while (status == OFF)
