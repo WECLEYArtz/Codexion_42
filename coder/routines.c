@@ -19,13 +19,7 @@
 
 static void	_compile_work(t_coder *coder)
 {
-	__debug_heap__(coder->dongle_r, coder, "Request dongle_r");
-	request(coder->dongle_r, coder);
-
-	__debug_heap__(coder->dongle_l, coder, "Request dongle_l");
-	request(coder->dongle_l, coder);
-
-
+	try_take_dongles(coder->dongle_r, coder->dongle_l, coder);
 	announce(coder, ANNOUCE_COMPILE, false);
 	pthread_mutex_lock(&coder->compiled_mutex);
 	coder_dates_update(coder);
