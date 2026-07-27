@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/25 14:24:08 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/27 03:29:44 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,9 @@ void	*monitor_routine(void *t_sim_p)
 	t_monitor	*monitor;
 
 	monitor = ((t_sim *)t_sim_p)->monitor;
+	if (SIM_DEBUG) puts(YELLOW"[MONITOR]: waiting AWAKEN"RESET);
 	burnout_list_action(M_WATCH, monitor);
+	if (SIM_DEBUG) puts(YELLOW"[MONITOR]: AWAKEN"RESET);
 	while (!wait_coder_burnout(burnout_list_action(POP, NULL)))
 		;
 	return (NULL);

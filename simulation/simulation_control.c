@@ -6,18 +6,30 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 13:20:47 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/27 01:26:07 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/27 03:28:40 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./simulation.h"
 
-static void	_action_wait(pthread_cond_t *cond, pthread_mutex_t *mutex,
+void __debug_sleep__(t_timespec *abstime)
+{
+	t_timespec now;
+	clock_gettime(CLOCK_REALTIME, &now);
+
+	printf("sleeping until:		%ld | %ld\nnow is:			%ld | %ld\n",
+			abstime->tv_sec, abstime->tv_nsec, now.tv_sec, now.tv_nsec);
+}
+
+static void	_action_wait(pthread_cond_t *run_call, pthread_mutex_t *run_mutex,
 		t_timespec *abstime, short *is_running)
 {
 	while (1)
-		if (pthread_cond_timedwait(cond, mutex, abstime) || *is_running == END)
+	{
+		if (SIM_DEBUG) __debug_sleep__(abstime);
+		if (pthread_cond_timedwait(run_call, run_mutex, abstime) || *is_running == END)
 			return ;
+	}
 }
 
 // NOTE: try to make every option returning the latest state
@@ -40,6 +52,7 @@ short	sim_action(short choice, t_timespec *abstime)
 		else if (choice == END || choice == ON)
 		{
 			status = choice;
+			if (SIM_DEBUG) printf(YELLOW"[sim] Simulation declaring code %d\n"RESET, choice);
 			pthread_cond_broadcast(&run_call);
 		}
 	}

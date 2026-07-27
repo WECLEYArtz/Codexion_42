@@ -6,14 +6,14 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:00:49 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/27 00:48:25 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/27 03:29:14 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef DONGLE_H
 # define DONGLE_H
 
-# define HEAP_DEBUG 1
+# define HEAP_DEBUG 0
 
 # define HEAP_SIZE 2
 # define EDF 0

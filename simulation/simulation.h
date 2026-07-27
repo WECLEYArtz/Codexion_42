@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:00:49 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/25 18:34:19 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/27 03:28:59 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,9 @@
 
 # include "../dependencies.h"
 # include "../parser/parser.h"
+
+
+# define SIM_DEBUG 0
 
 # define OFF 0
 # define ON 1

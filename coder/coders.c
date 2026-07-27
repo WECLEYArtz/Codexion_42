@@ -6,13 +6,34 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/25 18:26:05 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/27 02:40:05 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../coder/coder.h"
 #include "../utils/utils.h"
 #include "../simulation/simulation.h"
+
+
+static	int	first_compile(t_coder *coder)
+{
+	static pthread_mutex_t	first_compile_mutex = PTHREAD_MUTEX_INITIALIZER;
+	static bool				first_compile_taken = false;
+
+	pthread_mutex_lock(&first_compile_mutex);
+	if (!first_compile_taken)
+	{
+		coder->first_compiler = true;
+		first_compile_taken = true;
+	}
+	else
+	{
+		pthread_mutex_unlock(&first_compile_mutex);
+		return (0);
+	}
+	pthread_mutex_unlock(&first_compile_mutex);
+	return (1);
+}
 
 void	*coder_routine(void *coder_p)
 {

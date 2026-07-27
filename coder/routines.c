@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/27 00:48:32 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/27 03:30:15 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,36 @@
 #include "../simulation/simulation.h"
 #include "../utils/utils.h"
 
-static void	_compile_work(t_coder *coder)
+void	compile(t_coder *coder)
 {
+	t_timespec				abstime;
+
 	if (try_take_dongles(coder->dongle_r, coder->dongle_l, coder))
 		return;
 	announce(coder, ANNOUCE_COMPILE, false);
 	pthread_mutex_lock(&coder->compiled_mutex);
 	coder_dates_update(coder);
+	abstime = get_abstime(&coder->last_compile, &coder->sim->ta_compile);
 	coder->compiled++;
-	pthread_mutex_unlock(&coder->compiled_mutex);
 	burnout_list_action(MV_BACK, coder);
+	pthread_cond_signal(coder->monitor_link);
+	if (coder->first_compiler)
+	{
+		if (SIM_DEBUG) puts(YELLOW"[Coder to monitor]: waking monitor"RESET);
+		burnout_list_action(M_WAKE, NULL);
+		coder->first_compiler = false;
+		if (SIM_DEBUG) puts(YELLOW"[Coder to monitor]: First compile Granted"RESET);
+	}
+	else if (sim_action(STAT, NULL) == OFF)
+		return ;
+	sim_action(WAIT_STP, &abstime);
+	pthread_mutex_unlock(&coder->compiled_mutex);
+
+	__debug_heap__(coder->dongle_r, coder, "dropping dongle_r");
+	untake_dongle(coder->dongle_r, coder);
+
+	__debug_heap__(coder->dongle_l, coder, "dropping dongle_l");
+	untake_dongle(coder->dongle_l, coder);
 }
 
 // PERF:	Optimise this, only use one compile function with flag
@@ -36,59 +56,6 @@ static void	_compile_work(t_coder *coder)
 // 			the only reason it would be off is init cleanup, which would've been
 // 			checked earlier than here.
 
-int	first_compile(t_coder *coder)
-{
-	static pthread_mutex_t	first_compile_mutex = PTHREAD_MUTEX_INITIALIZER;
-	static bool				first_compile_taken = false;
-	t_timespec				abstime;
-
-	pthread_mutex_lock(&first_compile_mutex);
-	if (!first_compile_taken)
-		first_compile_taken = true;
-	else
-	{
-		pthread_mutex_unlock(&first_compile_mutex);
-		return (0);
-	}
-	pthread_mutex_unlock(&first_compile_mutex);
-	// if (sim_action(STAT, NULL) == ON)
-	// {
-		_compile_work(coder);
-		pthread_mutex_lock(&coder->compiled_mutex);
-		abstime = get_abstime(&coder->last_compile, &coder->sim->ta_compile);
-		pthread_mutex_unlock(&coder->compiled_mutex);
-		burnout_list_action(M_WAKE, NULL);
-		sim_action(WAIT_STP, &abstime);
-
-		__debug_heap__(coder->dongle_r, coder, "dropping dongle_r");
-		untake_dongle(coder->dongle_r, coder);
-
-		__debug_heap__(coder->dongle_l, coder, "dropping dongle_l");
-		untake_dongle(coder->dongle_l, coder);
-	// }
-	puts(RED"First compile END"RESET);
-	return (1);
-}
-
-void	compile(t_coder *coder)
-{
-	t_timespec	abstime;
-
-	_compile_work(coder);
-	pthread_mutex_lock(&coder->compiled_mutex);
-	abstime = get_abstime(&coder->last_compile, &coder->sim->ta_compile);
-	pthread_cond_signal(coder->monitor_link);
-	pthread_mutex_unlock(&coder->compiled_mutex);
-	if (sim_action(STAT, NULL) == OFF)
-		return ;
-	sim_action(WAIT_STP, &abstime);
-
-	// __debug_heap__(coder->dongle_r, coder, "Unequiping dongle_r");
-	untake_dongle(coder->dongle_r, coder);
-
-	// __debug_heap__(coder->dongle_l, coder, "Unequiping dongle_l");
-	untake_dongle(coder->dongle_l, coder);
-}
 
 void	debug(t_coder *coder)
 {

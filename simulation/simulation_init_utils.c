@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/13 21:48:08 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/27 01:55:38 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/27 03:32:53 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ int	_create_coder(t_coder *coder, int order, t_sim *sim)
 	coder->dongle_r = sim->dongles + order;
 	coder->dongle_l = sim->dongles + (order + 1) % sim->args.number_of_coders;
 	coder->monitor_link = sim->monitor->monitor_router + order;
+	coder->first_compiler = false;
 	coder->previous = NULL;
 	coder->next = NULL;
 	coder->sim = sim;

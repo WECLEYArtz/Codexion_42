@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/27 01:28:44 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/27 02:42:03 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ static int	safe_wait_dongle(t_dongle *d_to_waited, t_dongle *d_to_released,
 
 int	try_take_dongles(t_dongle *dngl_r, t_dongle *dngl_l, t_coder *cdr)
 {
-	int safe_wait = 10;
 	pthread_mutex_lock(&dngl_r->mutex);
 	pthread_mutex_lock(&dngl_l->mutex);
 
@@ -69,9 +68,6 @@ int	try_take_dongles(t_dongle *dngl_r, t_dongle *dngl_l, t_coder *cdr)
 
 		if (safe_wait_dongle(dngl_l, dngl_r, cdr))
 			return (1);
-
-		if (!safe_wait--)
-			exit(printf(RED"Loop wait detected"RESET));
 	}
 
 	if (HEAP_DEBUG) __debug_heap__(dngl_r, cdr, "waiting until dongles available (d_r)");
@@ -83,7 +79,7 @@ int	try_take_dongles(t_dongle *dngl_r, t_dongle *dngl_l, t_coder *cdr)
 	dngl_l->taken = true;
 
 	if (HEAP_DEBUG) __debug_heap__(dngl_r, cdr, GREEN"Dongles_r taken!"RESET);
-	if (HEAP_DEBUG) __debug_heap__(dngl_l, cdr, GREEN"dongles_l taken!"RESET);
+	if (HEAP_DEBUG) __debug_heap__(dngl_l, cdr, GREEN"Dongles_l taken!"RESET);
 
 	pthread_mutex_unlock(&dngl_l->mutex);
 	pthread_mutex_unlock(&dngl_r->mutex);
@@ -116,8 +112,8 @@ void	untake_dongle(t_dongle *dongle, t_coder *coder)
 
 	dongle->taken = false;
 
-	if (HEAP_DEBUG) __debug_heap__(dongle, coder, "utaken a dongle");
 
 	pthread_cond_signal(&dongle->cond);
 	pthread_mutex_unlock(&dongle->mutex);
+	if (HEAP_DEBUG) __debug_heap__(dongle, coder, "untaken a dongle");
 }
