@@ -6,12 +6,13 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/13 21:48:08 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/27 03:32:53 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/27 16:24:30 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../dongle/dongle.h"
 #include "../monitor/monitor.h"
+#include "../coder/coder.h"
 #include "simulation.h"
 
 void	__init_ta(t_time_add *time, int ms)
@@ -34,11 +35,10 @@ void	_init_sim_ta(t_sim *sim)
 int	_create_coder(t_coder *coder, int order, t_sim *sim)
 {
 	coder->id = order + 1;
-	coder->compiled = 0;
+	coder->compiled = -1;
 	coder->dongle_r = sim->dongles + order;
 	coder->dongle_l = sim->dongles + (order + 1) % sim->args.number_of_coders;
 	coder->monitor_link = sim->monitor->monitor_router + order;
-	coder->first_compiler = false;
 	coder->previous = NULL;
 	coder->next = NULL;
 	coder->sim = sim;
@@ -49,28 +49,6 @@ int	_create_coder(t_coder *coder, int order, t_sim *sim)
 		return (1);
 	sim->init_records.c_thread_init_ok++;
 	return (0);
-}
-
-void	preseed_coders_firstcompile(t_sim *sim)
-{
-	int		i;
-	int		coders_count;
-	t_coder	*coder;
-
-	i = 1;
-	coders_count = sim->args.number_of_coders;
-	coder = sim->coders;
-	while (i < coders_count)
-	{
-		coder_dates_update(coder + i);
-		i += 2;
-	}
-	i = 0;
-	while (i < coders_count)
-	{
-		coder_dates_update(coder + i);
-		i += 2;
-	}
 }
 
 void	preseed_dongles_heap(t_sim *sim)
@@ -99,5 +77,28 @@ void	preseed_dongles_heap(t_sim *sim)
 	{
 		(coder)->dongle_r->heap[0] = coder;
 		(coder)->dongle_l->heap[1] = coder;
+	}
+}
+
+
+void	preseed_coders_firstcompile(t_sim *sim)
+{
+	int		i;
+	int		coders_count;
+	t_coder	*coder;
+
+	i = 1;
+	coders_count = sim->args.number_of_coders;
+	coder = sim->coders;
+	while (i < coders_count)
+	{
+		coder_compiled_status_update(coder + i);
+		i += 2;
+	}
+	i = 0;
+	while (i < coders_count)
+	{
+		coder_compiled_status_update(coder + i);
+		i += 2;
 	}
 }

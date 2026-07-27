@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 21:41:30 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/19 17:24:12 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/27 16:08:55 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 # define MV_BACK 0
 # define POP 1
 # define M_WATCH 2
-# define M_WAKE 4
 
 # include "../dependencies.h"
 

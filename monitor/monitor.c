@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/27 03:29:44 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/27 16:06:34 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "../utils/utils.h"
 #include "../simulation/simulation.h"
 
+// NOTE:	recheck	the condition in a clearer way
 static int	wait_coder_burnout(t_coder *coder)
 {
 	int			old_compiles;
@@ -39,7 +40,7 @@ static int	wait_coder_burnout(t_coder *coder)
 	}
 }
 
-// PERF: just copy ta_burnout for locality and performance
+// PERF:	just copy ta_burnout for locality and performance
 void	*monitor_routine(void *t_sim_p)
 {
 	t_monitor	*monitor;

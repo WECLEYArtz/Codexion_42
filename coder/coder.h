@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 13:05:58 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/27 02:35:50 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/27 16:06:28 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,9 @@ typedef struct s_coder
 	t_sim			*sim;
 	t_timespec		last_compile;
 	t_timespec		burnout_date;
-	bool			first_compiler;
 }					t_coder;
 
-void				coder_dates_update(t_coder *coder);
+void				coder_compiled_status_update(t_coder *coder);
 void				*coder_routine(void *coder_p);
 void				compile(t_coder *coder);
 void				debug(t_coder *coder);

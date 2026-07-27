@@ -11,7 +11,6 @@ DEBUG=\
 SRC=		main.c \
 			cleaner.c \
 			utils/utils.c \
-			schedualer/schedualer.c \
 			simulation/simulation_control.c \
 			coder/coders.c coder/routines.c \
 			parser/args_parser.c parser/atopi.c \
