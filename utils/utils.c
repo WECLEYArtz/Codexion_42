@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/16 00:21:31 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/27 03:52:16 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/27 17:12:25 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void	announce(t_coder *coder, short action, bool force)
 			+ ((current.tv_nsec - coder->sim->startup.tv_nsec) / 1000000);
 		if (action == ANNOUCE_COMPILE)
 		{
+			printf("%ld %d has taken a dongle\n", diff_ms, coder->id);
 			printf("%ld %d has taken a dongle\n", diff_ms, coder->id);
 			printf("%ld %d is compiling\n", diff_ms, coder->id);
 		}

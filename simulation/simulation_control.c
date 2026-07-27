@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 13:20:47 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/27 03:28:40 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/27 17:39:00 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static void	_action_wait(pthread_cond_t *run_call, pthread_mutex_t *run_mutex,
 {
 	while (1)
 	{
-		if (SIM_DEBUG) __debug_sleep__(abstime);
+		// __debug_sleep__(abstime);
 		if (pthread_cond_timedwait(run_call, run_mutex, abstime) || *is_running == END)
 			return ;
 	}
@@ -52,7 +52,6 @@ short	sim_action(short choice, t_timespec *abstime)
 		else if (choice == END || choice == ON)
 		{
 			status = choice;
-			if (SIM_DEBUG) printf(YELLOW"[sim] Simulation declaring code %d\n"RESET, choice);
 			pthread_cond_broadcast(&run_call);
 		}
 	}
