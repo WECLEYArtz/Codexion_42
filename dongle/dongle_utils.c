@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/27 04:03:23 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/27 04:31:40 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static int	safe_wait_dongle(t_dongle *dngl_r, t_dongle *dngl_l,
 	if (sim_action(STAT, NULL) == END)
 	{
 		_unlock_dongles(dngl_l, dngl_r);
-		return 1;
+		return END;
 	}
 	if (d_target->heap[0] == cdr && d_target->taken == false)
 		return 0;
@@ -74,20 +74,20 @@ int	try_take_dongles(t_dongle *dngl_r, t_dongle *dngl_l, t_coder *cdr)
 	{
 		if (HEAP_DEBUG) __debug_heap__(dngl_r, cdr, "sleeping on dongle_r");
 
-		if (safe_wait_dongle(dngl_r, dngl_l, dngl_r, cdr))
-			return (1);
+		if (safe_wait_dongle(dngl_r, dngl_l, dngl_r, cdr) == END)
+			return (_unlock_dongles(dngl_l, dngl_r),1);
 
 		if (HEAP_DEBUG) __debug_heap__(dngl_r, cdr, "sleeping on dongle_l");
 
-		if (safe_wait_dongle(dngl_l, dngl_r, dngl_l, cdr))
-			return (1);
+		if (safe_wait_dongle(dngl_r, dngl_l, dngl_l, cdr) == END)
+			return (_unlock_dongles(dngl_l, dngl_r), 1);
 	}
 
 	if (HEAP_DEBUG) __debug_heap__(dngl_r, cdr, "waiting until dongles available (d_r)");
 
 	if (sim_action(WAIT_STP, &dngl_r->available_date) == END
 			|| sim_action(WAIT_STP, &dngl_l->available_date) == END)
-		return 1;
+			return (_unlock_dongles(dngl_l, dngl_r), 1);
 	dngl_r->taken = true;
 	dngl_l->taken = true;
 
