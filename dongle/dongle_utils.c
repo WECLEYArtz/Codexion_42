@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/27 02:42:03 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/27 04:03:23 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,28 +18,41 @@
 // NOTE:	if we insert everytime we dont find the requester coder,
 // 			what are the odds of soemthing to go wrong? like duplication.
 
-static int	safe_wait_dongle(t_dongle *d_to_waited, t_dongle *d_to_released,
-		t_coder *cdr)
+//	a mini locking function that help resolve lock order violation
+static void _lock_dongles(t_dongle *dngl_r, t_dongle *dngl_l)
 {
+	pthread_mutex_lock(&dngl_r->mutex);
+	pthread_mutex_lock(&dngl_l->mutex);
+}
 
+//	a mini locking function that help resolve lock order violation
+static void _unlock_dongles(t_dongle *dngl_l, t_dongle *dngl_r)
+{
+	pthread_mutex_unlock(&dngl_l->mutex);
+	pthread_mutex_unlock(&dngl_r->mutex);
+}
+
+static int	safe_wait_dongle(t_dongle *dngl_r, t_dongle *dngl_l,
+		t_dongle *d_target, t_coder *cdr)
+{
 	if (sim_action(STAT, NULL) == END)
 	{
-		pthread_mutex_unlock(&d_to_waited->mutex);
-		pthread_mutex_unlock(&d_to_released->mutex);
+		_unlock_dongles(dngl_l, dngl_r);
 		return 1;
 	}
-	if (d_to_waited->heap[0] == cdr && d_to_waited->taken == false)
+	if (d_target->heap[0] == cdr && d_target->taken == false)
 		return 0;
-	pthread_mutex_unlock(&d_to_released->mutex);
-	pthread_cond_wait(&d_to_waited->cond, &d_to_waited->mutex);
-	pthread_mutex_lock(&d_to_released->mutex);
+	_unlock_dongles(dngl_l, dngl_r);
+	pthread_mutex_lock(&d_target->mutex);
+	pthread_cond_wait(&d_target->cond, &d_target->mutex);
+	pthread_mutex_unlock(&d_target->mutex);
+	_lock_dongles(dngl_r, dngl_l);
 	return 0;
 }
 
 int	try_take_dongles(t_dongle *dngl_r, t_dongle *dngl_l, t_coder *cdr)
 {
-	pthread_mutex_lock(&dngl_r->mutex);
-	pthread_mutex_lock(&dngl_l->mutex);
+	_lock_dongles(dngl_r, dngl_l);
 
 	if (HEAP_DEBUG) __debug_heap__(dngl_r, cdr, "inserting to a dongle_r...");
 
@@ -61,12 +74,12 @@ int	try_take_dongles(t_dongle *dngl_r, t_dongle *dngl_l, t_coder *cdr)
 	{
 		if (HEAP_DEBUG) __debug_heap__(dngl_r, cdr, "sleeping on dongle_r");
 
-		if (safe_wait_dongle(dngl_r, dngl_l, cdr))
+		if (safe_wait_dongle(dngl_r, dngl_l, dngl_r, cdr))
 			return (1);
 
 		if (HEAP_DEBUG) __debug_heap__(dngl_r, cdr, "sleeping on dongle_l");
 
-		if (safe_wait_dongle(dngl_l, dngl_r, cdr))
+		if (safe_wait_dongle(dngl_l, dngl_r, dngl_l, cdr))
 			return (1);
 	}
 
@@ -81,8 +94,7 @@ int	try_take_dongles(t_dongle *dngl_r, t_dongle *dngl_l, t_coder *cdr)
 	if (HEAP_DEBUG) __debug_heap__(dngl_r, cdr, GREEN"Dongles_r taken!"RESET);
 	if (HEAP_DEBUG) __debug_heap__(dngl_l, cdr, GREEN"Dongles_l taken!"RESET);
 
-	pthread_mutex_unlock(&dngl_l->mutex);
-	pthread_mutex_unlock(&dngl_r->mutex);
+	_unlock_dongles(dngl_l, dngl_r);
 	return (0);
 }
 
@@ -100,14 +112,11 @@ void	untake_dongle(t_dongle *dongle, t_coder *coder)
 	dongle->available_date = new;
 
 
-
 	if (HEAP_DEBUG) __debug_heap__(dongle, coder, "popping off from a dongle...");
 
 	dhq_pop(dongle);
 
 	if (HEAP_DEBUG) __debug_heap__(dongle, coder, "poped off from a dongle");
-
-
 
 
 	dongle->taken = false;

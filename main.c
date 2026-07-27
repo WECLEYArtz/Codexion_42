@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:37:01 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/19 17:38:18 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/27 03:54:36 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ int	main(int argc, char **argv)
 		return (1);
 	else
 	{
-		sim_action(ON, NULL);
 		clock_gettime(CLOCK_REALTIME, &sim.startup);
+		sim_action(ON, NULL);
 		pthread_join(monitor.thread, NULL);
 		cleaner(&sim);
 	}
