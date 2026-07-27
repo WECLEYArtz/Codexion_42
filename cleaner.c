@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 14:29:38 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/25 19:24:03 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/27 01:49:52 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,19 @@
 #include "monitor/monitor.h"
 #include "simulation/simulation.h"
 
-void	join_coders(pthread_t *coders_threads, int join_count)
+// PERF:	at this point give every coder its thread,
+//			no need to keep it in the monitor
+void	join_coders(t_coder *coder, pthread_t *coders_threads, int join_count)
 {
-	sim_action(END, NULL);
 	while (join_count)
-		pthread_join(*(coders_threads + (join_count-- - 1)), NULL);
+	{
+		pthread_cond_signal(&coder->dongle_r->cond);
+		pthread_cond_signal(&coder->dongle_l->cond);
+		pthread_join(*coders_threads, NULL);
+		coders_threads++;
+		coder++;
+		join_count--;
+	}
 }
 
 static void	_clean_monitor(t_monitor *monitor, t_init_records *rec)
@@ -62,7 +70,9 @@ void	cleaner(t_sim *sim)
 
 	init_records = &sim->init_records;
 	sim_action(END, NULL);
-	join_coders(sim->monitor->coders_threads, init_records->c_thread_init_ok);
+	join_coders(sim->coders,
+			sim->monitor->coders_threads,
+			init_records->c_thread_init_ok);
 	_clean_monitor(sim->monitor, init_records);
 	_clean_dongles(sim->dongles, init_records);
 	_clean_coders(sim->coders, init_records);

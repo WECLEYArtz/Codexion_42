@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/25 18:49:16 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/27 00:48:32 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@
 
 static void	_compile_work(t_coder *coder)
 {
-	try_take_dongles(coder->dongle_r, coder->dongle_l, coder);
+	if (try_take_dongles(coder->dongle_r, coder->dongle_l, coder))
+		return;
 	announce(coder, ANNOUCE_COMPILE, false);
 	pthread_mutex_lock(&coder->compiled_mutex);
 	coder_dates_update(coder);
@@ -28,7 +29,12 @@ static void	_compile_work(t_coder *coder)
 	burnout_list_action(MV_BACK, coder);
 }
 
-// PERF:	optimise this, only use one compile function with flag
+// PERF:	Optimise this, only use one compile function with flag
+
+// PERF:	I dont think i need to check the simulation status
+// 			when the monitor is not yet on that shuts it.
+// 			the only reason it would be off is init cleanup, which would've been
+// 			checked earlier than here.
 
 int	first_compile(t_coder *coder)
 {
@@ -45,8 +51,8 @@ int	first_compile(t_coder *coder)
 		return (0);
 	}
 	pthread_mutex_unlock(&first_compile_mutex);
-	if (sim_action(STAT, NULL) == ON)
-	{
+	// if (sim_action(STAT, NULL) == ON)
+	// {
 		_compile_work(coder);
 		pthread_mutex_lock(&coder->compiled_mutex);
 		abstime = get_abstime(&coder->last_compile, &coder->sim->ta_compile);
@@ -59,7 +65,7 @@ int	first_compile(t_coder *coder)
 
 		__debug_heap__(coder->dongle_l, coder, "dropping dongle_l");
 		untake_dongle(coder->dongle_l, coder);
-	}
+	// }
 	puts(RED"First compile END"RESET);
 	return (1);
 }

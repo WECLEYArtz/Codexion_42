@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:00:49 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/26 14:00:09 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/27 00:48:25 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ typedef struct s_dongle
 	t_sim			*sim;
 }					t_dongle;
 
-void				try_take_dongles(t_dongle *dr, t_dongle *dl, t_coder *cdr);
+int					try_take_dongles(t_dongle *dr, t_dongle *dl, t_coder *cdr);
 void				untake_dongle(t_dongle *dongle, t_coder *coder);
 
 void				dhq_insert(t_dongle *dongle, t_coder *coder);
