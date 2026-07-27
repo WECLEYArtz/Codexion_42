@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:15:04 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/26 13:43:41 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/27 02:24:20 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,11 @@ static int	init_monitor(t_sim *sim, t_monitor *monitor)
 	int	order;
 	int	coders_num;
 
-	memset(monitor, 0, sizeof(t_monitor));
 	order = 0;
 	coders_num = sim->args.number_of_coders;
+	memset(monitor, 0, sizeof(t_monitor));
 	monitor->monitor_router = malloc(sizeof(pthread_cond_t) * coders_num);
-	monitor->coders_threads = malloc(sizeof(pthread_t) * coders_num);
-	if (!monitor->monitor_router || !monitor->coders_threads)
+	if (!monitor->monitor_router)
 		return (12);
 	while (order < coders_num)
 	{
@@ -104,10 +103,7 @@ int	init_simulation(t_sim *sim, t_monitor *monitor, char **argv)
 	_init_sim_ta(sim);
 	if (init_dongles(sim) || init_monitor(sim, monitor) || init_coders(sim)
 			|| pthread_create(&monitor->thread, NULL, monitor_routine, sim))
-	{
-		return (1);
-		cleaner(sim);
-	}
+		return (cleaner(sim), 1);
 	preseed_dongles_heap(sim);
 	preseed_coders_firstcompile(sim);
 	return (0);

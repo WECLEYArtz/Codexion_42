@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 13:05:58 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/24 17:56:22 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/27 01:55:08 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 // 			try to optimise if uneeded later
 typedef struct s_coder
 {
+	pthread_t		thread;
 	int				id;
 	int				compiled;
 
