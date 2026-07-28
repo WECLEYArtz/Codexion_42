@@ -48,6 +48,8 @@ static void _unlock_dongles(t_dongle *dngl_1, t_dongle *dngl_2)
 	}
 }
 
+// PERF:	the way this lock mess happens looks performance concerning.
+// 			try to fix later
 static int	safe_wait_dongle(t_dongle *dngl_r, t_dongle *dngl_l,
 		t_dongle *d_target, t_coder *cdr)
 {
@@ -56,11 +58,10 @@ static int	safe_wait_dongle(t_dongle *dngl_r, t_dongle *dngl_l,
 		//__debug_heap__(dngl_r, cdr, "sleeping skipped, simulation ends");
 		return END;
 	}
-	if (d_target->heap[0] == cdr && d_target->taken == false)
-		return 0;
 	_unlock_dongles(dngl_r, dngl_l);
 	pthread_mutex_lock(&d_target->mutex);
-	pthread_cond_wait(&d_target->cond, &d_target->mutex);
+	while(d_target->heap[0] != cdr && d_target->taken == true)
+		pthread_cond_wait(&d_target->cond, &d_target->mutex);
 	pthread_mutex_unlock(&d_target->mutex);
 	_lock_dongles(dngl_r, dngl_l);
 	return 0;
@@ -85,10 +86,14 @@ int	try_take_dongles(t_dongle *dngl_r, t_dongle *dngl_l, t_coder *cdr)
 		if (safe_wait_dongle(dngl_r, dngl_l, dngl_l, cdr) == END)
 			return (_unlock_dongles(dngl_r, dngl_l), END);
 	}
+	_unlock_dongles(dngl_r, dngl_l);
+
 	//__debug_heap__(dngl_r, cdr, "waiting until dongles available (d_r)");
 	if (sim_action(WAIT_STP, &dngl_r->available_date) == END
 			|| sim_action(WAIT_STP, &dngl_l->available_date) == END)
-		return (_unlock_dongles(dngl_r, dngl_l), 1);
+		return (1);
+
+	_lock_dongles(dngl_r, dngl_l);
 	dngl_r->taken = true;
 	dngl_l->taken = true;
 	_unlock_dongles(dngl_r, dngl_l);
