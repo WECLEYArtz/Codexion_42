@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/27 17:40:02 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/28 23:24:38 by wec              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,13 @@ void	compile(t_coder *coder)
 	pthread_cond_signal(coder->monitor_link);
 	coder_compiled_status_update(coder);
 	burnout_list_action(MV_BACK, coder);
-	if (sim_action(STAT, NULL) != ON)
-		return ;
 	abstime = get_abstime(&coder->last_compile, &coder->sim->ta_compile);
-	sim_action(WAIT_STP, &abstime);
 	pthread_mutex_unlock(&coder->compiled_mutex);
-	//__debug_heap__(coder->dongle_r, coder, "dropping dongle_r");
+	if (sim_action(WAIT_STP, &abstime) == END)
+		return;
+	__debug_heap__(coder->dongle_r, coder, "dropping dongle_r");
 	untake_dongle(coder->dongle_r, coder);
-	//__debug_heap__(coder->dongle_l, coder, "dropping dongle_l");
+	__debug_heap__(coder->dongle_l, coder, "dropping dongle_l");
 	untake_dongle(coder->dongle_l, coder);
 }
 
