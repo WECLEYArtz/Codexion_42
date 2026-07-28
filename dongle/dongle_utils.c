@@ -91,8 +91,6 @@ int	try_take_dongles(t_dongle *dngl_r, t_dongle *dngl_l, t_coder *cdr)
 		return (_unlock_dongles(dngl_r, dngl_l), 1);
 	dngl_r->taken = true;
 	dngl_l->taken = true;
-	//__debug_heap__(dngl_r, cdr, GREEN"Dongles_r taken!"RESET);
-	//__debug_heap__(dngl_l, cdr, GREEN"Dongles_l taken!"RESET);
 	_unlock_dongles(dngl_r, dngl_l);
 	return (0);
 }
@@ -101,18 +99,19 @@ void	untake_dongle(t_dongle *dongle, t_coder *coder)
 {
 	t_timespec	new;
 
-	coder = NULL;// error suspender
+	if (!coder)
+		coder = NULL;// error suspender
 	pthread_mutex_lock(&dongle->mutex);
-	//__debug_heap__(dongle, coder, "untaking a dongle...");
+	//__debug_heap__(dongle, coder, "untaking a dongle... (mutex check)");
 	clock_gettime(CLOCK_REALTIME, &dongle->available_date);
 	new = get_abstime(&dongle->available_date,
 			&dongle->sim->ta_dongle_cooldown);
 	dongle->available_date = new;
 	//__debug_heap__(dongle, coder, "popping off from a dongle...");
-	dhq_pop(dongle);
+	dhq_pop(dongle, coder);
 	//__debug_heap__(dongle, coder, "poped off from a dongle");
 	dongle->taken = false;
 	pthread_cond_signal(&dongle->cond);
 	pthread_mutex_unlock(&dongle->mutex);
-	//__debug_heap__(dongle, coder, "untaken a dongle");
+	//__debug_heap__(dongle, coder, BLUE"untaken a dongle"RESET);
 }

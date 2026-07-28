@@ -39,6 +39,6 @@ int					try_take_dongles(t_dongle *dr, t_dongle *dl, t_coder *cdr);
 void				untake_dongle(t_dongle *dongle, t_coder *coder);
 
 void				dhq_insert(t_dongle *dongle, t_coder *coder);
-void				dhq_pop(t_dongle *dongle);
+void				dhq_pop(t_dongle *dongle, t_coder *coder);
 
 #endif

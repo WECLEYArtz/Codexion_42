@@ -73,14 +73,17 @@ void	dhq_insert(t_dongle *dongle, t_coder *coder)
 }
 
 // NOTE: if no element, this will break;
-void	dhq_pop(t_dongle *dongle)
+void	dhq_pop(t_dongle *dongle, t_coder *coder)
 {
 	int last_index;
 
-	last_index = dongle->heap_occupied -1;
-	dongle->heap[0] = dongle->heap[last_index];
-	dongle->heap[last_index] = NULL;
-	if (dongle->scheduler == EDF)
-		dhq_bubble_down(dongle->heap, last_index);
-	dongle->heap_occupied--;
+	if (dongle->heap[0] == coder)
+	{
+		last_index = dongle->heap_occupied -1;
+		dongle->heap[0] = dongle->heap[last_index];
+		dongle->heap[last_index] = NULL;
+		if (dongle->scheduler == EDF)
+			dhq_bubble_down(dongle->heap, last_index);
+		dongle->heap_occupied--;
+	}
 }

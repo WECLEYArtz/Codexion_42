@@ -39,8 +39,8 @@ void	announce(t_coder *coder, short action, bool force)
 			+ ((current.tv_nsec - coder->sim->startup.tv_nsec) / 1000000);
 		if (action == ANNOUCE_COMPILE)
 		{
-			printf("%ld %d has taken a dongle\n", diff_ms, coder->id);
-			printf("%ld %d has taken a dongle\n", diff_ms, coder->id);
+			printf(GREEN"%ld %d has taken a dongle\n"RESET, diff_ms, coder->id);
+			printf(GREEN"%ld %d has taken a dongle\n"RESET, diff_ms, coder->id);
 			printf("%ld %d is compiling\n", diff_ms, coder->id);
 		}
 		else
@@ -53,8 +53,6 @@ void	announce(t_coder *coder, short action, bool force)
 #include "../dongle/dongle.h"
 void __debug_heap__(t_dongle *dongle, t_coder *coder, char *msg)
 {
-	if (!HEAP_DEBUG)
-		return;
 	static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 	pthread_mutex_lock(&mutex);
 
