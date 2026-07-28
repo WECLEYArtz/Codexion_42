@@ -4,9 +4,9 @@ NAME=		codexion
 
 DEBUG=\
 	  -g3 -O0\
-	  # -fsanitize=address\
-	  # -fsanitize=leak
-	  # -fsanitize=thread
+	  # -fsanitize=thread \
+	  # -fsanitize=leak \
+	  # -fsanitize=address \
 
 SRC=		main.c \
 			cleaner.c \
@@ -37,11 +37,6 @@ fclean: clean
 	rm -f $(NAME)
 
 re: fclean all
-
-
-test:
-	echo "Renning test.sh..."
-	bash test.sh
 
 
 .PHONY: fclean all clean re Libft

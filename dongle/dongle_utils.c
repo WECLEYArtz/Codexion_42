@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/28 22:19:52 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/28 22:30:02 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,22 +53,29 @@ static void _unlock_dongles(t_dongle *dngl_1, t_dongle *dngl_2)
 static int	safe_wait_dongle(t_dongle *dngl_r, t_dongle *dngl_l,
 		t_dongle *d_target, t_coder *cdr)
 {
-	if (sim_action(STAT, NULL) == END)
+	int ret_val;
+
+	ret_val = 0;
+	if (sim_action(STAT, NULL) != END)
 	{
 		//__debug_heap__(dngl_r, cdr, "sleeping skipped, simulation ends");
 		return END;
+		_unlock_dongles(dngl_r, dngl_l);
+		pthread_mutex_lock(&d_target->mutex);
+		while(d_target->heap[0] != cdr || d_target->taken == true)
+		{
+			if (sim_action(STAT, NULL) == END)
+			{
+				ret_val = END;
+				break;
+			}
+			pthread_cond_wait(&d_target->cond, &d_target->mutex);
+		}
+		pthread_mutex_unlock(&d_target->mutex);
 	}
-	_unlock_dongles(dngl_r, dngl_l);
-	pthread_mutex_lock(&d_target->mutex);
-	while(d_target->heap[0] != cdr || d_target->taken == true)
-	{
-		if (sim_action(STAT, NULL) == END)
-			return END;
-		pthread_cond_wait(&d_target->cond, &d_target->mutex);
-	}
-	pthread_mutex_unlock(&d_target->mutex);
-	_lock_dongles(dngl_r, dngl_l);
-	return 0;
+	else
+		ret_val = END;
+	return (_lock_dongles(dngl_r, dngl_l), ret_val);
 }
 
 int	try_take_dongles(t_dongle *dngl_r, t_dongle *dngl_l, t_coder *cdr)
