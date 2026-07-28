@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/27 19:50:40 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/28 22:19:52 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,12 @@ static int	safe_wait_dongle(t_dongle *dngl_r, t_dongle *dngl_l,
 	}
 	_unlock_dongles(dngl_r, dngl_l);
 	pthread_mutex_lock(&d_target->mutex);
-	while(d_target->heap[0] != cdr && d_target->taken == true)
+	while(d_target->heap[0] != cdr || d_target->taken == true)
+	{
+		if (sim_action(STAT, NULL) == END)
+			return END;
 		pthread_cond_wait(&d_target->cond, &d_target->mutex);
+	}
 	pthread_mutex_unlock(&d_target->mutex);
 	_lock_dongles(dngl_r, dngl_l);
 	return 0;

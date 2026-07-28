@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 13:20:47 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/27 17:39:00 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/28 21:16:21 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ short	sim_action(short choice, t_timespec *abstime)
 				pthread_cond_wait(&run_call, &run_mutex);
 		else if (choice == END || choice == ON)
 		{
+			if(choice == ON)
+				clock_gettime(CLOCK_REALTIME, abstime);
 			status = choice;
 			pthread_cond_broadcast(&run_call);
 		}

@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 14:29:38 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/27 13:07:48 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/28 22:09:57 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,16 @@ void	join_coders(t_coder *coder, int join_count)
 	{
 		if (SIM_DEBUG) printf(BLUE"[Cleaner]: broadcasting to %d's dongle_r:"RESET, coder->id);
 		pthread_mutex_lock(&coder->dongle_r->mutex);
-		pthread_cond_signal(&coder->dongle_r->cond);
+		pthread_cond_broadcast(&coder->dongle_r->cond);
 		pthread_mutex_unlock(&coder->dongle_r->mutex);
 		if (SIM_DEBUG) puts(BLUE" - Done"RESET);
 
 		if (SIM_DEBUG) printf(BLUE"[Cleaner]: broadcasting to %d's dongle_l:"RESET, coder->id);
 		pthread_mutex_lock(&coder->dongle_l->mutex);
-		pthread_cond_signal(&coder->dongle_l->cond);
+		pthread_cond_broadcast(&coder->dongle_l->cond);
 		pthread_mutex_unlock(&coder->dongle_l->mutex);
 		if (SIM_DEBUG) puts(BLUE" - Done"RESET);
+		pthread_join(coder->thread, NULL);
 		if (SIM_DEBUG) printf(BLUE"[Cleaner]: Done with %d | %d left\n"RESET, coder->id, join_count);
 		coder++;
 		join_count--;
