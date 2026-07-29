@@ -16,7 +16,7 @@ static	bool is_sader(t_coder *coder1, t_coder *coder2)
 	return  (coder1 - coder2 < 0);
 }
 
-void swap(t_coder *heap[HEAP_SIZE], int a, int b)
+void swap(t_coder **heap, int a, int b)
 {
 	t_coder *tmp;
 
@@ -25,7 +25,7 @@ void swap(t_coder *heap[HEAP_SIZE], int a, int b)
 	heap[b] = tmp;
 }
 
-static void	dhq_bubble_down(t_coder *heap[HEAP_SIZE], int i)
+static void	dhq_bubble_down(t_coder **heap, int i)
 {
 	short	sadest_coder;
 	short	left;
@@ -45,7 +45,7 @@ static void	dhq_bubble_down(t_coder *heap[HEAP_SIZE], int i)
 	}
 }
 
-static void	dhq_bubble_up(t_coder *heap[HEAP_SIZE], int i)
+static void	dhq_bubble_up(t_coder **heap, int i)
 {
 	int		parent;
 
@@ -76,14 +76,16 @@ void	dhq_insert(t_dongle *dongle, t_coder *coder)
 void	dhq_pop(t_dongle *dongle, t_coder *coder)
 {
 	int last_index;
+	t_coder **heap;
 
-	if (dongle->heap[0] == coder)
+	heap= dongle->heap;
+	if (heap[0] == coder)
 	{
 		last_index = dongle->heap_occupied -1;
-		dongle->heap[0] = dongle->heap[last_index];
-		dongle->heap[last_index] = NULL;
+		heap[0] = heap[last_index];
+		heap[last_index] = NULL;
 		if (dongle->scheduler == EDF)
-			dhq_bubble_down(dongle->heap, last_index);
+			dhq_bubble_down(heap, last_index);
 		dongle->heap_occupied--;
 	}
 }

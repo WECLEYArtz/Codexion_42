@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/16 00:21:31 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/29 13:31:29 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/29 17:29:41 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,9 @@ void	announce(t_coder *coder, short action, bool force)
 	t_timespec				current;
 	long					diff;
 	static pthread_mutex_t	print_mutex = PTHREAD_MUTEX_INITIALIZER;
-	static char				*str = "is debuging\0is refactoring\0burned out\0";
+	static char				*msgs[3] = {
+		"is debuging", "is refactoring", "burned out"
+	};
 
 	clock_gettime(CLOCK_REALTIME, &current);
 	diff = ((current.tv_sec - coder->sim->startup.tv_sec) * 1000)
@@ -38,11 +40,12 @@ void	announce(t_coder *coder, short action, bool force)
 	if (sim_action(STAT, NULL) == ON || force == true)
 	{
 		if (action == ANNOUCE_COMPILE)
-			printf("%ld %d has taken a dongle\n%ld %d has taken a dongle\n"
-				"%ld %d is compiling\n",
-				diff, coder->id, diff, coder->id, diff, coder->id);
+			printf("%ld %d %s\n%ld %d %s\n%ld %d %s\n",
+				diff, coder->id, "has taken a dongle",
+				diff, coder->id, "has taken a dongle",
+				diff, coder->id, "is compiling");
 		else
-			printf("%ld %d %s\n", diff, coder->id, &str[action]);
+			printf("%ld %d %s\n", diff, coder->id, msgs[action]);
 	}
 	pthread_mutex_unlock(&print_mutex);
 }
@@ -59,5 +62,4 @@ void	__debug_heap__(t_dongle *dongle, t_coder *coder, char *msg)
 		dongle->heap[0] ? dongle->heap[0]->id : 0,
 		dongle->heap[1] ? dongle->heap[1]->id : 0, dongle->taken, msg);
 	pthread_mutex_unlock(&mutex);
-};
-// debug
+}

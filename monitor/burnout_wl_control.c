@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 17:31:10 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/27 16:23:41 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/29 14:54:44 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,8 @@ static t_coder	*_pop(t_coder **head_p, pthread_mutex_t *mutex)
 
 t_coder	*burnout_list_action(short choice, void *pointer)
 {
+	static pthread_cond_t	sig_new_add = PTHREAD_COND_INITIALIZER;
 	static pthread_mutex_t	mutex = PTHREAD_MUTEX_INITIALIZER;
-	static pthread_cond_t	first_add_condr = PTHREAD_COND_INITIALIZER;
 	static t_coder			*head = NULL;
 	static bool				monitor_started = false;
 
@@ -69,7 +69,7 @@ t_coder	*burnout_list_action(short choice, void *pointer)
 		_addback(&head, (t_coder *)pointer);
 		if(monitor_started == false)
 		{
-			pthread_cond_signal(&first_add_condr);
+			pthread_cond_signal(&sig_new_add);
 			monitor_started = true;
 		}
 	}
@@ -77,7 +77,7 @@ t_coder	*burnout_list_action(short choice, void *pointer)
 		return (_pop(&head, &mutex));
 	else if (choice == M_WATCH)
 		while (!head)
-			pthread_cond_wait(&first_add_condr, &mutex);
+			pthread_cond_wait(&sig_new_add, &mutex);
 	pthread_mutex_unlock(&mutex);
 	return (NULL);
 }

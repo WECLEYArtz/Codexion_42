@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/29 12:15:20 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/29 17:35:54 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,16 +102,14 @@ int	try_take_dongles(t_dongle *dngl_r, t_dongle *dngl_l, t_coder *cdr)
 
 void	untake_dongle(t_dongle *dongle, t_coder *coder)
 {
-	t_timespec	new;
-
 	if (!coder)
-		coder = NULL;// error suspender
+		coder = NULL;// error suspender for debug
 	pthread_mutex_lock(&dongle->mutex);
 	//__debug_heap__(dongle, coder, "untaking a dongle... (mutex check)");
 	clock_gettime(CLOCK_REALTIME, &dongle->available_date);
-	new = get_abstime(&dongle->available_date,
+	dongle->available_date = get_abstime(
+			&dongle->available_date,
 			&dongle->sim->ta_dongle_cooldown);
-	dongle->available_date = new;
 	//__debug_heap__(dongle, coder, "popping off from a dongle...");
 	dhq_pop(dongle, coder);
 	//__debug_heap__(dongle, coder, "poped off from a dongle");

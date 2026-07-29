@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/29 17:16:54 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/25 14:10:57 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/29 17:17:09 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@
 
 # define ANNOUCE_COMPILE 255
 # define ANNOUCE_DEBUG 0
-# define ANNOUCE_REFACTOR 12
-# define ANNOUCE_BURNOUT 27
+# define ANNOUCE_REFACTOR 1
+# define ANNOUCE_BURNOUT 2
 
 typedef struct s_sim		t_sim;
 typedef struct s_args		t_args;

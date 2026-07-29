@@ -3,7 +3,7 @@ CFLAGS=		-pthread -Wall -Werror -Wextra
 NAME=		codexion
 
 DEBUG=\
-	  -g3 -O0\
+	  -g3 -Og\
 	  # -fsanitize=thread \
 	  # -fsanitize=leak \
 	  # -fsanitize=address \
