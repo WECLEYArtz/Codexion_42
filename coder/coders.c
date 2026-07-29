@@ -6,12 +6,25 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/19 16:41:58 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/29 21:46:26 by wec              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../coder/coder.h"
+#include "../monitor/monitor.h"
+#include "../utils/utils.h"
 #include "../simulation/simulation.h"
+
+//	Responsible for updating last compile and burnout date.
+//	First called when the coder is created, then everytime a coder compiles.
+void	coder_compiled_status_update(t_coder *coder)
+{
+	clock_gettime(CLOCK_REALTIME, &coder->last_compile);
+	coder->burnout_date = get_abstime(
+			&coder->last_compile,
+			&coder->sim->ta_burnout);
+	coder->compiles_count++;
+}
 
 void	*coder_routine(void *coder_p)
 {
@@ -21,15 +34,15 @@ void	*coder_routine(void *coder_p)
 
 	routine_turn = 0;
 	self = (t_coder *)coder_p;
-	if (!sim_action(WAIT_RUN, NULL))
+	if (sim_action(WAIT_RUN, NULL) == END)
 		return (NULL);
-	if (first_compile(self))
-		routine_turn++;
+	burnout_list_action(MV_BACK, self);
 	while (sim_action(STAT, NULL) == ON)
 	{
 		if (routine_turn == 3)
 			routine_turn = 0;
 		routines[routine_turn++](self);
 	}
+	if (SIM_DEBUG) puts("[event loop]: simulatoin no longer going, leaving...");
 	return (NULL);
 }

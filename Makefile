@@ -3,21 +3,20 @@ CFLAGS=		-pthread -Wall -Werror -Wextra
 NAME=		codexion
 
 DEBUG=\
-	  -g3 -O0\
-	  # -fsanitize=address\
-	  # -fsanitize=leak
-	  # -fsanitize=thread
+	  -g3 -Og\
+	  # -fsanitize=thread \
+	  # -fsanitize=leak \
+	  # -fsanitize=address \
 
-SRC=		main.c\
-			cleaner.c\
-			utils/utils.c\
-			dongle/dongle.c \
-			schedualer/schedualer.c\
+SRC=		main.c \
+			cleaner.c \
+			utils/utils.c \
+			simulation/simulation_control.c \
 			coder/coders.c coder/routines.c \
 			parser/args_parser.c parser/atopi.c \
+			dongle/dongle_utils.c dongle/heap_utils.c \
 			monitor/monitor.c monitor/burnout_wl_control.c \
-			simulation/simulation_control.c\
-			simulation/simulation_init.c simulation/simulation_init_utils.c\
+			simulation/simulation_init.c simulation/simulation_init_utils.c \
 
 OBJ=		$(SRC:.c=.o)
 
@@ -38,11 +37,6 @@ fclean: clean
 	rm -f $(NAME)
 
 re: fclean all
-
-
-test:
-	echo "Renning test.sh..."
-	bash test.sh
 
 
 .PHONY: fclean all clean re Libft

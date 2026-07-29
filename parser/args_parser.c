@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/19 17:24:55 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/24 21:41:18 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,9 @@ static int	_isvalidate_args(t_args *args)
 int	get_args(char **argv, t_args *args)
 {
 	if (!strcmp(argv[8], "edf"))
-		args->scheduler = 1;
+		args->scheduler = 0;
 	else if (!strcmp(argv[8], "fifo"))
-		args->scheduler = 2;
+		args->scheduler = 1;
 	else
 		return (1);
 	args->number_of_coders = ft_atopi(argv[1]);
