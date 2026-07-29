@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/28 23:25:02 by wec              ###   ########.fr       */
+/*   Updated: 2026/07/29 12:15:20 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,27 +68,27 @@ static int	safe_wait_dongle(t_dongle *d_target, t_coder *cdr)
 int	try_take_dongles(t_dongle *dngl_r, t_dongle *dngl_l, t_coder *cdr)
 {
 	_lock_dongles(dngl_r, dngl_l);
-	__debug_heap__(dngl_r, cdr, "inserting to a dongle_r...");
+	//__debug_heap__(dngl_r, cdr, "inserting to a dongle_r...");
 	dhq_insert(dngl_r, cdr);
-	__debug_heap__(dngl_r, cdr, "inserted to a dongle_r");
-	__debug_heap__(dngl_l, cdr, "inserting to a dongle_l...");
+	//__debug_heap__(dngl_r, cdr, "inserted to a dongle_r");
+	//__debug_heap__(dngl_l, cdr, "inserting to a dongle_l...");
 	dhq_insert(dngl_l, cdr);
-	__debug_heap__(dngl_l, cdr, "inserted to a dongle_l");
+	//__debug_heap__(dngl_l, cdr, "inserted to a dongle_l");
 	while ((dngl_r->heap[0] != cdr || dngl_r->taken ||
 				dngl_l->heap[0] != cdr || dngl_l->taken))
 	{
 		_unlock_dongles(dngl_r, dngl_l);
-		__debug_heap__(dngl_r, cdr, "sleeping on dongle_r");
+		//__debug_heap__(dngl_r, cdr, "sleeping on dongle_r");
 		if (safe_wait_dongle(dngl_r, cdr) == END)
 			return (END);
-		__debug_heap__(dngl_r, cdr, "sleeping on dongle_l");
+		//__debug_heap__(dngl_r, cdr, "sleeping on dongle_l");
 		if (safe_wait_dongle(dngl_l, cdr) == END)
 			return (END);
 		_lock_dongles(dngl_r, dngl_l);
 	}
 	_unlock_dongles(dngl_r, dngl_l);
 
-	__debug_heap__(dngl_r, cdr, "waiting until dongles available (d_r)");
+	//__debug_heap__(dngl_r, cdr, "waiting until dongles available (d_r)");
 	if (sim_action(WAIT_STP, &dngl_r->available_date) == END
 			|| sim_action(WAIT_STP, &dngl_l->available_date) == END)
 		return (1);
@@ -107,16 +107,16 @@ void	untake_dongle(t_dongle *dongle, t_coder *coder)
 	if (!coder)
 		coder = NULL;// error suspender
 	pthread_mutex_lock(&dongle->mutex);
-	__debug_heap__(dongle, coder, "untaking a dongle... (mutex check)");
+	//__debug_heap__(dongle, coder, "untaking a dongle... (mutex check)");
 	clock_gettime(CLOCK_REALTIME, &dongle->available_date);
 	new = get_abstime(&dongle->available_date,
 			&dongle->sim->ta_dongle_cooldown);
 	dongle->available_date = new;
-	__debug_heap__(dongle, coder, "popping off from a dongle...");
+	//__debug_heap__(dongle, coder, "popping off from a dongle...");
 	dhq_pop(dongle, coder);
-	__debug_heap__(dongle, coder, "poped off from a dongle");
+	//__debug_heap__(dongle, coder, "poped off from a dongle");
 	dongle->taken = false;
 	pthread_cond_signal(&dongle->cond);
 	pthread_mutex_unlock(&dongle->mutex);
-	__debug_heap__(dongle, coder, BLUE"untaken a dongle"RESET);
+	//__debug_heap__(dongle, coder, BLUE"untaken a dongle"RESET);
 }

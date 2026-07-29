@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/16 00:21:31 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/27 17:12:25 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/29 13:31:29 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,41 +27,37 @@ t_timespec	get_abstime(t_timespec *time, t_time_add *addition)
 void	announce(t_coder *coder, short action, bool force)
 {
 	t_timespec				current;
-	long					diff_ms;
+	long					diff;
 	static pthread_mutex_t	print_mutex = PTHREAD_MUTEX_INITIALIZER;
 	static char				*str = "is debuging\0is refactoring\0burned out\0";
 
+	clock_gettime(CLOCK_REALTIME, &current);
+	diff = ((current.tv_sec - coder->sim->startup.tv_sec) * 1000)
+		+ ((current.tv_nsec - coder->sim->startup.tv_nsec) / 1000000);
 	pthread_mutex_lock(&print_mutex);
 	if (sim_action(STAT, NULL) == ON || force == true)
 	{
-		clock_gettime(CLOCK_REALTIME, &current);
-		diff_ms = ((current.tv_sec - coder->sim->startup.tv_sec) * 1000)
-			+ ((current.tv_nsec - coder->sim->startup.tv_nsec) / 1000000);
 		if (action == ANNOUCE_COMPILE)
-		{
-			printf(GREEN"%ld %d has taken a dongle\n"RESET, diff_ms, coder->id);
-			printf(GREEN"%ld %d has taken a dongle\n"RESET, diff_ms, coder->id);
-			printf("%ld %d is compiling\n", diff_ms, coder->id);
-		}
+			printf("%ld %d has taken a dongle\n%ld %d has taken a dongle\n"
+				"%ld %d is compiling\n",
+				diff, coder->id, diff, coder->id, diff, coder->id);
 		else
-			printf("%ld %d %s\n", diff_ms, coder->id, &str[action]);
+			printf("%ld %d %s\n", diff, coder->id, &str[action]);
 	}
 	pthread_mutex_unlock(&print_mutex);
 }
 
-//debug
+// debug (don't bother norminette, will be removed)
 #include "../dongle/dongle.h"
-void __debug_heap__(t_dongle *dongle, t_coder *coder, char *msg)
+
+void	__debug_heap__(t_dongle *dongle, t_coder *coder, char *msg)
 {
 	static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 	pthread_mutex_lock(&mutex);
 
-	printf("[ %d ]: heap [ %d - %d ] taken:(%d)\t\t[ %s ]\n",
-			coder->id,
-			dongle->heap[0]? dongle->heap[0]->id: 0,
-			dongle->heap[1]? dongle->heap[1]->id: 0,
-			dongle->taken,
-			msg);
+	printf("[ %d ]: heap [ %d - %d ] taken:(%d)\t\t[ %s ]\n", coder->id,
+		dongle->heap[0] ? dongle->heap[0]->id : 0,
+		dongle->heap[1] ? dongle->heap[1]->id : 0, dongle->taken, msg);
 	pthread_mutex_unlock(&mutex);
 };
-//debug
+// debug
