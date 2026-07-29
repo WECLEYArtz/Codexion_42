@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/29 20:39:56 by wec              ###   ########.fr       */
+/*   Updated: 2026/07/29 21:52:38 by wec              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,41 +15,34 @@
 #include "../simulation/simulation.h"
 #include "../utils/utils.h"
 
-//	a mini locking function that help resolve lock order violation
-
-// PERF: optimise performance, dereference once when passing to function
-//			swap values in if condition
-static void _lock_dongles(t_dongle *dngl_1, t_dongle *dngl_2)
+static void _lock_dongles(pthread_mutex_t *mutex_1, pthread_mutex_t *mutex_2)
 {
-	if (&dngl_1->mutex < &dngl_2->mutex)
+	if (mutex_1 < mutex_2)
 	{
-		pthread_mutex_lock(&dngl_1->mutex);
-		pthread_mutex_lock(&dngl_2->mutex);
+		pthread_mutex_lock(mutex_1);
+		pthread_mutex_lock(mutex_2);
 	}
 	else
 	{
-		pthread_mutex_lock(&dngl_2->mutex);
-		pthread_mutex_lock(&dngl_1->mutex);
+		pthread_mutex_lock(mutex_2);
+		pthread_mutex_lock(mutex_1);
 	}
 }
 
-//	a mini locking function that help resolve lock order violation
-static void _unlock_dongles(t_dongle *dngl_1, t_dongle *dngl_2)
+static void _unlock_dongles(pthread_mutex_t *mutex_1, pthread_mutex_t *mutex_2)
 {
-	if (&dngl_1->mutex < &dngl_2->mutex)
+	if (mutex_1 < mutex_2)
 	{
-		pthread_mutex_unlock(&dngl_2->mutex);
-		pthread_mutex_unlock(&dngl_1->mutex);
+		pthread_mutex_unlock(mutex_2);
+		pthread_mutex_unlock(mutex_1);
 	}
 	else
 	{
-		pthread_mutex_unlock(&dngl_1->mutex);
-		pthread_mutex_unlock(&dngl_2->mutex);
+		pthread_mutex_unlock(mutex_1);
+		pthread_mutex_unlock(mutex_2);
 	}
 }
 
-// PERF:	the way this lock mess happens looks performance concerning.
-// 			try to fix later
 static int	safe_wait_dongle(t_dongle *d_target, t_coder *cdr)
 {
 	pthread_mutex_lock(&d_target->mutex);
@@ -68,8 +61,7 @@ int	try_take_dongles(t_dongle *dngl_r, t_dongle *dngl_l, t_coder *cdr)
 	t_timespec dngl_r_available;
 	t_timespec dngl_l_available;
 
-
-	_lock_dongles(dngl_r, dngl_l);
+	_lock_dongles(&dngl_r->mutex, &dngl_l->mutex);
 	//__debug_heap__(dngl_r, cdr, "inserting to a dongle_r...");
 	dhq_insert(dngl_r, cdr);
 	//__debug_heap__(dngl_r, cdr, "inserted to a dongle_r");
@@ -79,20 +71,20 @@ int	try_take_dongles(t_dongle *dngl_r, t_dongle *dngl_l, t_coder *cdr)
 	while ((dngl_r->heap[0] != cdr || dngl_r->taken ||
 				dngl_l->heap[0] != cdr || dngl_l->taken))
 	{
-		_unlock_dongles(dngl_r, dngl_l);
+		_unlock_dongles(&dngl_r->mutex, &dngl_l->mutex);
 		//__debug_heap__(dngl_r, cdr, "sleeping on dongle_r");
 		if (safe_wait_dongle(dngl_r, cdr) == END)
 			return (END);
 		//__debug_heap__(dngl_r, cdr, "sleeping on dongle_l");
 		if (safe_wait_dongle(dngl_l, cdr) == END)
 			return (END);
-		_lock_dongles(dngl_r, dngl_l);
+		_lock_dongles(&dngl_r->mutex, &dngl_l->mutex);
 	}
 	dngl_r->taken = true;
 	dngl_l->taken = true;
 	dngl_r_available = dngl_r->available_date;
 	dngl_l_available = dngl_l->available_date;
-	_unlock_dongles(dngl_r, dngl_l);
+	_unlock_dongles(&dngl_r->mutex, &dngl_l->mutex);
 
 	//__debug_heap__(dngl_r, cdr, "waiting until dongles available (d_r)");
 	if (sim_action(WAIT_STP, &dngl_r_available) == END

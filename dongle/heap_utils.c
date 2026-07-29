@@ -63,16 +63,15 @@ static void	dhq_bubble_up(t_coder **heap, int i)
 void	dhq_insert(t_dongle *dongle, t_coder *coder)
 {
 
-	if(dongle->heap_occupied < HEAP_SIZE && dongle->heap[0] != coder)
+	if(dongle->heap_elements < HEAP_SIZE && dongle->heap[0] != coder)
 	{
-		dongle->heap[dongle->heap_occupied] = coder;
+		dongle->heap[dongle->heap_elements] = coder;
 		if (dongle->scheduler == EDF)
-			dhq_bubble_up(dongle->heap, dongle->heap_occupied);
-		dongle->heap_occupied++;
+			dhq_bubble_up(dongle->heap, dongle->heap_elements);
+		dongle->heap_elements++;
 	}
 }
 
-// NOTE: if no element, this will break;
 void	dhq_pop(t_dongle *dongle, t_coder *coder)
 {
 	int last_index;
@@ -81,11 +80,11 @@ void	dhq_pop(t_dongle *dongle, t_coder *coder)
 	heap= dongle->heap;
 	if (heap[0] == coder)
 	{
-		last_index = dongle->heap_occupied -1;
+		last_index = dongle->heap_elements -1;
 		heap[0] = heap[last_index];
 		heap[last_index] = NULL;
 		if (dongle->scheduler == EDF)
 			dhq_bubble_down(heap, last_index);
-		dongle->heap_occupied--;
+		dongle->heap_elements--;
 	}
 }

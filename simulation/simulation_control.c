@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 13:20:47 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/28 22:36:00 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/29 22:05:20 by wec              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,6 @@ static void	_action_wait(pthread_cond_t *run_call, pthread_mutex_t *run_mutex,
 	}
 }
 
-// NOTE: try to make every option returning the latest state
-// 			this might need putting each one in an isolated function
 short	sim_action(short choice, t_timespec *abstime)
 {
 	static pthread_mutex_t	run_mutex = PTHREAD_MUTEX_INITIALIZER;

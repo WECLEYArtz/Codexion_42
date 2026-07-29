@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 14:29:38 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/28 22:09:57 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/29 22:00:18 by wec              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,6 @@
 #include "monitor/monitor.h"
 #include "simulation/simulation.h"
 
-// PERF:	at this point give every coder its thread,
-//			no need to keep it in the monitor
 void	join_coders(t_coder *coder, int join_count)
 {
 	while (join_count)

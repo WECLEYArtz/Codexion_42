@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/27 16:19:23 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/29 21:46:26 by wec              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	coder_compiled_status_update(t_coder *coder)
 	coder->burnout_date = get_abstime(
 			&coder->last_compile,
 			&coder->sim->ta_burnout);
-	coder->compiled++;
+	coder->compiles_count++;
 }
 
 void	*coder_routine(void *coder_p)

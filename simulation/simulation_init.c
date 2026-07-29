@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:15:04 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/27 02:24:20 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/29 21:56:21 by wec              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static int	init_monitor(t_sim *sim, t_monitor *monitor)
 	return (0);
 }
 
-// NOTE: are we sure the dongle doesn't need the whole simulation struct?
+// NOTE: dont forget to put dongle initialisation in subfunction
 static int	init_dongles(t_sim *sim)
 {
 	int	order;
@@ -77,7 +77,7 @@ static int	init_dongles(t_sim *sim)
 			sim->init_records.d_mutex_init_ok++;
 		(sim->dongles + order)->heap[0] = NULL;
 		(sim->dongles + order)->heap[1] = NULL;
-		(sim->dongles + order)->heap_occupied = 2;
+		(sim->dongles + order)->heap_elements = 2;
 
 		(sim->dongles + order)->cooldown = sim->args.dongle_cooldown;
 		(sim->dongles + order)->scheduler = sim->args.scheduler;

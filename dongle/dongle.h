@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:00:49 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/29 14:30:27 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/29 21:55:16 by wec              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ typedef struct s_dongle
 	pthread_mutex_t	mutex;
 	pthread_cond_t	cond;
 	t_coder			*heap[HEAP_SIZE];
-	int				heap_occupied;
+	int				heap_elements;
 
 	int				cooldown;
 	short			scheduler;
