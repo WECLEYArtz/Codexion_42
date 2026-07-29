@@ -6,19 +6,35 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 14:29:38 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/19 17:20:08 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/29 22:00:18 by wec              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "coder/coder.h"
+#include "dongle/dongle.h"
 #include "monitor/monitor.h"
 #include "simulation/simulation.h"
 
-void	join_coders(pthread_t *coders_threads, int join_count)
+void	join_coders(t_coder *coder, int join_count)
 {
-	sim_action(END, NULL);
 	while (join_count)
-		pthread_join(*(coders_threads + (join_count-- - 1)), NULL);
+	{
+		if (SIM_DEBUG) printf(BLUE"[Cleaner]: broadcasting to %d's dongle_r:"RESET, coder->id);
+		pthread_mutex_lock(&coder->dongle_r->mutex);
+		pthread_cond_broadcast(&coder->dongle_r->cond);
+		pthread_mutex_unlock(&coder->dongle_r->mutex);
+		if (SIM_DEBUG) puts(BLUE" - Done"RESET);
+
+		if (SIM_DEBUG) printf(BLUE"[Cleaner]: broadcasting to %d's dongle_l:"RESET, coder->id);
+		pthread_mutex_lock(&coder->dongle_l->mutex);
+		pthread_cond_broadcast(&coder->dongle_l->cond);
+		pthread_mutex_unlock(&coder->dongle_l->mutex);
+		if (SIM_DEBUG) puts(BLUE" - Done"RESET);
+		pthread_join(coder->thread, NULL);
+		if (SIM_DEBUG) printf(BLUE"[Cleaner]: Done with %d | %d left\n"RESET, coder->id, join_count);
+		coder++;
+		join_count--;
+	}
 }
 
 static void	_clean_monitor(t_monitor *monitor, t_init_records *rec)
@@ -41,15 +57,28 @@ static void	_clean_coders(t_coder *coders, t_init_records *rec)
 	free(coders);
 }
 
+
+static void	_clean_dongles(t_dongle *dongles, t_init_records *rec)
+{
+	int	count;
+
+	count = rec->d_cond_init_ok;
+	while (count)
+		pthread_cond_destroy(&(dongles + (count-- - 1))->cond);
+	count = rec->d_mutex_init_ok;
+	while (count)
+		pthread_mutex_destroy(&(dongles + (count-- - 1))->mutex);
+	free(dongles);
+}
+
 void	cleaner(t_sim *sim)
 {
 	t_init_records	*init_records;
 
 	init_records = &sim->init_records;
 	sim_action(END, NULL);
-	join_coders(sim->monitor->coders_threads, init_records->c_thread_init_ok);
+	join_coders(sim->coders, init_records->c_thread_init_ok);
 	_clean_monitor(sim->monitor, init_records);
+	_clean_dongles(sim->dongles, init_records);
 	_clean_coders(sim->coders, init_records);
-	free(sim->monitor->coders_threads);
-	free(sim->dongles);
 }

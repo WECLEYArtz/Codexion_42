@@ -6,31 +6,32 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/19 17:18:14 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/29 22:10:20 by wec              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../coder/coder.h"
 #include "../monitor/monitor.h"
-#include "../utils/utils.h"
 #include "../simulation/simulation.h"
+#include "../utils/utils.h"
 
-static int	wait_coder_burnout(t_coder *coder, t_time_add *ta_burnout)
+// NOTE:	recheck	the condition in a clearer way
+static int	wait_coder_burnout(t_coder *coder)
 {
-	int			old_compiles;
+	t_timespec	burnout_date;
+	int			old_compiles_count;
 	int			rc;
-	t_timespec	abstime;
 
 	pthread_mutex_lock(&coder->compiled_mutex);
-	old_compiles = coder->compiled;
-	abstime = get_abstime(&coder->last_compile, ta_burnout);
+	old_compiles_count = coder->compiles_count;
+	burnout_date = coder->burnout_date;
 	while (1)
 	{
 		rc = pthread_cond_timedwait(coder->monitor_link, &coder->compiled_mutex,
-				&abstime);
-		if (!rc && old_compiles == coder->compiled)
+				&burnout_date);
+		if (!rc && old_compiles_count == coder->compiles_count)
 			continue ;
-		else if (rc && old_compiles == coder->compiled)
+		else if (rc && old_compiles_count == coder->compiles_count)
 		{
 			pthread_mutex_unlock(&coder->compiled_mutex);
 			sim_action(END, NULL);
@@ -41,15 +42,11 @@ static int	wait_coder_burnout(t_coder *coder, t_time_add *ta_burnout)
 	}
 }
 
-void	*monitor_routine(void *t_sim_p)
+void	*monitor_routine(void *unused)
 {
-	t_monitor	*monitor;
-	t_time_add	*burnout_ta;
-
-	burnout_ta = &((t_sim *)t_sim_p)->ta_burnout;
-	monitor = ((t_sim *)t_sim_p)->monitor;
-	burnout_list_action(M_WATCH, monitor);
-	while (!wait_coder_burnout(burnout_list_action(POP, NULL), burnout_ta))
+	(void)unused;
+	burnout_list_action(M_WATCH, NULL);
+	while (!wait_coder_burnout(burnout_list_action(POP, NULL)))
 		;
 	return (NULL);
 }

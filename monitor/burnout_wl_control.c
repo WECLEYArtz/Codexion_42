@@ -6,12 +6,13 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 17:31:10 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/19 17:24:28 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/29 14:54:44 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../coder/coder.h"
 #include "./monitor.h"
+#include <stdbool.h>
 
 static void	_addback(t_coder **head_p, t_coder *node)
 {
@@ -41,31 +42,42 @@ static void	_addback(t_coder **head_p, t_coder *node)
 	node->next = NULL;
 }
 
+static t_coder	*_pop(t_coder **head_p, pthread_mutex_t *mutex)
+{
+	t_coder	*tmp;
+
+	tmp = *head_p;
+	*head_p = (*head_p)->next;
+	tmp->next = NULL;
+	tmp->previous = NULL;
+	if (*head_p)
+		(*head_p)->previous = NULL;
+	pthread_mutex_unlock(mutex);
+	return (tmp);
+}
+
 t_coder	*burnout_list_action(short choice, void *pointer)
 {
+	static pthread_cond_t	sig_new_add = PTHREAD_COND_INITIALIZER;
 	static pthread_mutex_t	mutex = PTHREAD_MUTEX_INITIALIZER;
-	static pthread_cond_t	fc_cond = PTHREAD_COND_INITIALIZER;
 	static t_coder			*head = NULL;
-	t_coder					*tmp;
+	static bool				monitor_started = false;
 
 	pthread_mutex_lock(&mutex);
 	if (choice == MV_BACK)
-		_addback(&head, (t_coder *)pointer);
-	else if (choice == POP)
 	{
-		tmp = head;
-		head = head->next;
-		tmp->next = NULL;
-		tmp->previous = NULL;
-		if (head)
-			head->previous = NULL;
-		return (pthread_mutex_unlock(&mutex), tmp);
+		_addback(&head, (t_coder *)pointer);
+		if(monitor_started == false)
+		{
+			pthread_cond_signal(&sig_new_add);
+			monitor_started = true;
+		}
 	}
+	else if (choice == POP)
+		return (_pop(&head, &mutex));
 	else if (choice == M_WATCH)
 		while (!head)
-			pthread_cond_wait(&fc_cond, &mutex);
-	else if (choice == M_WAKE)
-		pthread_cond_signal(&fc_cond);
+			pthread_cond_wait(&sig_new_add, &mutex);
 	pthread_mutex_unlock(&mutex);
 	return (NULL);
 }
