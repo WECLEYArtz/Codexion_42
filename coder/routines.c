@@ -6,10 +6,9 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/30 16:13:40 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/30 20:14:31 by wec              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "../coder/coder.h"
 #include "../dongle/dongle.h"
@@ -17,13 +16,12 @@
 #include "../simulation/simulation.h"
 #include "../utils/utils.h"
 
-
 void	compile(t_coder *coder)
 {
-	t_timespec				abstime;
+	t_timespec	abstime;
 
 	if (try_take_dongles(coder->dongle_r, coder->dongle_l, coder) == END)
-		return;
+		return ;
 	pthread_mutex_lock(&coder->compiled_mutex);
 	announce(coder, ANNOUCE_COMPILE, false);
 	coder_compiled_status_update(coder);
@@ -32,10 +30,8 @@ void	compile(t_coder *coder)
 	abstime = get_abstime(&coder->last_compile, &coder->sim->ta_compile);
 	pthread_mutex_unlock(&coder->compiled_mutex);
 	if (sim_action(WAIT_STP, &abstime) == END)
-		return;
-	//__debug_heap__(coder->dongle_r, coder, "dropping dongle_r");
+		return ;
 	untake_dongle(coder->dongle_r, coder);
-	//__debug_heap__(coder->dongle_l, coder, "dropping dongle_l");
 	untake_dongle(coder->dongle_l, coder);
 }
 

@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/30 16:17:57 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/30 19:35:56 by wec              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,14 @@
 #include "../simulation/simulation.h"
 #include "../utils/utils.h"
 
-// NOTE:	recheck	the condition in a clearer way
+static int	declare_burnout(t_coder *coder)
+{
+	pthread_mutex_unlock(&coder->compiled_mutex);
+	sim_action(END, NULL);
+	announce(coder, ANNOUCE_BURNOUT, true);
+	return (1);
+}
+
 static int	wait_coder_burnout(t_coder *coder)
 {
 	t_timespec	burnout_date;
@@ -32,11 +39,7 @@ static int	wait_coder_burnout(t_coder *coder)
 		if (!rc && old_compiles_count == coder->compiles_required)
 			continue ;
 		if (rc && old_compiles_count == coder->compiles_required)
-		{
-			pthread_mutex_unlock(&coder->compiled_mutex);
-			sim_action(END, NULL);
-			return (announce(coder, ANNOUCE_BURNOUT, true), 1);
-		}
+			return (declare_burnout(coder));
 		pthread_mutex_unlock(&coder->compiled_mutex);
 		pthread_mutex_lock(&coder->sim->unfinished_coders_mutex);
 		if (coder->sim->unfinished_coders == 0)

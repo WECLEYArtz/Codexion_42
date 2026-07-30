@@ -6,13 +6,13 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:15:04 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/30 15:35:57 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/30 18:57:23 by wec              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../dongle/dongle.h"
-#include "../utils/utils.h"
 #include "../monitor/monitor.h"
+#include "../utils/utils.h"
 #include "simulation.h"
 
 static int	init_coders(t_sim *sim)
@@ -66,28 +66,8 @@ static int	init_dongles(t_sim *sim)
 		return (12);
 	order = 0;
 	while (order < coders_num)
-	{
-		if(pthread_cond_init(&(sim->dongles + order)->cond, NULL))
-			return (cleaner(sim),1);
-		else
-			sim->init_records.d_cond_init_ok++;
-		if(pthread_mutex_init(&(sim->dongles + order)->mutex, NULL))
-			return (cleaner(sim),1);
-		else
-			sim->init_records.d_mutex_init_ok++;
-		(sim->dongles + order)->heap[0] = NULL;
-		(sim->dongles + order)->heap[1] = NULL;
-		(sim->dongles + order)->heap_elements = 2;
-
-		(sim->dongles + order)->cooldown = sim->args.dongle_cooldown;
-		(sim->dongles + order)->scheduler = sim->args.scheduler;
-
-
-		(sim->dongles + order)->taken = false;
-		clock_gettime(CLOCK_REALTIME, &(sim->dongles + order)->available_date);
-		(sim->dongles + order)->sim = sim;
-		order++;
-	}
+		if (_init_dongle(order++, sim))
+			return (1);
 	return (0);
 }
 
@@ -107,7 +87,7 @@ int	init_simulation(t_sim *sim, t_monitor *monitor, char **argv)
 	else
 		sim->init_records.s_mutex_init_ok = 1;
 	if (init_dongles(sim) || init_monitor(sim, monitor) || init_coders(sim)
-			|| pthread_create(&monitor->thread, NULL, monitor_routine, sim))
+		|| pthread_create(&monitor->thread, NULL, monitor_routine, sim))
 		return (cleaner(sim), 1);
 	preseed_dongles_heap(sim);
 	preseed_coders_firstcompile(sim);

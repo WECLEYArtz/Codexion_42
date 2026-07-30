@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/16 00:21:31 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/29 17:29:41 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/30 20:15:16 by wec              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,18 +48,4 @@ void	announce(t_coder *coder, short action, bool force)
 			printf("%ld %d %s\n", diff, coder->id, msgs[action]);
 	}
 	pthread_mutex_unlock(&print_mutex);
-}
-
-// debug (don't bother norminette, will be removed)
-#include "../dongle/dongle.h"
-
-void	__debug_heap__(t_dongle *dongle, t_coder *coder, char *msg)
-{
-	static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
-	pthread_mutex_lock(&mutex);
-
-	printf("[ %d ]: heap [ %d - %d ] taken:(%d)\t\t[ %s ]\n", coder->id,
-		dongle->heap[0] ? dongle->heap[0]->id : 0,
-		dongle->heap[1] ? dongle->heap[1]->id : 0, dongle->taken, msg);
-	pthread_mutex_unlock(&mutex);
 }

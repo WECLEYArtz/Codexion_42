@@ -6,16 +6,15 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/13 21:48:08 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/30 15:30:44 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/30 19:12:04 by wec              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../dongle/dongle.h"
 #include "../monitor/monitor.h"
-#include "../coder/coder.h"
 #include "simulation.h"
 
-void	__init_ta(t_time_add *time, int ms)
+static void	__init_ta(t_time_add *time, int ms)
 {
 	time->sec = ms / 1000;
 	time->nsec = (ms % 1000) * 1000000;
@@ -30,6 +29,27 @@ void	_init_sim_ta(t_sim *sim)
 	__init_ta(&sim->ta_refactor, sim->args.time_to_compile
 		+ sim->args.time_to_debug + sim->args.time_to_refactor);
 	__init_ta(&sim->ta_dongle_cooldown, sim->args.dongle_cooldown);
+}
+
+int	_init_dongle(int order, t_sim *sim)
+{
+	if (pthread_cond_init(&(sim->dongles + order)->cond, NULL))
+		return (1);
+	else
+		sim->init_records.d_cond_init_ok++;
+	if (pthread_mutex_init(&(sim->dongles + order)->mutex, NULL))
+		return (1);
+	else
+		sim->init_records.d_mutex_init_ok++;
+	(sim->dongles + order)->heap[0] = NULL;
+	(sim->dongles + order)->heap[1] = NULL;
+	(sim->dongles + order)->heap_elements = 2;
+	(sim->dongles + order)->cooldown = sim->args.dongle_cooldown;
+	(sim->dongles + order)->scheduler = sim->args.scheduler;
+	(sim->dongles + order)->taken = false;
+	clock_gettime(CLOCK_REALTIME, &(sim->dongles + order)->available_date);
+	(sim->dongles + order)->sim = sim;
+	return (0);
 }
 
 int	_create_coder(t_coder *coder, int order, t_sim *sim)
@@ -49,56 +69,4 @@ int	_create_coder(t_coder *coder, int order, t_sim *sim)
 		return (1);
 	sim->init_records.c_thread_init_ok++;
 	return (0);
-}
-
-void	preseed_dongles_heap(t_sim *sim)
-{
-	int		i;
-	int		coders_count;
-	t_coder	*coder;
-	short	priority_order;
-
-	priority_order = 0;
-	coders_count = sim->args.number_of_coders;
-	coder = sim->coders;
-	i = 1;
-	while (priority_order < 2)
-	{
-		while (i < coders_count)
-		{
-			(coder + i)->dongle_r->heap[priority_order] = coder + i;
-			(coder + i)->dongle_l->heap[priority_order] = coder + i;
-			i += 2;
-		}
-		i = 0 + 2 * (coders_count > 2 && coders_count % 2);
-		priority_order++;
-	}
-	if (coders_count > 2 && coders_count % 2)
-	{
-		(coder)->dongle_r->heap[0] = coder;
-		(coder)->dongle_l->heap[1] = coder;
-	}
-}
-
-
-void	preseed_coders_firstcompile(t_sim *sim)
-{
-	int		i;
-	int		coders_count;
-	t_coder	*coder;
-
-	i = 1;
-	coders_count = sim->args.number_of_coders;
-	coder = sim->coders;
-	while (i < coders_count)
-	{
-		coder_compiled_status_update(coder + i);
-		i += 2;
-	}
-	i = 0;
-	while (i < coders_count)
-	{
-		coder_compiled_status_update(coder + i);
-		i += 2;
-	}
 }

@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/30 16:09:39 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/30 20:14:43 by wec              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 // NOTE: if you can find a way to make sim accessible easielly 
 void	coder_compiled_status_update(t_coder *coder)
 {
-	t_sim *sim;
+	t_sim	*sim;
 
 	sim = coder->sim;
 	clock_gettime(CLOCK_REALTIME, &coder->last_compile);
@@ -32,8 +32,6 @@ void	coder_compiled_status_update(t_coder *coder)
 	if (coder->compiles_required == 0)
 	{
 		pthread_mutex_lock(&sim->unfinished_coders_mutex);
-		printf(BLUE"[coder %d] i compiled, removing one unfinished from %d\n"RESET,
-				coder->id, sim->unfinished_coders);
 		sim->unfinished_coders--;
 		pthread_mutex_unlock(&sim->unfinished_coders_mutex);
 	}
@@ -56,6 +54,5 @@ void	*coder_routine(void *coder_p)
 			routine_turn = 0;
 		routines[routine_turn++](self);
 	}
-	if (SIM_DEBUG) puts("[event loop]: simulatoin no longer going, leaving...");
 	return (NULL);
 }
