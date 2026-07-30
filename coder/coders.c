@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/29 21:46:26 by wec              ###   ########.fr       */
+/*   Updated: 2026/07/30 16:09:39 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,26 @@
 
 //	Responsible for updating last compile and burnout date.
 //	First called when the coder is created, then everytime a coder compiles.
+
+// NOTE: if you can find a way to make sim accessible easielly 
 void	coder_compiled_status_update(t_coder *coder)
 {
+	t_sim *sim;
+
+	sim = coder->sim;
 	clock_gettime(CLOCK_REALTIME, &coder->last_compile);
 	coder->burnout_date = get_abstime(
 			&coder->last_compile,
 			&coder->sim->ta_burnout);
-	coder->compiles_count++;
+	coder->compiles_required--;
+	if (coder->compiles_required == 0)
+	{
+		pthread_mutex_lock(&sim->unfinished_coders_mutex);
+		printf(BLUE"[coder %d] i compiled, removing one unfinished from %d\n"RESET,
+				coder->id, sim->unfinished_coders);
+		sim->unfinished_coders--;
+		pthread_mutex_unlock(&sim->unfinished_coders_mutex);
+	}
 }
 
 void	*coder_routine(void *coder_p)

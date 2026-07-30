@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 14:29:38 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/29 22:00:18 by wec              ###   ########.fr       */
+/*   Updated: 2026/07/30 15:48:03 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ static void	_clean_coders(t_coder *coders, t_init_records *rec)
 	free(coders);
 }
 
-
 static void	_clean_dongles(t_dongle *dongles, t_init_records *rec)
 {
 	int	count;
@@ -73,12 +72,14 @@ static void	_clean_dongles(t_dongle *dongles, t_init_records *rec)
 
 void	cleaner(t_sim *sim)
 {
-	t_init_records	*init_records;
+	t_init_records	*rec;
 
-	init_records = &sim->init_records;
+	rec = &sim->init_records;
 	sim_action(END, NULL);
-	join_coders(sim->coders, init_records->c_thread_init_ok);
-	_clean_monitor(sim->monitor, init_records);
-	_clean_dongles(sim->dongles, init_records);
-	_clean_coders(sim->coders, init_records);
+	join_coders(sim->coders, rec->c_thread_init_ok);
+	_clean_monitor(sim->monitor, rec);
+	_clean_dongles(sim->dongles, rec);
+	_clean_coders(sim->coders, rec);
+	if (rec->s_mutex_init_ok)
+		pthread_mutex_destroy(&sim->unfinished_coders_mutex);
 }

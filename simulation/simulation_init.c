@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:15:04 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/29 21:56:21 by wec              ###   ########.fr       */
+/*   Updated: 2026/07/30 15:35:57 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,12 @@ int	init_simulation(t_sim *sim, t_monitor *monitor, char **argv)
 		return (1);
 	sim->args = args;
 	sim->monitor = monitor;
+	sim->unfinished_coders = args.number_of_coders;
 	_init_sim_ta(sim);
+	if (pthread_mutex_init(&sim->unfinished_coders_mutex, NULL))
+		return (cleaner(sim), 1);
+	else
+		sim->init_records.s_mutex_init_ok = 1;
 	if (init_dongles(sim) || init_monitor(sim, monitor) || init_coders(sim)
 			|| pthread_create(&monitor->thread, NULL, monitor_routine, sim))
 		return (cleaner(sim), 1);

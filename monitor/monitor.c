@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/29 22:10:20 by wec              ###   ########.fr       */
+/*   Updated: 2026/07/30 16:17:57 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,22 +23,26 @@ static int	wait_coder_burnout(t_coder *coder)
 	int			rc;
 
 	pthread_mutex_lock(&coder->compiled_mutex);
-	old_compiles_count = coder->compiles_count;
+	old_compiles_count = coder->compiles_required;
 	burnout_date = coder->burnout_date;
 	while (1)
 	{
 		rc = pthread_cond_timedwait(coder->monitor_link, &coder->compiled_mutex,
 				&burnout_date);
-		if (!rc && old_compiles_count == coder->compiles_count)
+		if (!rc && old_compiles_count == coder->compiles_required)
 			continue ;
-		else if (rc && old_compiles_count == coder->compiles_count)
+		if (rc && old_compiles_count == coder->compiles_required)
 		{
 			pthread_mutex_unlock(&coder->compiled_mutex);
 			sim_action(END, NULL);
 			return (announce(coder, ANNOUCE_BURNOUT, true), 1);
 		}
-		else
-			return (pthread_mutex_unlock(&coder->compiled_mutex), 0);
+		pthread_mutex_unlock(&coder->compiled_mutex);
+		pthread_mutex_lock(&coder->sim->unfinished_coders_mutex);
+		if (coder->sim->unfinished_coders == 0)
+			return (sim_action(END, NULL), 1);
+		pthread_mutex_unlock(&coder->sim->unfinished_coders_mutex);
+		return (0);
 	}
 }
 

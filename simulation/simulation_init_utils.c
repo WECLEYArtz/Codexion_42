@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/13 21:48:08 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/29 21:46:13 by wec              ###   ########.fr       */
+/*   Updated: 2026/07/30 15:30:44 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	_init_sim_ta(t_sim *sim)
 int	_create_coder(t_coder *coder, int order, t_sim *sim)
 {
 	coder->id = order + 1;
-	coder->compiles_count = -1;
+	coder->compiles_required = sim->args.number_of_compiles_required + 1;
 	coder->dongle_r = sim->dongles + order;
 	coder->dongle_l = sim->dongles + (order + 1) % sim->args.number_of_coders;
 	coder->monitor_link = sim->monitor->monitor_router + order;

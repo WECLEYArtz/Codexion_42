@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/29 14:10:57 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/30 16:13:40 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,10 @@ void	compile(t_coder *coder)
 	if (try_take_dongles(coder->dongle_r, coder->dongle_l, coder) == END)
 		return;
 	pthread_mutex_lock(&coder->compiled_mutex);
+	announce(coder, ANNOUCE_COMPILE, false);
 	coder_compiled_status_update(coder);
 	pthread_cond_signal(coder->monitor_link);
 	burnout_list_action(MV_BACK, coder);
-	announce(coder, ANNOUCE_COMPILE, false);
 	abstime = get_abstime(&coder->last_compile, &coder->sim->ta_compile);
 	pthread_mutex_unlock(&coder->compiled_mutex);
 	if (sim_action(WAIT_STP, &abstime) == END)

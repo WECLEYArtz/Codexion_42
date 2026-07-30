@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 13:05:58 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/29 22:00:44 by wec              ###   ########.fr       */
+/*   Updated: 2026/07/30 15:22:13 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@
 
 typedef struct s_coder
 {
-	pthread_t		thread;
 	int				id;
-	int				compiles_count;
+	pthread_t		thread;
+	long			compiles_required;
 
 	t_dongle		*dongle_r;
 	t_dongle		*dongle_l;
