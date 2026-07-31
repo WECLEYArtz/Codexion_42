@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 13:20:47 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/30 20:14:59 by wec              ###   ########.fr       */
+/*   Updated: 2026/07/31 17:34:46 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,5 +45,6 @@ short	sim_action(short choice, t_timespec *abstime)
 		}
 	}
 	tmp = status;
-	return (pthread_mutex_unlock(&run_mutex), tmp);
+	pthread_mutex_unlock(&run_mutex);
+	return (tmp);
 }

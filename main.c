@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:37:01 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/28 21:08:24 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/31 17:47:49 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,3 @@ int	main(int argc, char **argv)
 		cleaner(&sim);
 	}
 }
-
-// try:	./codexion 40 300 100 100 100 7 0 edf
-// try: valgrind --tool=helgrind ./codexion 200 301 100 100 100 7 0 edf
-// try ./codexion 400 202 1 100 100 7 0 edf (may deadlock)

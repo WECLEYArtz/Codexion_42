@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/13 21:48:08 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/30 19:12:04 by wec              ###   ########.fr       */
+/*   Updated: 2026/07/31 18:57:54 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,8 @@ int	_init_dongle(int order, t_sim *sim)
 	return (0);
 }
 
-int	_create_coder(t_coder *coder, int order, t_sim *sim)
+int	_create_coder(t_coder *coder, int order, t_sim *sim,
+		void *(*routine)(void *))
 {
 	coder->id = order + 1;
 	coder->compiles_required = sim->args.number_of_compiles_required + 1;
@@ -65,7 +66,7 @@ int	_create_coder(t_coder *coder, int order, t_sim *sim)
 	if (pthread_mutex_init(&coder->compiled_mutex, NULL))
 		return (1);
 	sim->init_records.c_mutex_init_ok++;
-	if (pthread_create(&coder->thread, NULL, coder_routine, coder))
+	if (pthread_create(&coder->thread, NULL, routine, coder))
 		return (1);
 	sim->init_records.c_thread_init_ok++;
 	return (0);

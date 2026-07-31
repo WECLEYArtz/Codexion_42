@@ -6,11 +6,12 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/30 20:14:43 by wec              ###   ########.fr       */
+/*   Updated: 2026/07/31 20:22:43 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../coder/coder.h"
+#include "../dongle/dongle.h"
 #include "../monitor/monitor.h"
 #include "../utils/utils.h"
 #include "../simulation/simulation.h"
@@ -45,7 +46,7 @@ void	*coder_routine(void *coder_p)
 
 	routine_turn = 0;
 	self = (t_coder *)coder_p;
-	if (sim_action(WAIT_RUN, NULL) == END)
+	if (sim_action(WAIT_RUN, NULL) == END || self->compiles_required == 0)
 		return (NULL);
 	burnout_list_action(MV_BACK, self);
 	while (sim_action(STAT, NULL) == ON)
@@ -54,5 +55,18 @@ void	*coder_routine(void *coder_p)
 			routine_turn = 0;
 		routines[routine_turn++](self);
 	}
+	return (NULL);
+}
+
+void	*single_coder_routine(void *coder_p)
+{
+	t_coder		*self;
+
+	self = (t_coder *)coder_p;
+	if (sim_action(WAIT_RUN, NULL) == END || self->compiles_required == 0)
+		return (NULL);
+	burnout_list_action(MV_BACK, self);
+	dhq_insert(self->dongle_r, self);
+	single_announce(self, false);
 	return (NULL);
 }

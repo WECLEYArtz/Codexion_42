@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 14:29:38 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/30 20:09:42 by wec              ###   ########.fr       */
+/*   Updated: 2026/07/31 17:37:51 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static void	_clean_dongles(t_dongle *dongles, t_init_records *rec)
 	free(dongles);
 }
 
-void	cleaner(t_sim *sim)
+int	cleaner(t_sim *sim)
 {
 	t_init_records	*rec;
 
@@ -76,4 +76,5 @@ void	cleaner(t_sim *sim)
 	_clean_coders(sim->coders, rec);
 	if (rec->s_mutex_init_ok)
 		pthread_mutex_destroy(&sim->unfinished_coders_mutex);
+	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/16 00:21:31 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/30 20:15:16 by wec              ###   ########.fr       */
+/*   Updated: 2026/07/31 20:03:18 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,4 +48,17 @@ void	announce(t_coder *coder, short action, bool force)
 			printf("%ld %d %s\n", diff, coder->id, msgs[action]);
 	}
 	pthread_mutex_unlock(&print_mutex);
+}
+
+void	single_announce(t_coder *coder, bool force)
+{
+	t_timespec	current;
+	long		diff;
+
+	clock_gettime(CLOCK_REALTIME, &current);
+	diff = ((current.tv_sec - coder->sim->startup.tv_sec) * 1000)
+		+ ((current.tv_nsec - coder->sim->startup.tv_nsec) / 1000000);
+	if (!(sim_action(STAT, NULL) == ON || force == true))
+		return ;
+	printf("%ld %d %s\n", diff, coder->id, "has taken a dongle");
 }
