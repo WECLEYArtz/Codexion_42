@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/31 20:22:43 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/31 21:56:33 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,20 +40,21 @@ void	coder_compiled_status_update(t_coder *coder)
 
 void	*coder_routine(void *coder_p)
 {
-	static void	(*routines[3])(t_coder *) = {compile, debug, refactor};
-	int			routine_turn;
-	t_coder		*self;
+	static short	(*routines[3])(t_coder *) = {compile, debug, refactor};
+	int				routine_turn;
+	t_coder			*self;
 
 	routine_turn = 0;
 	self = (t_coder *)coder_p;
 	if (sim_action(WAIT_RUN, NULL) == END || self->compiles_required == 0)
 		return (NULL);
 	burnout_list_action(MV_BACK, self);
-	while (sim_action(STAT, NULL) == ON)
+	while (1)
 	{
 		if (routine_turn == 3)
 			routine_turn = 0;
-		routines[routine_turn++](self);
+		if (routines[routine_turn++](self) == END)
+			break ;
 	}
 	return (NULL);
 }

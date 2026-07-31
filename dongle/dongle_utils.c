@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/31 17:40:22 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/31 21:37:57 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,8 +82,8 @@ int	try_take_dongles(t_dongle *dngl_r, t_dongle *dngl_l, t_coder *cdr)
 	dngl_r_available = dngl_r->available_date;
 	dngl_l_available = dngl_l->available_date;
 	_unlock_dongles(&dngl_r->mutex, &dngl_l->mutex);
-	if (sim_action(WAIT_STP, &dngl_r_available) == END || sim_action(WAIT_STP,
-			&dngl_l_available) == END)
+	if (sim_action(WAIT_STP, &dngl_r_available) == END
+		|| sim_action(WAIT_STP, &dngl_l_available) == END)
 		return (1);
 	return (0);
 }
