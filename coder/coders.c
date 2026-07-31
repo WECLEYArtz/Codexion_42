@@ -6,11 +6,12 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/30 16:09:39 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/31 21:56:33 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../coder/coder.h"
+#include "../dongle/dongle.h"
 #include "../monitor/monitor.h"
 #include "../utils/utils.h"
 #include "../simulation/simulation.h"
@@ -21,7 +22,7 @@
 // NOTE: if you can find a way to make sim accessible easielly 
 void	coder_compiled_status_update(t_coder *coder)
 {
-	t_sim *sim;
+	t_sim	*sim;
 
 	sim = coder->sim;
 	clock_gettime(CLOCK_REALTIME, &coder->last_compile);
@@ -32,8 +33,6 @@ void	coder_compiled_status_update(t_coder *coder)
 	if (coder->compiles_required == 0)
 	{
 		pthread_mutex_lock(&sim->unfinished_coders_mutex);
-		printf(BLUE"[coder %d] i compiled, removing one unfinished from %d\n"RESET,
-				coder->id, sim->unfinished_coders);
 		sim->unfinished_coders--;
 		pthread_mutex_unlock(&sim->unfinished_coders_mutex);
 	}
@@ -41,21 +40,34 @@ void	coder_compiled_status_update(t_coder *coder)
 
 void	*coder_routine(void *coder_p)
 {
-	static void	(*routines[3])(t_coder *) = {compile, debug, refactor};
-	int			routine_turn;
-	t_coder		*self;
+	static short	(*routines[3])(t_coder *) = {compile, debug, refactor};
+	int				routine_turn;
+	t_coder			*self;
 
 	routine_turn = 0;
 	self = (t_coder *)coder_p;
-	if (sim_action(WAIT_RUN, NULL) == END)
+	if (sim_action(WAIT_RUN, NULL) == END || self->compiles_required == 0)
 		return (NULL);
 	burnout_list_action(MV_BACK, self);
-	while (sim_action(STAT, NULL) == ON)
+	while (1)
 	{
 		if (routine_turn == 3)
 			routine_turn = 0;
-		routines[routine_turn++](self);
+		if (routines[routine_turn++](self) == END)
+			break ;
 	}
-	if (SIM_DEBUG) puts("[event loop]: simulatoin no longer going, leaving...");
+	return (NULL);
+}
+
+void	*single_coder_routine(void *coder_p)
+{
+	t_coder		*self;
+
+	self = (t_coder *)coder_p;
+	if (sim_action(WAIT_RUN, NULL) == END || self->compiles_required == 0)
+		return (NULL);
+	burnout_list_action(MV_BACK, self);
+	dhq_insert(self->dongle_r, self);
+	single_announce(self, false);
 	return (NULL);
 }

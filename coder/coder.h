@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 13:05:58 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/30 15:22:13 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/31 21:53:55 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,9 @@ typedef struct s_coder
 
 void				coder_compiled_status_update(t_coder *coder);
 void				*coder_routine(void *coder_p);
-void				compile(t_coder *coder);
-void				debug(t_coder *coder);
-void				refactor(t_coder *coder);
+void				*single_coder_routine(void *coder_p);
+short				compile(t_coder *coder);
+short				debug(t_coder *coder);
+short				refactor(t_coder *coder);
 
 #endif

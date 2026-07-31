@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 14:29:38 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/30 15:48:03 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/31 17:37:51 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,19 +19,13 @@ void	join_coders(t_coder *coder, int join_count)
 {
 	while (join_count)
 	{
-		if (SIM_DEBUG) printf(BLUE"[Cleaner]: broadcasting to %d's dongle_r:"RESET, coder->id);
 		pthread_mutex_lock(&coder->dongle_r->mutex);
 		pthread_cond_broadcast(&coder->dongle_r->cond);
 		pthread_mutex_unlock(&coder->dongle_r->mutex);
-		if (SIM_DEBUG) puts(BLUE" - Done"RESET);
-
-		if (SIM_DEBUG) printf(BLUE"[Cleaner]: broadcasting to %d's dongle_l:"RESET, coder->id);
 		pthread_mutex_lock(&coder->dongle_l->mutex);
 		pthread_cond_broadcast(&coder->dongle_l->cond);
 		pthread_mutex_unlock(&coder->dongle_l->mutex);
-		if (SIM_DEBUG) puts(BLUE" - Done"RESET);
 		pthread_join(coder->thread, NULL);
-		if (SIM_DEBUG) printf(BLUE"[Cleaner]: Done with %d | %d left\n"RESET, coder->id, join_count);
 		coder++;
 		join_count--;
 	}
@@ -70,7 +64,7 @@ static void	_clean_dongles(t_dongle *dongles, t_init_records *rec)
 	free(dongles);
 }
 
-void	cleaner(t_sim *sim)
+int	cleaner(t_sim *sim)
 {
 	t_init_records	*rec;
 
@@ -82,4 +76,5 @@ void	cleaner(t_sim *sim)
 	_clean_coders(sim->coders, rec);
 	if (rec->s_mutex_init_ok)
 		pthread_mutex_destroy(&sim->unfinished_coders_mutex);
+	return (1);
 }

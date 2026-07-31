@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 11:00:49 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/29 21:55:16 by wec              ###   ########.fr       */
+/*   Updated: 2026/07/30 20:21:03 by wec              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # define HEAP_SIZE 2
 # define EDF 0
 # define FIFO 1
+
 # include "../coder/coder.h"
 
 typedef struct s_dongle

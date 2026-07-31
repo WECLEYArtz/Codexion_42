@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/16 00:21:31 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/29 17:29:41 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/31 20:03:18 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,16 +50,15 @@ void	announce(t_coder *coder, short action, bool force)
 	pthread_mutex_unlock(&print_mutex);
 }
 
-// debug (don't bother norminette, will be removed)
-#include "../dongle/dongle.h"
-
-void	__debug_heap__(t_dongle *dongle, t_coder *coder, char *msg)
+void	single_announce(t_coder *coder, bool force)
 {
-	static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
-	pthread_mutex_lock(&mutex);
+	t_timespec	current;
+	long		diff;
 
-	printf("[ %d ]: heap [ %d - %d ] taken:(%d)\t\t[ %s ]\n", coder->id,
-		dongle->heap[0] ? dongle->heap[0]->id : 0,
-		dongle->heap[1] ? dongle->heap[1]->id : 0, dongle->taken, msg);
-	pthread_mutex_unlock(&mutex);
+	clock_gettime(CLOCK_REALTIME, &current);
+	diff = ((current.tv_sec - coder->sim->startup.tv_sec) * 1000)
+		+ ((current.tv_nsec - coder->sim->startup.tv_nsec) / 1000000);
+	if (!(sim_action(STAT, NULL) == ON || force == true))
+		return ;
+	printf("%ld %d %s\n", diff, coder->id, "has taken a dongle");
 }

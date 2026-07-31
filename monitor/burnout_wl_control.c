@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 17:31:10 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/29 14:54:44 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/07/30 19:55:14 by wec              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ t_coder	*burnout_list_action(short choice, void *pointer)
 	if (choice == MV_BACK)
 	{
 		_addback(&head, (t_coder *)pointer);
-		if(monitor_started == false)
+		if (monitor_started == false)
 		{
 			pthread_cond_signal(&sig_new_add);
 			monitor_started = true;
