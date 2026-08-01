@@ -24,11 +24,11 @@ DEP=		$(addprefix $(BUILD)/,$(SRC:.c=.d))
 all:		$(NAME)
 
 $(NAME) : $(OBJ)
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJ)
+	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
 
 $(BUILD)/%.o : %.c
 	@mkdir -p $(dir $@)
-	$(CC) $(DEPFLAGS) -c $(CFLAGS) $< -o $@
+	$(CC) $(CFLAGS) $(DEPFLAGS) $< -c -o $@
 
 clean:
 	rm -rf $(BUILD)
