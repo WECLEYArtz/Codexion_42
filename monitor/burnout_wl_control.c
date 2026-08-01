@@ -6,13 +6,12 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 17:31:10 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/30 19:55:14 by wec              ###   ########.fr       */
+/*   Updated: 2026/08/01 16:02:41 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../coder/coder.h"
 #include "./monitor.h"
-#include <stdbool.h>
 
 static void	_addback(t_coder **head_p, t_coder *node)
 {

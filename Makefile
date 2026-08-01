@@ -1,14 +1,9 @@
 CFLAGS=		-pthread -Wall -Werror -Wextra
-
 NAME=		codexion
+DEPFLAGS=	-MMD
 
-DEBUG=\
-	  -g3 -Og\
-	  # -fsanitize=thread \
-	  # -fsanitize=leak \
-	  # -fsanitize=address \
-
-SRC=		main.c cleaner.c \
+BUILD:=		.build
+SRC= 		main.c cleaner.c \
 			utils/utils.c \
 			parser/args_parser.c \
 			parser/atopi.c \
@@ -23,25 +18,26 @@ SRC=		main.c cleaner.c \
 			simulation/simulation_init_utils.c \
 			simulation/simulation_preseeders.c \
 
-OBJ=		$(SRC:.c=.o)
-
-HEADER=		codexion.h
+OBJ=		$(addprefix $(BUILD)/,$(SRC:.c=.o))
+DEP=		$(addprefix $(BUILD)/,$(SRC:.c=.d))
 
 all:		$(NAME)
 
-$(NAME): 	$(OBJ) 
-	$(CC) $(CFLAGS) $(DEBUG) -o $(NAME) $(OBJ)
+$(NAME) : $(OBJ)
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJ)
 
-%.o:%.c		dependencies.h
-	$(CC) -c $(CFLAGS) $(DEBUG) $< -o $@
+$(BUILD)/%.o : %.c
+	@mkdir -p $(dir $@)
+	$(CC) $(DEPFLAGS) -c $(CFLAGS) $< -o $@
 
 clean:
-	rm -f $(OBJ)
+	rm -rf $(BUILD)
 
 fclean: clean
 	rm -f $(NAME)
 
 re: fclean all
 
+-include $(DEP)
 
-.PHONY: fclean all clean re Libft
+.PHONY: fclean all clean re
