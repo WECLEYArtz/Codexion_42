@@ -1,16 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   args_parser.c                                      :+:      :+:    :+:   */
+/*   get_args.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/24 21:41:18 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/08/02 23:41:13 by wec              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../dependencies.h"
+#include "../dongle/dongle.h"
 #include "../parser/parser.h"
 
 static int	_isvalidate_args(t_args *args)
@@ -27,9 +28,9 @@ static int	_isvalidate_args(t_args *args)
 int	get_args(char **argv, t_args *args)
 {
 	if (!strcmp(argv[8], "edf"))
-		args->scheduler = 0;
+		args->scheduler = EDF;
 	else if (!strcmp(argv[8], "fifo"))
-		args->scheduler = 1;
+		args->scheduler = FIFO;
 	else
 		return (1);
 	args->number_of_coders = ft_atopi(argv[1]);

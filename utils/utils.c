@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/16 00:21:31 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/31 20:03:18 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/08/02 22:39:52 by wec              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	announce(t_coder *coder, short action, bool force)
 	long					diff;
 	static pthread_mutex_t	print_mutex = PTHREAD_MUTEX_INITIALIZER;
 	static char				*msgs[3] = {
-		"is debuging", "is refactoring", "burned out"
+		"is debuging", "is refactoring", RED"burned out"RESET
 	};
 
 	clock_gettime(CLOCK_REALTIME, &current);
@@ -43,7 +43,7 @@ void	announce(t_coder *coder, short action, bool force)
 			printf("%ld %d %s\n%ld %d %s\n%ld %d %s\n",
 				diff, coder->id, "has taken a dongle",
 				diff, coder->id, "has taken a dongle",
-				diff, coder->id, "is compiling");
+				diff, coder->id, GREEN"is compiling"RESET);
 		else
 			printf("%ld %d %s\n", diff, coder->id, msgs[action]);
 	}
