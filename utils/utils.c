@@ -6,11 +6,12 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/16 00:21:31 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/08/02 22:39:52 by wec              ###   ########.fr       */
+/*   Updated: 2026/08/03 01:38:03 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../coder/coder.h"
+#include "../utils/utils.h"
 #include "../simulation/simulation.h"
 
 t_timespec	get_abstime(t_timespec *time, t_time_add *addition)
@@ -24,11 +25,12 @@ t_timespec	get_abstime(t_timespec *time, t_time_add *addition)
 	return (new_abstime);
 }
 
-void	announce(t_coder *coder, short action, bool force)
+void	announce(t_coder *coder, short action)
 {
 	t_timespec				current;
 	long					diff;
 	static pthread_mutex_t	print_mutex = PTHREAD_MUTEX_INITIALIZER;
+	static bool				print_allowed = true;
 	static char				*msgs[3] = {
 		"is debuging", "is refactoring", RED"burned out"RESET
 	};
@@ -37,7 +39,7 @@ void	announce(t_coder *coder, short action, bool force)
 	diff = ((current.tv_sec - coder->sim->startup.tv_sec) * 1000)
 		+ ((current.tv_nsec - coder->sim->startup.tv_nsec) / 1000000);
 	pthread_mutex_lock(&print_mutex);
-	if (sim_action(STAT, NULL) == ON || force == true)
+	if (print_allowed)
 	{
 		if (action == ANNOUCE_COMPILE)
 			printf("%ld %d %s\n%ld %d %s\n%ld %d %s\n",
@@ -47,10 +49,12 @@ void	announce(t_coder *coder, short action, bool force)
 		else
 			printf("%ld %d %s\n", diff, coder->id, msgs[action]);
 	}
+	if (action == ANNOUCE_BURNOUT)
+		print_allowed = false;
 	pthread_mutex_unlock(&print_mutex);
 }
 
-void	single_announce(t_coder *coder, bool force)
+void	single_announce(t_coder *coder)
 {
 	t_timespec	current;
 	long		diff;
@@ -58,7 +62,5 @@ void	single_announce(t_coder *coder, bool force)
 	clock_gettime(CLOCK_REALTIME, &current);
 	diff = ((current.tv_sec - coder->sim->startup.tv_sec) * 1000)
 		+ ((current.tv_nsec - coder->sim->startup.tv_nsec) / 1000000);
-	if (!(sim_action(STAT, NULL) == ON || force == true))
-		return ;
 	printf("%ld %d %s\n", diff, coder->id, "has taken a dongle");
 }

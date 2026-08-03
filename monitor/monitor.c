@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/31 20:24:43 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/08/03 01:34:53 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static int	declare_burnout(t_coder *coder)
 {
 	pthread_mutex_unlock(&coder->compiled_mutex);
 	sim_action(END, NULL);
-	announce(coder, ANNOUCE_BURNOUT, true);
+	announce(coder, ANNOUCE_BURNOUT);
 	return (1);
 }
 

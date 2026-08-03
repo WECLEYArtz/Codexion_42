@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/31 21:56:33 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/08/03 01:35:14 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,6 @@ void	*single_coder_routine(void *coder_p)
 		return (NULL);
 	burnout_list_action(MV_BACK, self);
 	dhq_insert(self->dongle_r, self);
-	single_announce(self, false);
+	single_announce(self);
 	return (NULL);
 }

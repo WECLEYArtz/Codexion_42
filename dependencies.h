@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/29 17:16:54 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/29 17:17:09 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/08/03 01:30:31 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,6 @@
 # define RESET "\x1b[0m"
 # define YELLOW "\x1b[33m"
 # define BLUE "\x1b[34m"
-
-# define ANNOUCE_COMPILE 255
-# define ANNOUCE_DEBUG 0
-# define ANNOUCE_REFACTOR 1
-# define ANNOUCE_BURNOUT 2
 
 typedef struct s_sim		t_sim;
 typedef struct s_args		t_args;
