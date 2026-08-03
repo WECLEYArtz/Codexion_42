@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/08/03 01:35:08 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/08/03 02:44:47 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ short	compile(t_coder *coder)
 	pthread_mutex_lock(&coder->compiled_mutex);
 	announce(coder, ANNOUCE_COMPILE);
 	coder_compiled_status_update(coder);
-	pthread_cond_signal(coder->monitor_link);
 	burnout_list_action(MV_BACK, coder);
+	pthread_cond_signal(coder->monitor_link);
 	abstime = get_abstime(&coder->last_compile, &coder->sim->ta_compile);
 	pthread_mutex_unlock(&coder->compiled_mutex);
 	if (sim_action(WAIT_STP, &abstime) == END)

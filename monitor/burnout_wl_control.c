@@ -6,38 +6,35 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 17:31:10 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/08/01 16:02:41 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/08/03 03:28:44 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../coder/coder.h"
 #include "./monitor.h"
 
-static void	_addback(t_coder **head_p, t_coder *node)
+static void	_addback(t_coder **head_root, t_coder *node)
 {
-	t_coder	*head;
+	static t_coder	*tail = NULL;
+	t_coder			*head;
 
-	head = *head_p;
+	head = *head_root;
+	if ((head == node && node->next == NULL) || (tail == node))
+		return ;
 	if (!head)
 	{
-		*head_p = node;
+		*head_root = node;
+		tail = node;
 		return ;
 	}
-	if (head == node && !node->next)
-		return ;
+	if (head == node)
+		*head_root = node->next;
 	if (node->previous)
 		node->previous->next = node->next;
 	if (node->next)
 		node->next->previous = node->previous;
-	if (head == node && node->next)
-	{
-		*head_p = node->next;
-		(*head_p)->previous = NULL;
-	}
-	while (head->next)
-		head = head->next;
-	head->next = node;
-	node->previous = head;
+	tail->next = node;
+	node->previous = tail;
 	node->next = NULL;
 }
 
