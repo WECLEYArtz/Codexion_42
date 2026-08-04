@@ -6,11 +6,10 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/08/02 23:41:13 by wec              ###   ########.fr       */
+/*   Updated: 2026/08/04 05:58:18 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../dependencies.h"
 #include "../dongle/dongle.h"
 #include "../parser/parser.h"
 

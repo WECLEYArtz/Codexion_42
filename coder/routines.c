@@ -6,11 +6,10 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/08/03 02:44:47 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/08/04 05:58:18 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../coder/coder.h"
 #include "../dongle/dongle.h"
 #include "../monitor/monitor.h"
 #include "../simulation/simulation.h"

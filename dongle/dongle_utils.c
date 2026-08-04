@@ -6,11 +6,10 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 10:38:05 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/07/31 21:37:57 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/08/04 05:58:18 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../dependencies.h"
 #include "../dongle/dongle.h"
 #include "../simulation/simulation.h"
 #include "../utils/utils.h"

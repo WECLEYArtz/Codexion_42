@@ -6,11 +6,10 @@
 /*   By: wec <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/30 18:29:44 by wec               #+#    #+#             */
-/*   Updated: 2026/07/30 19:56:25 by wec              ###   ########.fr       */
+/*   Updated: 2026/08/04 05:58:18 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../dependencies.h"
 #include "../dongle/dongle.h"
 
 static bool	is_sader(t_coder *coder1, t_coder *coder2)
