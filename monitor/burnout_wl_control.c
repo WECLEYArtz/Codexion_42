@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 17:31:10 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/08/04 05:58:18 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/08/04 23:03:20 by wec              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ static void	_addback(t_coder **head_root, t_coder *node)
 	tail->next = node;
 	node->previous = tail;
 	node->next = NULL;
+	tail = node;
 }
 
 static t_coder	*_pop(t_coder **head_p, pthread_mutex_t *mutex)
