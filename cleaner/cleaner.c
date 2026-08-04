@@ -6,13 +6,13 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 14:29:38 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/08/04 05:58:18 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/08/05 00:16:40 by wec              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "dongle/dongle.h"
-#include "monitor/monitor.h"
-#include "simulation/simulation.h"
+#include "../dongle/dongle.h"
+#include "../monitor/monitor.h"
+#include "../simulation/simulation.h"
 
 void	join_coders(t_coder *coder, int join_count)
 {

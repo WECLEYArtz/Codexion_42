@@ -71,7 +71,7 @@ The core flow is:
 These solution ere implemented to avoid deadlock or temporary hanging:
 
 - Deadlock prevention: dongles are always locked in pointer order, so the code does not create a circular wait.
-- Hold-and-wait reduction: a coder only proceeds into a compile when both dongles are available in the expected queue order.
+- Hold-and-wait reduction: a coder only proceeds into a compile when both dongles are available in the expected queue order, which helps breaking one of coffman's conditions for a deadlock to happen.
 - Starvation mitigation: coders are pre-seeded into the dongle queues and the monitor list so the first scheduling window is not dominated by startup order alone.
 - Burnout detection: the monitor uses `pthread_cond_timedwait` against each coder's computed burnout deadline, so a coder is declared burned out precisely when the deadline expires.
 - Clean shutdown: once burnout or completion is detected, the simulation status flips to `END` and all waiting threads recieve the same stop signal.

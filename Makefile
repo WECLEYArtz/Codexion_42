@@ -4,7 +4,8 @@ BUILD=	.build
 
 NAME=	codexion
 
-SRC= 	main.c cleaner.c \
+SRC= 	main.c \
+		cleaner/cleaner.c \
 		utils/utils.c \
 		parser/atopi.c \
 		parser/get_args.c \
