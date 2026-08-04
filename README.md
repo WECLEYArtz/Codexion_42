@@ -4,121 +4,94 @@
 
 ## Description
 
-Codexion is a multithreaded simulation in C where a number of "coders" sit around a
-shared table and take turns compiling, debugging, and refactoring. Compiling requires
-two shared "dongles" (one per hand), and coders must avoid "burning out" by compiling
-regularly.
-The project inspired from the classic concurrency problems "Dining philosophers"
-touching the neccesary multithreading conceps (mutual exclusion, resource starvation, fair scheduling)
+Codexion is a multithreaded simulation in C inspired by the classic dining philosophers problem.
+A group of coders that repeatedly compile, debug, and refactor while competing for shared
+dongles. Each compile requires two dongles, each dongle has a cooldown before it can be reused,
+and a monitor thread watches for burnout to stop the simulation, and cleanly.
 
 ## Instructions
 
-To compile:
+Build the project with:
+
 ```sh
-make (all / re / clean / fclean)
+make (clean / fclean / re)
 ```
 
-Note:	The makefile uses automatic dependencies to prevent uneccesary relink
-     	and the compilation results in a clear structure keeping the code clean
-     	and remaining easy to read.
+Run the executable with:
 
-### Usage
-
-These are the parameters required for the simulation to work.
 ```sh
-./codexion  <number_of_coders>
-            <time_to_burnout> <time_to_compile> <time_to_debug> <time_to_refactor>
-            <number_of_compiles_required> <dongle_cooldown> <scheduler>
+./codexion <number_of_coders> <time_to_burnout> <time_to_compile> <time_to_debug> <time_to_refactor> <number_of_compiles_required> <dongle_cooldown> <scheduler>
 ```
-Valid Parameters Requirements:
-- None valid integer are rejected, including ones containing spaces
+
+
+Strict parameters validaiton rules:
+- All values other than scheduler must be valid integers
 - Negative values are rejected
-- There has to be atleast one coder
+- `number_of_coders` should be more than 0
+- The parser accepts `-0` as `0`.
 
+## Usage Notes
 
-Note:
-- `-0` will be considered a `0`
+The program prints a timestamped event log showing when coders take dongles, compile, debug,
+refactor, or burn out. Important events are colorized for readability.
 
+The core flow is:
 
-### Output
+1. Initialize the simulation state, coder threads, dongles, and monitor.
+2. Release all workers at the same start time through a shared simulation gate.
+3. Let coders cycle through compile, debug, and refactor while respecting dongle cooldowns.
+4. Stop the simulation when a coder burns out or when atleast all required compiles are completed for each coder.
 
-The output follows a pattern similar to this:
-```
-0 1 has taken a dongle
-1 1 has taken a dongle
-1 1 is compiling
-201 1 is debugging
-401 1 is refactoring
-402 2 has taken a dongle
-403 2 has taken a dongle
-403 2 is compiling
-603 2 is debugging
-803 2 is refactoring
-1204 3 burned out
-```
-Important events are colorized for better reading experience
+## Blocking cases handled
+
+This solution addresses the main concurrency hazards explicitly:
+
+- Deadlock prevention: dongles are always locked in pointer order, so the code does not create a circular wait.
+- Hold-and-wait reduction: a coder only proceeds into a compile when both dongles are available in the expected queue order.
+- Starvation mitigation: coders are pre-seeded into the dongle queues and the monitor list so the first scheduling window is not dominated by startup order alone.
+- Burnout detection: the monitor uses `pthread_cond_timedwait` against each coder's computed burnout deadline, so a coder is declared burned out precisely when the deadline expires.
+- Clean shutdown: once burnout or completion is detected, the simulation status flips to `END` and all waiting threads observe the same stop signal.
+- Log serialization: output is guarded so concurrent threads do not interleave event messages.
+
+The code also handles the single-coder edge case separately, since one coder can never acquire two dongles.
+
+## Thread synchronization mechanisms
+
+The implementation uses several synchronization layers that work together:
+
+- `pthread_mutex_t` on each dongle protects its queue, availability flag, and cooldown state.
+- `pthread_cond_t` on each dongle wakes waiting coders when a dongle becomes available again.
+- A dedicated `pthread_mutex_t` and `pthread_cond_t` pair inside `sim_action()` acts as a shared start/stop event for the whole simulation.
+- Each coder has a `compiled_mutex` protecting `last_compile`, `burnout_date`, and its remaining compile count while the monitor reads the same data.
+- The monitor link `pthread_cond_t` lets a coder notify the monitor immediately after a successful compile, which keeps burnout checks precise without busy waiting.
+- The shared burnout list is protected by its own mutex so coders can move in and out of the monitor queue safely.
+
+Two patterns are especially important here:
+
+1. Race-free state updates: a coder updates its timing information under `compiled_mutex` before signaling the monitor, so the monitor never sees a half-updated burnout deadline.
+2. Thread-safe resource handoff: when a dongle is released, the code updates its next available time, removes the current owner from the queue, clears the taken flag, and signals the dongle condition variable while still holding the dongle mutex.
+
+This is what keeps the communication between coders and the monitor predictable: coders publish their new state with mutex protection, and the monitor reacts only after it has exclusive access to the same data.
+
+## Technical Highlights
+
+- The simulation gate in `sim_action()` is a small custom event primitive that handles `OFF`, `ON`, `WAIT_RUN`, `WAIT_STP`, `STAT`, and `END` states.
+- Dongles can be scheduled with either EDF or FIFO ordering.
+- EDF uses a tiny heap per dongle to prioritize the coder with the earliest burnout deadline.
+- The monitor waits on a linked list of coders so it always watches active participants first.
+- The startup phase pre-seeds both the dongle queues and the first compile timestamps to avoid awkward first-turn bias.
 
 ## Resources
-Mandatory entry knowledge for proccesses, concurrency and parallelism
-- https://www.baeldung.com/cs/process-scheduling#2-shortest-job-first-sjf
-- https://www.baeldung.com/cs/concurrency-vs-parallelism
-- https://www.youtube.com/watch?v=RlM9AfWf1WU
 
-Deeper knowledge for how proccesses and threads works
+Classic references used while building this project:
+
+- https://www.baeldung.com/cs/concurrency-vs-parallelism
+- https://www.baeldung.com/cs/process-scheduling#2-shortest-job-first-sjf
+- https://www.lenovo.com/us/en/glossary/what-is-deadlock
 - https://broman.dev/download/The%20Linux%20Programming%20Interface.pdf
 - https://kuleuven-diepenbeek.github.io/osc-course/ch6-tasks/processes/
 - https://www.geeksforgeeks.org/operating-systems/thread-control-block-in-operating-system/
-
-Heap Implementation for EDF *(not even needed in this project, but what can you do, f*ck the subject)*
-- https://medium.com/data-science-collective/heaps-priority-queues-data-structures-algorithms-for-data-scientists-17d392ab0074
 - https://www.geeksforgeeks.org/dsa/priority-queue-using-binary-heap/
-
-Good to know:
-- https://en.wikipedia.org/wiki/Process_state
-- https://www.geeksforgeeks.org/operating-systems/states-of-a-process-in-operating-systems/
-
-C's pthread introduction and usage tutorial:
 - https://www.youtube.com/playlist?list=PLfqABt5AS4FmuQf70psXrsMLEDQXNkLq2
 
-
-Lenovo's explanation for coffman's conditions
-- https://www.lenovo.com/us/en/glossary/what-is-deadlock
-
-AI was used for first steps getting used to multithreading APIs, and books parsin for faster information reach (claude)
-Also a tool for potential issues prediction in release code bases, and recognising bad practices (github's copilot)
-
-
-## Blocking cases handled
-In order to prevent deadlocks, the common solution of either acquiring both resources
-neccesary or none was implemented, which translates to a coder either taking both dongles or none,
-this way, no coder would block another from a dongle while waiting for another, causing a circular wait.
-
-To avoid stravation, a preseeding is performed at the begining of the simulation, forcing all even coders to start
-leaving no coder who should've taken a dongle be a victim of bad run order.
-
-A locking mechanism relying on dongle's pointer order was used to keep a global consistant locking and unlocking order
-which just minimizes the likelyhood of a potential circular wait deadlock.
-
-
-## Thread synchronization mechanisms
-Generally, every shared data between coders and monitors (as in every side can access the data of the other and possibly manipulate it)
-is considered a critical section, and every critical section has to be loked during read or write.
-
-
-### Mutex usage
-Mutexes are to implement any atomic function, such as
-- announce (logging)
-- dual dongle taking
-- monitor's burnout wait list updating
-- coder's and dongle's data updating, such as dates or records
-
-
-### Conditional variables usage
-Cond vars helped achieving a comunication between coders and monitors,
-resulting in a precise control of the simulation without unreasonable sleeps with magical values.
-
-Shared functions containing both neccesary mutex and conv in that function's purpose scope helped minimizing code syntax and improves readability too
-especially debugging, due to the locking and unlocking in fewer code blocks
-
-A shared variable of how many coders left to finished their compile which coders modify (once per coder),
-and monitor reads everytime someone compiles to determine when the simulation stops
+AI was used as a coding aid for understanding pthread patterns, checking concurrency design choices, and spotting likely race-condition or cleanup issues while rewriting the README and reviewing the implementation. The final structure, explanations, and project-specific conclusions were written to match the code in this repository.
