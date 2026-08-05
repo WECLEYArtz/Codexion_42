@@ -6,7 +6,7 @@
 /*   By: ahmounsi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/19 15:34:43 by ahmounsi          #+#    #+#             */
-/*   Updated: 2026/08/04 05:58:18 by ahmounsi         ###   ########.fr       */
+/*   Updated: 2026/08/05 17:24:30 by ahmounsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@
 # define ANNOUCE_DEBUG 0
 # define ANNOUCE_REFACTOR 1
 # define ANNOUCE_BURNOUT 2
+# define ANNOUCE_SINGLE 3
 
 void		announce(t_coder *coder, short action);
-void		single_announce(t_coder *coder);
 void		join_coders(t_coder *coder, int count);
 int			cleaner(t_sim *sim);
 
