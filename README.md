@@ -128,3 +128,7 @@ Classic references used while building this project:
 - https://www.lenovo.com/us/en/glossary/what-is-deadlock
 
 AI was used as a coding aid for understanding pthread patterns, checking concurrency design choices, and spotting likely race-condition or cleanup issues while rewriting the README and reviewing the implementation and highlighting bad practices.
+
+
+## To Fix:
+monitor fights with other coders to pop new coder to track, likelyhood to fail
